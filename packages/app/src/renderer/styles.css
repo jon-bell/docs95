@@ -1,0 +1,50 @@
+:root {
+  --app-bg: #c0c0c0;
+  --page-bg: #ffffff;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12px;
+  background: var(--app-bg);
+  color: #000;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.workspace {
+  flex: 1;
+  overflow: auto;
+  background: #808080;
+  padding: 16px;
+}
+
+.viewport {
+  display: flex;
+  justify-content: center;
+}
+
+.page-host {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.page {
+  position: relative;
+  background: var(--page-bg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}

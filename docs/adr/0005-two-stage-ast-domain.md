@@ -19,16 +19,19 @@ Bidirectional mappers move between the two. The AST is the persistence-side cont
 ## Consequences
 
 ### Positive
+
 - Forward compatibility: novel vendor XML round-trips verbatim.
 - Layered testing: AST↔XML and AST↔Domain test separately; each has a property-test surface (`non-functional.md:875-879`).
 - The Domain remains free of format concerns (`CLAUDE.md:67`).
 
 ### Negative
+
 - Two model surfaces to maintain; doubled mapping code per feature.
 - Opaque subtrees need position anchoring across edits (ADR-0013) or they relocate silently.
 - Canonicalization must be specified precisely or round-trip is not byte-stable (ADR-0012).
 
 ### Follow-up required
+
 - Enumerate every `[verify]` in `docs/requirements/docx-format.md` as an AST-level decision; resolve each before M1 exit.
 
 ## Alternatives considered

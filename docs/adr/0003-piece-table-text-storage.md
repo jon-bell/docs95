@@ -14,15 +14,18 @@ Text inside a paragraph is stored in a **piece table**: a read-only original buf
 ## Consequences
 
 ### Positive
+
 - O(log n) edits; amortized O(1) undo (the inverse op is always a delete-by-piece-range).
 - Snapshots to layout/spell/index workers are structural shares, zero-copy (`docs/architecture/editor-core.md:2494`).
 - Append-only add buffer is the transaction log: crash-recovery by replay is natural.
 
 ### Negative
+
 - Native offsets are UTF-16 code units, not grapheme clusters; grapheme movement is implemented a layer up (`non-functional.md:803-807`).
 - Periodic compaction required to bound fragmentation; compaction events surfaced in telemetry.
 
 ### Follow-up required
+
 - Define the compaction trigger (edits-since-last-compact and memory-pressure thresholds) and test hooks to observe it.
 
 ## Alternatives considered

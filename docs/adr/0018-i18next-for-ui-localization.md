@@ -17,16 +17,19 @@ Menu mnemonics remain English-only (`ux.md:167-171`, `P1-W4` in the review) as a
 ## Consequences
 
 ### Positive
+
 - Well-trodden library; React integration stable; MIT-licensed.
 - Plural/gender support aligned with ICU; interpolation syntax familiar to translators.
 - Hot-reloadable for dev; lazy-loadable per namespace in prod.
 - Pseudo-loc with `+40%` string expansion and accented characters is a one-flag enable (`non-functional.md:975`).
 
 ### Negative
+
 - Another dependency in the UI bundle (~40 KB gzipped with ICU plugin); acceptable against the 2 MB bundle budget (`non-functional.md:183`).
 - Translators must understand ICU MessageFormat, not just `printf` placeholders.
 
 ### Follow-up required
+
 - Add a lint rule that flags English string literals outside `src/i18n/`.
 - Commit a `pseudo-loc` CI job per `NFR-9-180`.
 - Document the translator's style guide (tone, placeholder conventions, mnemonic non-goal).

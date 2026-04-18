@@ -16,15 +16,18 @@ The first-run default theme is **Modern (accessible)**, meeting WCAG 2.1 AA out 
 ## Consequences
 
 ### Positive
+
 - VPAT pledge keepable in good faith.
 - Accessibility commitment honored without toggling.
 - Nostalgia users retain access to the Win95 theme with one opt-in click.
 
 ### Negative
+
 - Some Word-95 purists will consider the default inauthentic.
 - Visual-regression, axe-core, and Storybook runs cover both themes; ~1.3× CI cost on visual suites.
 
 ### Follow-up required
+
 - Draft "Accessibility Mode" notice text and a keyboard-reachable toggle UX.
 - Both themes must pass axe-core gate (`non-functional.md:967`); Win95 theme is allowed targeted exemptions documented here.
 
@@ -32,7 +35,7 @@ The first-run default theme is **Modern (accessible)**, meeting WCAG 2.1 AA out 
 
 - **Win95 default, accessibility theme opt-in.** Rejected: violates WCAG commitment out of the box; VPAT becomes a promise we break.
 - **Drop Win95 theme entirely.** Rejected: abandons the mission's fidelity goal.
-- **Compromise single theme blending both.** Rejected: loses accessibility compliance *and* fidelity.
+- **Compromise single theme blending both.** Rejected: loses accessibility compliance _and_ fidelity.
 
 ## References
 

@@ -252,14 +252,14 @@ packages/ui/
 
 ### 2.2 Rendering ownership
 
-| Subtree | Owned by | Package |
-|---|---|---|
-| TitleBar, MenuBar, ToolbarStack, StatusBar | UI | `@word/ui` |
-| MDIWorkspace, MDIChild, RulerRow, EditorViewport, Scrollbars | UI | `@word/ui` |
-| PageHost and its child page/line/run elements | Layout engine | `@word/layout-react` |
-| Selection overlay, caret, marching ants | Layout engine | `@word/layout-react` |
-| Dialog chrome, dialog content | UI | `@word/ui` |
-| PopoverRoot, Tooltip, Toast | UI | `@word/ui` |
+| Subtree                                                      | Owned by      | Package              |
+| ------------------------------------------------------------ | ------------- | -------------------- |
+| TitleBar, MenuBar, ToolbarStack, StatusBar                   | UI            | `@word/ui`           |
+| MDIWorkspace, MDIChild, RulerRow, EditorViewport, Scrollbars | UI            | `@word/ui`           |
+| PageHost and its child page/line/run elements                | Layout engine | `@word/layout-react` |
+| Selection overlay, caret, marching ants                      | Layout engine | `@word/layout-react` |
+| Dialog chrome, dialog content                                | UI            | `@word/ui`           |
+| PopoverRoot, Tooltip, Toast                                  | UI            | `@word/ui`           |
 
 ---
 
@@ -304,7 +304,7 @@ export interface PerChildUIState {
   formattingMarksVisible: boolean;
   scrollTopPx: number;
   scrollLeftPx: number;
-  splitPositionPct: number | null;   // null = no split
+  splitPositionPct: number | null; // null = no split
 }
 
 export interface FindReplaceState {
@@ -321,11 +321,14 @@ export interface FindReplaceState {
   searchIn: 'main' | 'header' | 'footer' | 'footnotes' | 'endnotes' | 'comments';
   format?: FindFormat;
   special?: FindSpecial;
-  lastResult: { ok: true; matchIndex: number; totalMatches: number } | { ok: false; reason: 'notFound' | 'searching' } | null;
+  lastResult:
+    | { ok: true; matchIndex: number; totalMatches: number }
+    | { ok: false; reason: 'notFound' | 'searching' }
+    | null;
 }
 
 export interface DialogStackEntry {
-  id: string;                                // unique per open
+  id: string; // unique per open
   kind: DialogKind;
   props: unknown;
   modal: boolean;
@@ -334,17 +337,54 @@ export interface DialogStackEntry {
 }
 
 export type DialogKind =
-  | 'font' | 'paragraph' | 'pageSetup' | 'print' | 'findReplace'
-  | 'options' | 'bulletNumbering' | 'bordersShading' | 'columns'
-  | 'break' | 'changeCase' | 'dropCap' | 'style' | 'styleGallery'
-  | 'field' | 'symbol' | 'bookmark' | 'crossReference' | 'indexTables'
-  | 'formula' | 'tableInsert' | 'cellHeightWidth' | 'tableSort'
-  | 'mailMergeHelper' | 'envelopeLabels' | 'protectDocument'
-  | 'revisions' | 'compareVersions' | 'mergeDocuments' | 'macro'
-  | 'customize' | 'thesaurus' | 'spelling' | 'grammar' | 'wordCount'
-  | 'summaryInfo' | 'findFile' | 'autoCorrect' | 'autoFormat'
-  | 'tipOfTheDay' | 'paste' | 'pasteSpecial' | 'help' | 'about'
-  | 'confirmOverwrite' | 'confirmClose' | 'error' | 'custom';
+  | 'font'
+  | 'paragraph'
+  | 'pageSetup'
+  | 'print'
+  | 'findReplace'
+  | 'options'
+  | 'bulletNumbering'
+  | 'bordersShading'
+  | 'columns'
+  | 'break'
+  | 'changeCase'
+  | 'dropCap'
+  | 'style'
+  | 'styleGallery'
+  | 'field'
+  | 'symbol'
+  | 'bookmark'
+  | 'crossReference'
+  | 'indexTables'
+  | 'formula'
+  | 'tableInsert'
+  | 'cellHeightWidth'
+  | 'tableSort'
+  | 'mailMergeHelper'
+  | 'envelopeLabels'
+  | 'protectDocument'
+  | 'revisions'
+  | 'compareVersions'
+  | 'mergeDocuments'
+  | 'macro'
+  | 'customize'
+  | 'thesaurus'
+  | 'spelling'
+  | 'grammar'
+  | 'wordCount'
+  | 'summaryInfo'
+  | 'findFile'
+  | 'autoCorrect'
+  | 'autoFormat'
+  | 'tipOfTheDay'
+  | 'paste'
+  | 'pasteSpecial'
+  | 'help'
+  | 'about'
+  | 'confirmOverwrite'
+  | 'confirmClose'
+  | 'error'
+  | 'custom';
 
 export interface PopoverStackEntry {
   id: string;
@@ -356,10 +396,18 @@ export interface PopoverStackEntry {
 }
 
 export type Placement =
-  | 'bottomStart' | 'bottomEnd' | 'bottomCenter'
-  | 'topStart' | 'topEnd' | 'topCenter'
-  | 'rightStart' | 'rightEnd' | 'rightCenter'
-  | 'leftStart' | 'leftEnd' | 'leftCenter';
+  | 'bottomStart'
+  | 'bottomEnd'
+  | 'bottomCenter'
+  | 'topStart'
+  | 'topEnd'
+  | 'topCenter'
+  | 'rightStart'
+  | 'rightEnd'
+  | 'rightCenter'
+  | 'leftStart'
+  | 'leftEnd'
+  | 'leftCenter';
 
 export interface Toast {
   id: string;
@@ -372,9 +420,9 @@ export interface Toast {
 }
 
 export interface MenuNavigationState {
-  activePath: string[];                      // e.g. ['file', 'new']
+  activePath: string[]; // e.g. ['file', 'new']
   openSubmenuId: string | null;
-  mnemonicsVisible: boolean;                 // Alt has been pressed
+  mnemonicsVisible: boolean; // Alt has been pressed
   activatedVia: 'mouse' | 'keyboard' | 'accelerator' | null;
 }
 
@@ -397,7 +445,7 @@ export interface UIState {
 
   // Toolbars
   toolbarVisibility: Record<string, boolean>;
-  toolbarDockStates: Record<string, DockState>;      // see § 6
+  toolbarDockStates: Record<string, DockState>; // see § 6
   customizeMode: boolean;
 
   // Selection visual markers (co-aligned with layout selection, cached for marching-ants animation)
@@ -413,7 +461,7 @@ export interface UIState {
     mrk: boolean;
     ext: boolean;
     ovr: boolean;
-    wph: boolean;      // WordPerfect Help emulation
+    wph: boolean; // WordPerfect Help emulation
   };
 
   // Splash / onboarding
@@ -471,8 +519,8 @@ export interface UIActions {
 
 export interface PrefsState {
   theme: ThemeId;
-  uiFontScale: number;                        // 1.0 = native
-  chromeZoom: number;                         // for accessibility
+  uiFontScale: number; // 1.0 = native
+  chromeZoom: number; // for accessibility
 
   window: {
     width: number;
@@ -498,7 +546,7 @@ export interface PrefsState {
     showHighlighting: boolean;
     draftFont: boolean;
     wrapToWindow: boolean;
-    showPictureDescriptionsOnly: boolean;    // accessibility
+    showPictureDescriptionsOnly: boolean; // accessibility
     showTextBoundaries: boolean;
   };
 
@@ -550,7 +598,7 @@ export interface PrefsState {
     promptToSaveNormalTemplate: boolean;
     saveDataOnlyForForms: boolean;
     embedTrueTypeFonts: boolean;
-    saveAutoRecoverEvery: number;            // minutes
+    saveAutoRecoverEvery: number; // minutes
     fileSharing: { password: string | null; readOnlyRecommended: boolean };
     defaultFormat: 'docx' | 'doc' | 'rtf' | 'txt';
   };
@@ -563,7 +611,7 @@ export interface PrefsState {
     automaticCheck: boolean;
     reset: boolean;
     customDictionaries: CustomDictionary[];
-    language: string;                         // BCP-47
+    language: string; // BCP-47
   };
 
   grammar: {
@@ -604,7 +652,7 @@ export interface PrefsState {
 
 export interface DocumentSnapshot {
   docId: string;
-  version: number;                           // monotonic, bumped per command
+  version: number; // monotonic, bumped per command
   title: string;
   filePath: string | null;
   dirty: boolean;
@@ -621,7 +669,12 @@ export interface DocumentSnapshot {
   zoomPct: number;
   revisionsTracked: boolean;
   revisions: RevisionInfo[];
-  history: { canUndo: boolean; canRedo: boolean; undoLabel: string | null; redoLabel: string | null };
+  history: {
+    canUndo: boolean;
+    canRedo: boolean;
+    undoLabel: string | null;
+    redoLabel: string | null;
+  };
   fields: FieldInfo[];
   comments: CommentInfo[];
   bookmarks: BookmarkInfo[];
@@ -631,8 +684,15 @@ export interface DocumentSnapshot {
 export interface EngineBridge {
   getSnapshot(docId: string): DocumentSnapshot;
   subscribe(docId: string, listener: () => void): () => void;
-  dispatchCommand<A extends CommandArgs = CommandArgs>(docId: string, commandId: string, args?: A): CommandResult;
-  on<E extends EngineEventName>(event: E, listener: (payload: EngineEventPayload[E]) => void): () => void;
+  dispatchCommand<A extends CommandArgs = CommandArgs>(
+    docId: string,
+    commandId: string,
+    args?: A,
+  ): CommandResult;
+  on<E extends EngineEventName>(
+    event: E,
+    listener: (payload: EngineEventPayload[E]) => void,
+  ): () => void;
   // Cross-document / app-scoped events
   onAny(listener: (event: EngineEventName, payload: unknown) => void): () => void;
 }
@@ -696,7 +756,7 @@ export interface PageHostProps {
 export function PageHost(props: PageHostProps): JSX.Element;
 
 export function useSelectionGeometry(docId: string): {
-  bounds: Rect[];             // per-line boxes in viewport pixels
+  bounds: Rect[]; // per-line boxes in viewport pixels
   caretRect: Rect | null;
   caretBlinkPhase: number;
 };
@@ -705,7 +765,7 @@ export function useHitTest(docId: string): (clientX: number, clientY: number) =>
 
 export interface HitTestResult {
   kind: 'text' | 'table' | 'image' | 'hyperlink' | 'footnote' | 'comment' | 'field' | 'outside';
-  offset?: number;            // character offset for text
+  offset?: number; // character offset for text
   tableRef?: TableRef;
   imageId?: string;
   hyperlinkTarget?: string;
@@ -765,7 +825,7 @@ A component at the root that captures `keydown`, `keyup`, and `beforeinput` on `
 // packages/ui/src/keyboard/KeyboardDispatcher.tsx
 
 export interface KeyboardDispatcherAPI {
-  pushHandler(scope: KeymapScope, handler: KeyHandler): () => void;  // dialogs/menus use this
+  pushHandler(scope: KeymapScope, handler: KeyHandler): () => void; // dialogs/menus use this
   resolve(e: KeyboardEvent): ResolvedAccelerator | null;
   flushPendingChord(): void;
 }
@@ -794,7 +854,7 @@ export interface ChordDefinition {
   scope: KeymapScope;
   prefix: AcceleratorString;
   children: Map<AcceleratorString, CommandId>;
-  timeoutMs: number;            // chord timeout, default 1000
+  timeoutMs: number; // chord timeout, default 1000
 }
 
 export interface ResolvedAccelerator {
@@ -803,7 +863,7 @@ export interface ResolvedAccelerator {
   consumedChord: boolean;
 }
 
-export type AcceleratorString = string;   // canonical form: "Ctrl+Shift+F12"
+export type AcceleratorString = string; // canonical form: "Ctrl+Shift+F12"
 export type CommandId = string;
 
 export interface KeyHandler {
@@ -943,14 +1003,14 @@ export type FocusHolderId = string;
 export interface FocusHolderOptions {
   id: FocusHolderId;
   kind: 'documentEditor' | 'menu' | 'dialog' | 'toolbar' | 'contextMenu' | 'popover';
-  trap: boolean;                     // true for modal dialogs
+  trap: boolean; // true for modal dialogs
   restoreOnUnmount: boolean;
   rootElement: HTMLElement;
   initialFocus?: HTMLElement;
 }
 
 export interface FocusManagerAPI {
-  push(options: FocusHolderOptions): () => void;  // returns release function
+  push(options: FocusHolderOptions): () => void; // returns release function
   current(): FocusHolderId | null;
   transfer(to: FocusHolderId): void;
   isTrapped(): boolean;
@@ -977,7 +1037,10 @@ Every resolved accelerator becomes `engine.dispatchCommand`. Commands are the si
 UI components call commands through `useDocument().dispatch(commandId, args)` or via the `useCommand(id)` hook which returns a stable callback and the command's current enablement:
 
 ```ts
-export function useCommand(commandId: CommandId, args?: CommandArgs): {
+export function useCommand(
+  commandId: CommandId,
+  args?: CommandArgs,
+): {
   run: () => void;
   enabled: boolean;
   checked: boolean | undefined;
@@ -999,21 +1062,21 @@ export function useCommand(commandId: CommandId, args?: CommandArgs): {
 export interface MenuNode {
   id: string;
   label: string;
-  mnemonic?: string;                 // single char
+  mnemonic?: string; // single char
   accelerator?: AcceleratorString;
   icon?: IconId;
   enabled?: boolean | (() => boolean);
   checked?: boolean | (() => boolean);
-  radioGroup?: string;               // when set, appears as radio item
+  radioGroup?: string; // when set, appears as radio item
   children?: MenuNode[];
   command?: CommandId;
   commandArgs?: CommandArgs;
   separator?: boolean;
-  insertBefore?: string;             // customization hint
+  insertBefore?: string; // customization hint
   insertAfter?: string;
-  recentFiles?: boolean;             // placeholder replaced dynamically
-  dynamic?: (ctx: MenuContext) => MenuNode[];   // for Window > open windows, etc.
-  description?: string;              // shown in status bar on hover
+  recentFiles?: boolean; // placeholder replaced dynamically
+  dynamic?: (ctx: MenuContext) => MenuNode[]; // for Window > open windows, etc.
+  description?: string; // shown in status bar on hover
 }
 
 export interface MenuContext {
@@ -1023,7 +1086,7 @@ export interface MenuContext {
 }
 
 export interface MenuTree {
-  root: MenuNode[];                  // top-level bar items
+  root: MenuNode[]; // top-level bar items
 }
 ```
 
@@ -1032,6 +1095,7 @@ export interface MenuTree {
 Rendered as a horizontal strip under the title bar. Top-level items are `<button>` elements with `role="menuitem"` contained in a `role="menubar"` `<div>`.
 
 Behavior:
+
 - `Alt` toggles mnemonic visibility (underline chars).
 - `F10` moves focus to the first menu item; arrows navigate; Enter opens.
 - `Alt+<char>` opens the matching top-level menu.
@@ -1082,6 +1146,7 @@ Submenus render via `PopoverRoot` portal. A submenu:
 ```
 
 Metrics:
+
 - Item height: 18 px
 - Top/bottom padding: 1 px
 - Left padding (icon area): 22 px
@@ -1106,7 +1171,7 @@ Menus are customizable through the Customize dialog (§ 7 under CustomizeDialog)
 
 ```ts
 export interface MenuCustomizationPrefs {
-  hiddenItems: string[];             // menu node IDs
+  hiddenItems: string[]; // menu node IDs
   addedItems: Array<{ parentId: string; node: MenuNode; position: number }>;
   renamedItems: Record<string, string>;
   reorderedChildren: Record<string, string[]>;
@@ -1122,7 +1187,7 @@ Engine plugins (e.g., the mail-merge plugin) contribute menu items via:
 ```ts
 engine.contributeMenuItems({
   parentId: 'tools.mailMerge',
-  items: [{ id: 'custom.foo', label: 'My Merge Tool', command: 'myplugin.foo' }]
+  items: [{ id: 'custom.foo', label: 'My Merge Tool', command: 'myplugin.foo' }],
 });
 ```
 
@@ -1131,6 +1196,7 @@ UI subscribes via `useMenuContributions()` and passes them into the registry.
 ### 6.8 Specification per component
 
 **MenuBar props**
+
 ```ts
 interface MenuBarProps {
   tree: MenuTree;
@@ -1139,10 +1205,11 @@ interface MenuBarProps {
 ```
 
 **MenuItem props**
+
 ```ts
 interface MenuItemProps {
   node: MenuNode;
-  depth: number;                     // 0 for top-level bar item
+  depth: number; // 0 for top-level bar item
   activePath: string[];
   mnemonicsVisible: boolean;
   context: MenuContext;
@@ -1170,15 +1237,49 @@ export interface ToolbarNode {
   visibleByDefault: boolean;
   buttons: Button[];
   customizable: boolean;
-  rowHint?: number;                  // preferred row index when multiple toolbars dock top
+  rowHint?: number; // preferred row index when multiple toolbars dock top
 }
 
 export type Button =
   | { kind: 'separator'; id: string }
-  | { kind: 'standard'; id: string; icon: IconId; commandId: CommandId; args?: CommandArgs; tooltip: string; showLabel?: boolean; width?: number }
-  | { kind: 'dropdown'; id: string; icon?: IconId; label?: string; items: DropdownItem[]; commandId?: CommandId; tooltip: string; defaultAction?: CommandId; width?: number }
-  | { kind: 'combo'; id: string; items: ComboItem[]; width: number; commandId: CommandId; tooltip: string; editable: boolean; showRecent?: boolean }
-  | { kind: 'swatch'; id: string; kind2: 'fontColor' | 'highlight' | 'shading'; tooltip: string; commandId: CommandId };
+  | {
+      kind: 'standard';
+      id: string;
+      icon: IconId;
+      commandId: CommandId;
+      args?: CommandArgs;
+      tooltip: string;
+      showLabel?: boolean;
+      width?: number;
+    }
+  | {
+      kind: 'dropdown';
+      id: string;
+      icon?: IconId;
+      label?: string;
+      items: DropdownItem[];
+      commandId?: CommandId;
+      tooltip: string;
+      defaultAction?: CommandId;
+      width?: number;
+    }
+  | {
+      kind: 'combo';
+      id: string;
+      items: ComboItem[];
+      width: number;
+      commandId: CommandId;
+      tooltip: string;
+      editable: boolean;
+      showRecent?: boolean;
+    }
+  | {
+      kind: 'swatch';
+      id: string;
+      kind2: 'fontColor' | 'highlight' | 'shading';
+      tooltip: string;
+      commandId: CommandId;
+    };
 
 export interface DropdownItem {
   id: string;
@@ -1199,8 +1300,8 @@ export type DockSide = 'top' | 'bottom' | 'left' | 'right';
 
 export interface DockState {
   side: DockSide | 'floating';
-  rowOrCol: number;                  // docked strips are stacked in rows/cols
-  order: number;                     // within a row/col, from left-top
+  rowOrCol: number; // docked strips are stacked in rows/cols
+  order: number; // within a row/col, from left-top
   floatingPos?: { x: number; y: number };
   floatingSize?: { width: number; height: number };
 }
@@ -1212,7 +1313,7 @@ export interface ToolbarsPrefs {
   showLargeIcons: boolean;
   showTooltips: boolean;
   showShortcutKeysInTooltips: boolean;
-  colorButtons: boolean;             // Word 95 "Color Buttons" option
+  colorButtons: boolean; // Word 95 "Color Buttons" option
   listFontNamesInFont: boolean;
 }
 ```
@@ -1236,12 +1337,13 @@ export interface ToolbarsPrefs {
 interface ToolbarProps {
   node: ToolbarNode;
   dockState: DockState;
-  onReorderButtons?: (newOrder: string[]) => void;    // only in customize mode
+  onReorderButtons?: (newOrder: string[]) => void; // only in customize mode
   onDock?: (to: DockState) => void;
 }
 ```
 
 Layout:
+
 - Horizontal toolbar: left edge has a 4 px "gripper" (drag handle). Buttons flow left-to-right. Height is 22 px at 100% zoom (native Win95).
 - Vertical toolbar: top edge has the gripper. Buttons flow top-to-bottom. Width 22 px.
 - Floating toolbar: rendered in `FloatingToolbarHost` as a draggable window with a title bar and close button.
@@ -1253,7 +1355,7 @@ Right-click on the gripper or between buttons opens a context menu with the list
 ```tsx
 interface ToolbarButtonProps {
   button: Button;
-  pressed: boolean;                  // for toggle commands
+  pressed: boolean; // for toggle commands
   enabled: boolean;
   tooltip: string;
   onClick: () => void;
@@ -1263,6 +1365,7 @@ interface ToolbarButtonProps {
 ```
 
 Visual states:
+
 - **Normal**: flat, 1 px transparent border.
 - **Hover**: 1 px raised bevel (white top/left, dark bottom/right).
 - **Pressed** (mouse down or toggled on): 1 px sunken bevel.
@@ -1285,6 +1388,7 @@ Implementation uses HTML5 DnD with a custom drag image drawn in Canvas (a 1 px o
 ### 7.6 Customize dialog integration
 
 See CustomizeDialog (§ 9.16). In customize mode:
+
 - Buttons show a hatched highlight.
 - Drag between toolbars.
 - Drag off a toolbar to remove.
@@ -1332,6 +1436,7 @@ interface HorizontalRulerProps {
 ```
 
 Visual layout (inches at 100%):
+
 - Ruler height: 17 px.
 - Tick marks: major every `unit` increment, minor in between.
 - Margin boundaries: shaded darker at left/right edges.
@@ -1341,6 +1446,7 @@ Visual layout (inches at 100%):
 - Column markers: shaded boundaries between columns.
 
 Interaction:
+
 - Click in ruler body: inserts a tab stop at the cursor position with current alignment.
 - Drag existing tab: repositions it; dragging below the ruler (into page area) removes it.
 - Drag indent markers: set paragraph indents; engine issues a real-time preview.
@@ -1377,12 +1483,15 @@ Visible only in Page Layout view. Tracks top/bottom margin handles; in tables, r
 ```ts
 // packages/ui/src/ruler/rulerScales.ts
 
-export const UNIT_TICKS: Record<MeasurementUnit, { majorPx: (zoom: number) => number; minors: number }> = {
-  inch: { majorPx: z => 96 * z, minors: 8 },
-  cm:   { majorPx: z => 37.795275591 * z, minors: 10 },
-  mm:   { majorPx: z => 3.7795275591 * z, minors: 10 },
-  point: { majorPx: z => 1.333 * z, minors: 1 },
-  pica:  { majorPx: z => 16 * z, minors: 12 },
+export const UNIT_TICKS: Record<
+  MeasurementUnit,
+  { majorPx: (zoom: number) => number; minors: number }
+> = {
+  inch: { majorPx: (z) => 96 * z, minors: 8 },
+  cm: { majorPx: (z) => 37.795275591 * z, minors: 10 },
+  mm: { majorPx: (z) => 3.7795275591 * z, minors: 10 },
+  point: { majorPx: (z) => 1.333 * z, minors: 1 },
+  pica: { majorPx: (z) => 16 * z, minors: 12 },
 };
 ```
 
@@ -1525,7 +1634,7 @@ interface ListBoxProps<T> {
   width?: number | string;
   height?: number | string;
   ariaLabel: string;
-  virtualized?: boolean;                  // for long lists (fonts)
+  virtualized?: boolean; // for long lists (fonts)
 }
 
 // Button
@@ -1565,6 +1674,7 @@ For each dialog we list: fields, submit command, default button, cancel button, 
 Tabs: Font, Character Spacing.
 
 **Font tab:**
+
 - `Font` ComboBox (editable, autocomplete=fontname, virtualized list of installed fonts, preview font).
 - `Font style` ComboBox: Regular, Italic, Bold, Bold Italic.
 - `Size` ComboBox (editable, items 8–72).
@@ -1575,6 +1685,7 @@ Tabs: Font, Character Spacing.
 - `Default...` button: apply settings to Normal style (confirmation dialog first).
 
 **Character Spacing tab:**
+
 - `Spacing` ComboBox (Normal/Expanded/Condensed) + NumberSpinner for value (pt, -2000..+2000).
 - `Position` (Normal/Raised/Lowered) + NumberSpinner (pt).
 - `Kerning for fonts` checkbox + NumberSpinner for "Points and above".
@@ -1586,12 +1697,14 @@ Submit: `format.applyFont` with merged args. Default = OK; Cancel; Help.
 Tabs: Indents and Spacing, Text Flow.
 
 **Indents and Spacing:**
+
 - Alignment ComboBox (Left/Centered/Right/Justified).
 - Indentation group: Left NumberSpinner, Right NumberSpinner, Special ComboBox (None/First line/Hanging) + By NumberSpinner.
 - Spacing group: Before, After, Line Spacing ComboBox (Single/1.5 lines/Double/At least/Exactly/Multiple) + At NumberSpinner.
 - Preview pane.
 
 **Text Flow:**
+
 - Pagination group: Keep lines together, Keep with next, Page break before, Widow/Orphan control, Suppress line numbers, Don't hyphenate.
 - Preview.
 
@@ -1620,6 +1733,7 @@ Submit: `file.print`.
 #### 9.4.5 FindReplaceDialog (modeless)
 
 This is modeless. Fields:
+
 - Find what ComboBox (recent searches).
 - Replace with ComboBox (in Replace mode).
 - Match case checkbox.
@@ -1638,6 +1752,7 @@ Surfaces state via `UIStore.findReplace`.
 #### 9.4.6 OptionsDialog (tabs)
 
 Tabs (each a separate tab panel):
+
 - View: Show (Draft font, Wrap to window, Picture placeholders, Field codes, Bookmarks, Field shading, Text boundaries, Highlight); Nonprinting characters (Tab characters, Spaces, Paragraph marks, Optional hyphens, Hidden text, All); Window (Status bar, Horizontal scroll bar, Vertical scroll bar); Style area width.
 - General: Background repagination, Help for WordPerfect users, Navigation keys for WordPerfect users, Blue background white text, Beep on error actions, Confirm conversion at Open, Update automatic links at Open, Mail as attachment, Recently used file list count, Measurement units.
 - Edit: Typing replaces selection, Drag-and-drop text editing, Automatic word selection, Use smart cut and paste, Tabs and backspace set left indent, Allow accented uppercase in French, Overtype mode, Use the INS key for paste, Picture editor.
@@ -1824,7 +1939,11 @@ Dialogs that have a Preview pane (Font, Paragraph, Borders, Columns, Page Setup)
 ```tsx
 interface PreviewCanvasProps<T> {
   value: T;
-  render: (ctx: CanvasRenderingContext2D, value: T, sizePx: { width: number; height: number }) => void;
+  render: (
+    ctx: CanvasRenderingContext2D,
+    value: T,
+    sizePx: { width: number; height: number },
+  ) => void;
   widthPx: number;
   heightPx: number;
   ariaLabel: string;
@@ -1885,8 +2004,8 @@ interface StatusRegionProps {
 Each region uses `useDocument(docId, selector)` with a narrow selector:
 
 ```ts
-const page = useDocument(docId, s => s.pageCount, Object.is);
-const currentPage = useDocument(docId, s => s.selection.pageIndex, Object.is);
+const page = useDocument(docId, (s) => s.pageCount, Object.is);
+const currentPage = useDocument(docId, (s) => s.selection.pageIndex, Object.is);
 ```
 
 Page numbers update on repagination; line/column update on selection change. We use `useDeferredValue` for status updates so they never block a user's typing.
@@ -1921,19 +2040,21 @@ export interface MDIChildState {
   minimized: boolean;
   maximized: boolean;
   zIndex: number;
-  iconPosition?: { x: number; y: number };   // when minimized
+  iconPosition?: { x: number; y: number }; // when minimized
 }
 ```
 
 ### 11.2 Child window chrome
 
 `MDIChildTitleBar`:
+
 - 18 px tall, `#000080` active / `#808080` inactive background.
 - Icon (16×16) at left, title text, min/max/close buttons at right.
 - Drag to reposition (only when `arrangement === 'free'`).
 - Double-click maximizes (toggles).
 
 When a child is maximized, the workspace behavior changes:
+
 - Child's title bar is removed.
 - Child's icon, title, and min/max/close buttons are merged into the main MenuBar region (on the left side of the menu bar: child icon; on the right side: min/max/close for the child).
 - This is a direct replica of Word 95 behavior and is implemented by `MenuBar` switching into "maximized child adornment" mode when `UIStore` reports a maximized active child.
@@ -1948,6 +2069,7 @@ When a child is maximized, the workspace behavior changes:
 ### 11.4 Virtualization
 
 MDI children are expensive (each has a full editor). We virtualize:
+
 - The active child is always rendered.
 - Adjacent children (by Z-order) are rendered only when their bounds intersect the viewport.
 - Non-rendered children show a placeholder in their title bar ("Reopening...") and reconstitute on focus.
@@ -1959,6 +2081,7 @@ The Window menu dynamically lists open MDI children with numeric accelerators (1
 ### 11.6 Scrollbars
 
 `Scrollbars` inside `EditorViewport` are custom-drawn to match Word 95:
+
 - 16 px wide.
 - Gray arrow buttons at ends (up/down or left/right).
 - Thumb with 1 px bevel.
@@ -1969,6 +2092,7 @@ The Window menu dynamically lists open MDI children with numeric accelerators (1
 ### 11.7 Split windows
 
 Each child can be split horizontally (Word Split command). Implementation:
+
 - `EditorViewport` renders one or two `<PageHost>` instances sharing the same `docId`.
 - Splitter bar between them (4 px) is draggable.
 - Each pane has its own scroll position and zoom.
@@ -1999,7 +2123,7 @@ export interface ThemeTokens {
       highlight: string;
       highlightInactive: string;
       toolTip: string;
-      backdrop: string;           // modal backdrop
+      backdrop: string; // modal backdrop
     };
     text: {
       default: string;
@@ -2036,11 +2160,11 @@ export interface ThemeTokens {
   };
 
   space: {
-    xs: number;                    // 2 px
-    sm: number;                    // 4 px
-    md: number;                    // 8 px
-    lg: number;                    // 12 px
-    xl: number;                    // 16 px
+    xs: number; // 2 px
+    sm: number; // 4 px
+    md: number; // 8 px
+    lg: number; // 12 px
+    xl: number; // 16 px
   };
 
   radius: {
@@ -2057,23 +2181,23 @@ export interface ThemeTokens {
   };
 
   control: {
-    rowHeightPx: number;           // 23 for Word95
-    toolbarHeightPx: number;       // 22 for Word95
-    menuBarHeightPx: number;       // 20 for Word95
-    statusBarHeightPx: number;     // 20 for Word95
-    titleBarHeightPx: number;      // 18
-    scrollbarSizePx: number;       // 16
-    gripperWidthPx: number;        // 4
-    iconSmallPx: number;           // 16
-    iconMediumPx: number;          // 24
-    iconLargePx: number;           // 32
+    rowHeightPx: number; // 23 for Word95
+    toolbarHeightPx: number; // 22 for Word95
+    menuBarHeightPx: number; // 20 for Word95
+    statusBarHeightPx: number; // 20 for Word95
+    titleBarHeightPx: number; // 18
+    scrollbarSizePx: number; // 16
+    gripperWidthPx: number; // 4
+    iconSmallPx: number; // 16
+    iconMediumPx: number; // 24
+    iconLargePx: number; // 32
     focusRingWidthPx: number;
     borderWidthPx: number;
   };
 
   animation: {
-    menuOpenMs: number;            // 0 for Word95
-    dialogFadeMs: number;          // 100 for Word95
+    menuOpenMs: number; // 0 for Word95
+    dialogFadeMs: number; // 100 for Word95
     toastSlideMs: number;
     reduced: boolean;
   };
@@ -2116,7 +2240,7 @@ export const word95Theme: ThemeTokens = {
     },
     border: {
       outset: { top: '#DFDFDF', left: '#DFDFDF', bottom: '#808080', right: '#808080' },
-      inset:  { top: '#808080', left: '#808080', bottom: '#DFDFDF', right: '#DFDFDF' },
+      inset: { top: '#808080', left: '#808080', bottom: '#DFDFDF', right: '#DFDFDF' },
       divider: '#808080',
       focusRing: '#000000',
     },
@@ -2129,7 +2253,12 @@ export const word95Theme: ThemeTokens = {
     },
   },
   font: {
-    ui: { family: 'Micross, "MS Sans Serif", Tahoma, sans-serif', sizePx: 11, weightNormal: 400, weightBold: 700 },
+    ui: {
+      family: 'Micross, "MS Sans Serif", Tahoma, sans-serif',
+      sizePx: 11,
+      weightNormal: 400,
+      weightBold: 700,
+    },
     uiSmall: { family: 'Micross, "MS Sans Serif", sans-serif', sizePx: 10, weightNormal: 400 },
     menu: { family: 'Micross, "MS Sans Serif", sans-serif', sizePx: 11 },
     ruler: { family: 'Micross, "MS Sans Serif", sans-serif', sizePx: 10 },
@@ -2138,12 +2267,12 @@ export const word95Theme: ThemeTokens = {
     monospace: { family: '"Courier New", monospace', sizePx: 12 },
   },
   space: { xs: 2, sm: 4, md: 8, lg: 12, xl: 16 },
-  radius: { none: 0, sm: 0, md: 0 },     // Word 95 has no rounded corners
+  radius: { none: 0, sm: 0, md: 0 }, // Word 95 has no rounded corners
   shadow: {
     none: 'none',
     subtle: 'none',
     raised: 'none',
-    dialog: 'none',                      // authentic 95 has none; optional param makes 2px offset shadow
+    dialog: 'none', // authentic 95 has none; optional param makes 2px offset shadow
   },
   control: {
     rowHeightPx: 23,
@@ -2192,11 +2321,7 @@ export interface ThemeProviderProps {
 export function ThemeProvider({ theme, children }: ThemeProviderProps) {
   const tokens = typeof theme === 'string' ? resolveTheme(theme) : theme;
   useEffect(() => writeThemeVariables(tokens), [tokens]);
-  return (
-    <ThemeContext.Provider value={tokens}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={tokens}>{children}</ThemeContext.Provider>;
 }
 ```
 
@@ -2231,17 +2356,17 @@ export function bevel(style: 'outset' | 'inset', t: ThemeTokens): string {
 ```ts
 // packages/ui/src/icons/IconRegistry.ts
 
-export type IconId = string;           // "file.save", "format.bold", etc.
+export type IconId = string; // "file.save", "format.bold", etc.
 
 export interface IconDefinition {
   id: IconId;
-  svg: string;                         // raw <svg>...</svg>
+  svg: string; // raw <svg>...</svg>
   variants?: Record<'light' | 'dark' | 'highContrast', string>;
   size: 16 | 24 | 32;
 }
 
 export interface IconPack {
-  id: string;                          // "word95-default", "material", "user-custom-A"
+  id: string; // "word95-default", "material", "user-custom-A"
   displayName: string;
   icons: Map<IconId, IconDefinition>;
 }
@@ -2274,7 +2399,7 @@ interface IconProps {
   id: IconId;
   size?: 16 | 24 | 32;
   title?: string;
-  decorative?: boolean;                // if true, aria-hidden
+  decorative?: boolean; // if true, aria-hidden
   disabled?: boolean;
   theme?: 'light' | 'dark' | 'highContrast';
 }
@@ -2314,7 +2439,7 @@ We ship the following fonts in `packages/ui/src/fonts/`:
   src: url('./fonts/Micross.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
-  font-display: block;          /* avoid FOUT on first render */
+  font-display: block; /* avoid FOUT on first render */
 }
 @font-face {
   font-family: 'Micross';
@@ -2345,12 +2470,12 @@ Fonts are preloaded (`<link rel="preload">`) before paint so first render doesn'
 
 ```tsx
 interface ButtonProps {
-  label: string;                        // or `children` for custom
+  label: string; // or `children` for custom
   onClick: () => void;
   kind?: 'default' | 'cancel' | 'normal' | 'toolbar';
   mnemonic?: string;
   disabled?: boolean;
-  width?: number | string;              // default: auto with min 75 px
+  width?: number | string; // default: auto with min 75 px
   icon?: IconId;
   ariaLabel?: string;
   tooltip?: string;
@@ -2358,6 +2483,7 @@ interface ButtonProps {
 ```
 
 Visuals (Word 95):
+
 - Height 23 px.
 - Min width 75 px.
 - Bevel: outset normal, inset when pressed.
@@ -2380,6 +2506,7 @@ interface CheckboxProps {
 ```
 
 Visuals:
+
 - 13×13 sunken bevel box on left, 4 px gap, label on right.
 - Check glyph: simple angular check in black.
 - Indeterminate: filled rectangle inside.
@@ -2475,7 +2602,7 @@ Composition: TextInput + vertical pair of up/down arrow buttons (8 px wide, half
 // packages/ui/src/clipboard/ClipboardService.ts
 
 export interface ClipboardServiceAPI {
-  readAll(): Promise<ClipboardItem[]>;    // all available representations
+  readAll(): Promise<ClipboardItem[]>; // all available representations
   writeAll(items: ClipboardItem[]): Promise<void>;
   hasFormat(format: ClipboardFormat): Promise<boolean>;
 }
@@ -2484,12 +2611,12 @@ export type ClipboardFormat =
   | 'text/plain'
   | 'text/rtf'
   | 'text/html'
-  | 'application/vnd.ms-word'              // OOXML WordProcessingML
+  | 'application/vnd.ms-word' // OOXML WordProcessingML
   | 'image/png'
   | 'image/bmp'
   | 'image/wmf'
   | 'image/svg+xml'
-  | 'word.internal';                       // our own inline format
+  | 'word.internal'; // our own inline format
 
 export interface ClipboardItem {
   format: ClipboardFormat;
@@ -2503,6 +2630,7 @@ All clipboard access is routed through IPC to the main process (`window.clipboar
 ### 16.2 Paste Special dialog
 
 Opens on `edit.pasteSpecial` command. Shows:
+
 - `Source:` text area describing clipboard origin.
 - `As:` list of formats: Microsoft Word Document Object, Formatted Text (RTF), Unformatted Text, HTML Format, Picture, Bitmap.
 - `Paste` / `Paste link` radio buttons.
@@ -2515,6 +2643,7 @@ OK dispatches `edit.pasteAs` with the chosen format.
 ### 16.3 Cut/Copy/Paste commands
 
 Commands accept optional `format?: ClipboardFormat` args. The default paste uses a priority order:
+
 1. `word.internal` (preserves full fidelity across instances)
 2. `application/vnd.ms-word`
 3. `text/rtf`
@@ -2522,6 +2651,7 @@ Commands accept optional `format?: ClipboardFormat` args. The default paste uses
 5. `text/plain`
 
 Images:
+
 1. `image/png`
 2. `image/wmf` (preferred for scalability; not supported on web, only via Electron)
 3. `image/bmp`
@@ -2535,11 +2665,13 @@ Images:
 We use React DnD with HTML5 backend for all drag-and-drop. Two distinct domains:
 
 **Intra-document** (text selection drag, image reorder, table row reorder):
+
 - Drag source: `PageHost` detects a drag-start on a selection.
 - We then create a custom drag image (rendered off-screen via Canvas), attach data with MIME `word.internal`.
 - Drop target: `PageHost` again; on drop, layout engine resolves the target location and commits a move or copy (Ctrl modifier for copy).
 
 **External DnD** (files/images from OS):
+
 - Drop zones: `MDIWorkspace` (drop file to open), `EditorViewport` (drop image to insert).
 - We accept standard `DataTransfer` types: `Files`, `text/uri-list`, `text/plain`.
 - We render a full-viewport drop indicator overlay during drag-over.
@@ -2594,9 +2726,9 @@ export type ContextTarget =
   | { kind: 'field'; fieldId: string; docId: string }
   | { kind: 'bookmark'; name: string; docId: string }
   | { kind: 'toolbar'; toolbarId: string }
-  | { kind: 'menubar'; }
-  | { kind: 'ruler'; }
-  | { kind: 'statusbar'; };
+  | { kind: 'menubar' }
+  | { kind: 'ruler' }
+  | { kind: 'statusbar' };
 
 export interface ContextMenuRegistryAPI {
   register(def: ContextMenuDefinition): () => void;
@@ -2609,6 +2741,7 @@ Multiple matching definitions are composed in priority order (higher first), sep
 ### 18.2 Trigger
 
 Right-click anywhere emits a synthetic "context menu requested" event:
+
 - In `PageHost`, we hit-test and produce a `ContextTarget`.
 - In UI components (toolbar, ruler, status bar), the target is known by the component.
 
@@ -2617,6 +2750,7 @@ The resolved `MenuNode[]` is rendered by the same `SubMenu` component used for m
 ### 18.3 Standard context menus
 
 Text selection:
+
 - Cut
 - Copy
 - Paste
@@ -2627,6 +2761,7 @@ Text selection:
 - Hyperlink...
 
 Table cell:
+
 - Cut / Copy / Paste
 - Insert Rows Above / Below
 - Delete Row / Column
@@ -2634,12 +2769,14 @@ Table cell:
 - Table Properties...
 
 Image:
+
 - Cut / Copy / Paste
 - Edit Picture
 - Format Picture...
 - Caption...
 
 Misspelling (from spell checker):
+
 - Top 5 suggestions (in bold)
 - separator
 - Ignore All
@@ -2650,12 +2787,14 @@ Misspelling (from spell checker):
 - Spelling...
 
 Hyperlink:
+
 - Open Hyperlink
 - Copy Hyperlink
 - Edit Hyperlink
 - Remove Hyperlink
 
 Comment:
+
 - Edit Comment
 - Delete Comment
 - Reply to Comment
@@ -2671,8 +2810,8 @@ Ruler / Status bar / Toolbar area also have context menus (matching Word 95).
 ```tsx
 interface ToastRootProps {
   placement?: 'bottomRight' | 'topRight' | 'bottomCenter';
-  maxConcurrent?: number;           // default 3
-  defaultDurationMs?: number;       // default 4000
+  maxConcurrent?: number; // default 3
+  defaultDurationMs?: number; // default 4000
 }
 ```
 
@@ -2722,28 +2861,28 @@ ui.pushToast({
 
 ### 20.2 Role map
 
-| Component | Role |
-|---|---|
-| AppShell | `application` |
-| MenuBar | `menubar` |
-| Top menu item | `menuitem` |
-| Submenu | `menu` |
-| Menu item (regular) | `menuitem` |
-| Menu item (radio) | `menuitemradio` |
-| Menu item (checkbox) | `menuitemcheckbox` |
-| Toolbar | `toolbar` |
-| Toolbar button | `button` |
-| Toolbar toggle button | `button` + `aria-pressed` |
-| Toolbar dropdown | `button` + `aria-haspopup="menu"` |
-| StatusBar | `status` |
-| Status region | various; if clickable `button` |
-| Dialog | `dialog` + `aria-modal="true"` |
-| Modeless dialog | `dialog` + `aria-modal="false"` |
-| PageHost | `document` |
-| Tabs | `tablist` / `tab` / `tabpanel` |
-| Ruler | `slider` group (tabs, indents act as sliders) |
-| MDIWorkspace | `region` |
-| MDIChild | `group` with aria-label |
+| Component             | Role                                          |
+| --------------------- | --------------------------------------------- |
+| AppShell              | `application`                                 |
+| MenuBar               | `menubar`                                     |
+| Top menu item         | `menuitem`                                    |
+| Submenu               | `menu`                                        |
+| Menu item (regular)   | `menuitem`                                    |
+| Menu item (radio)     | `menuitemradio`                               |
+| Menu item (checkbox)  | `menuitemcheckbox`                            |
+| Toolbar               | `toolbar`                                     |
+| Toolbar button        | `button`                                      |
+| Toolbar toggle button | `button` + `aria-pressed`                     |
+| Toolbar dropdown      | `button` + `aria-haspopup="menu"`             |
+| StatusBar             | `status`                                      |
+| Status region         | various; if clickable `button`                |
+| Dialog                | `dialog` + `aria-modal="true"`                |
+| Modeless dialog       | `dialog` + `aria-modal="false"`               |
+| PageHost              | `document`                                    |
+| Tabs                  | `tablist` / `tab` / `tabpanel`                |
+| Ruler                 | `slider` group (tabs, indents act as sliders) |
+| MDIWorkspace          | `region`                                      |
+| MDIChild              | `group` with aria-label                       |
 
 ### 20.3 Live regions
 
@@ -2767,6 +2906,7 @@ For every feature, a Playwright script verifies operability without a mouse. A C
 ### 20.6 Zoom independence
 
 UI chrome zoom is separate from document zoom:
+
 - CSS uses logical units; browser zoom (Ctrl+= on the native window) affects chrome.
 - Document zoom (`zoomPct` in UIStore) only affects `PageHost`.
 
@@ -2778,8 +2918,8 @@ UI chrome zoom is separate from document zoom:
 
 ```ts
 export interface NormalizedKeyEvent {
-  code: string;             // physical key, e.g. "KeyB"
-  key: string;              // logical char, e.g. "b" or "B"
+  code: string; // physical key, e.g. "KeyB"
+  key: string; // logical char, e.g. "b" or "B"
   ctrl: boolean;
   alt: boolean;
   shift: boolean;
@@ -2818,12 +2958,14 @@ Dead keys (accent composition) are ignored for accelerator matching; they are pa
 Three tabs:
 
 **Toolbars tab:**
+
 - List of toolbars with checkboxes (visible/hidden).
 - `New...` button → create new toolbar dialog (name + template).
 - `Rename...`, `Delete`, `Reset` buttons.
 - `Toolbar Options` group: Large buttons, Show ScreenTips on toolbars, Show shortcut keys in ScreenTips, Color buttons, List font names in their font.
 
 **Menus tab:**
+
 - Menu bar ListBox: Built-in Menus, Custom Menus.
 - `Rename...`, `Delete`, `Reset` buttons.
 - `Change What's on Menu` area:
@@ -2832,6 +2974,7 @@ Three tabs:
   - Buttons: Add, Remove, Move Up, Move Down.
 
 **Keyboard tab:**
+
 - Categories ListBox (File, Edit, ...).
 - Commands ListBox filtered to category.
 - `Current Keys` ListBox: existing shortcuts for selected command.
@@ -2861,6 +3004,7 @@ Like Word 95, a user can save customizations in a template (not just Normal.dot)
 ### 23.1 Document open failure
 
 `DialogError` shown with:
+
 - Icon (warning triangle).
 - Title: `Error Opening Document`.
 - Body: Description of error + truncated path.
@@ -2895,7 +3039,7 @@ interface ErrorDetails {
   summary: string;
   code?: string;
   cause?: Error | string;
-  remediation?: string[];        // bulleted steps
+  remediation?: string[]; // bulleted steps
   logHref?: string;
 }
 ```
@@ -2931,19 +3075,19 @@ Dialogs with heavy data (Font dialog with thousands of fonts; FindFile with sear
 
 ### 25.1 Catalogue
 
-| Element | Animation | Duration | Easing |
-|---|---|---|---|
-| Menu open | instant | 0 ms | n/a |
-| Menu close | instant | 0 ms | n/a |
-| Dialog open | fade-in | 100 ms | ease-out |
-| Dialog close | fade-out | 80 ms | ease-in |
-| Toast slide | slide-in | 200 ms | ease-out |
-| Toast dismiss | fade-out | 120 ms | linear |
-| Toolbar dock | snap | 0 ms | n/a |
-| Scroll thumb | instant | 0 ms | n/a |
-| Tooltip appear | fade | 120 ms (after 500 ms delay) | linear |
-| Caret blink | handled by layout engine | 530 ms period | n/a |
-| Focus ring | instant | 0 ms | n/a |
+| Element        | Animation                | Duration                    | Easing   |
+| -------------- | ------------------------ | --------------------------- | -------- |
+| Menu open      | instant                  | 0 ms                        | n/a      |
+| Menu close     | instant                  | 0 ms                        | n/a      |
+| Dialog open    | fade-in                  | 100 ms                      | ease-out |
+| Dialog close   | fade-out                 | 80 ms                       | ease-in  |
+| Toast slide    | slide-in                 | 200 ms                      | ease-out |
+| Toast dismiss  | fade-out                 | 120 ms                      | linear   |
+| Toolbar dock   | snap                     | 0 ms                        | n/a      |
+| Scroll thumb   | instant                  | 0 ms                        | n/a      |
+| Tooltip appear | fade                     | 120 ms (after 500 ms delay) | linear   |
+| Caret blink    | handled by layout engine | 530 ms period               | n/a      |
+| Focus ring     | instant                  | 0 ms                        | n/a      |
 
 ### 25.2 Reduced motion
 
@@ -2960,7 +3104,7 @@ interface SplashScreenProps {
   version: string;
   productName: string;
   buildDate: string;
-  minimumVisibleMs: number;     // default 800
+  minimumVisibleMs: number; // default 800
   onClose: () => void;
 }
 ```
@@ -2982,7 +3126,7 @@ Shown on cold launch if enabled.
 ```tsx
 interface TipOfTheDayDialogProps {
   tips: Tip[];
-  seenTipIds: Set<string>;       // persisted in PrefsStore
+  seenTipIds: Set<string>; // persisted in PrefsStore
   onClose: () => void;
   onToggleShowAtStartup: (show: boolean) => void;
 }
@@ -2995,6 +3139,7 @@ export interface Tip {
 ```
 
 UI:
+
 - Title: `Tip of the Day`.
 - Lightbulb icon + current tip text.
 - `Show Tips at Startup` checkbox (default on).
@@ -3095,13 +3240,13 @@ Icons are loaded only when their toolbar button first mounts and is visible. A `
 
 Context providers are split by volatility:
 
-| Provider | Volatility | Example |
-|---|---|---|
-| ThemeContext | low (changes on theme switch) | tokens |
-| I18nContext | low | locale |
-| FocusContext | medium | focus holder |
-| KeyboardContext | medium | dispatcher |
-| DndContext | low | DnD root |
+| Provider        | Volatility                    | Example      |
+| --------------- | ----------------------------- | ------------ |
+| ThemeContext    | low (changes on theme switch) | tokens       |
+| I18nContext     | low                           | locale       |
+| FocusContext    | medium                        | focus holder |
+| KeyboardContext | medium                        | dispatcher   |
+| DndContext      | low                           | DnD root     |
 
 High-frequency state (selection, caret position) is **not** in context; it's read via Zustand selectors.
 
@@ -3110,7 +3255,7 @@ High-frequency state (selection, caret position) is **not** in context; it's rea
 Zustand selectors are narrow and use reference equality where possible:
 
 ```ts
-const dirty = useUIStore(s => s.perChildUI[activeId]?.zoom);
+const dirty = useUIStore((s) => s.perChildUI[activeId]?.zoom);
 ```
 
 For multi-field selections, use `shallow` equality:
@@ -3213,10 +3358,13 @@ Set once at app startup, typically in the App component or in `main.tsx` before 
 export function useCommand(commandId: CommandId, args?: CommandArgs) {
   const docId = useActiveDocId();
   const bridge = getEngineBridge();
-  const snap = useDocument(docId ?? '', s => s, Object.is);
+  const snap = useDocument(docId ?? '', (s) => s, Object.is);
 
   return {
-    run: useCallback(() => bridge.dispatchCommand(docId ?? '', commandId, args), [docId, commandId, args]),
+    run: useCallback(
+      () => bridge.dispatchCommand(docId ?? '', commandId, args),
+      [docId, commandId, args],
+    ),
     enabled: useMemo(() => bridge.isCommandEnabled(docId ?? '', commandId, args), [snap.version]),
     checked: useMemo(() => bridge.isCommandChecked(docId ?? '', commandId, args), [snap.version]),
     label: bridge.getCommandLabel(commandId),
@@ -3233,6 +3381,7 @@ Every UI action that changes document state is a command. Undo/redo are themselv
 ### 33.4 Plugin contributions
 
 Plugins contribute:
+
 - Menu items
 - Toolbar buttons (with an optional custom rendering hook)
 - Dialog sub-panels (injected into existing dialogs' tabs, with a declared schema)
@@ -3244,7 +3393,13 @@ UI exposes registration APIs; plugins are loaded by the engine and emit `registe
 export interface UIContribution {
   id: string;
   kind: 'menu' | 'toolbar' | 'dialog' | 'contextMenu' | 'statusBar' | 'keymap';
-  payload: MenuContribution | ToolbarContribution | DialogContribution | ContextMenuContribution | StatusBarContribution | KeymapContribution;
+  payload:
+    | MenuContribution
+    | ToolbarContribution
+    | DialogContribution
+    | ContextMenuContribution
+    | StatusBarContribution
+    | KeymapContribution;
 }
 ```
 
@@ -3259,8 +3414,8 @@ This section provides Storybook-style specifications for the most important comp
 ```tsx
 export interface AppShellProps {
   children: React.ReactNode;
-  showTitleBar?: boolean;         // false on macOS with unified title
-  showStatusBar?: boolean;        // driven by PrefsStore.view.showStatusBar
+  showTitleBar?: boolean; // false on macOS with unified title
+  showStatusBar?: boolean; // driven by PrefsStore.view.showStatusBar
 }
 
 export function AppShell({ children, showTitleBar = true, showStatusBar = true }: AppShellProps) {
@@ -3274,11 +3429,11 @@ Layout model (CSS Grid):
 .appShell {
   display: grid;
   grid-template-rows:
-    var(--titleBarHeight, 0)   /* titleBar */
-    var(--menuBarHeight)        /* menuBar */
-    auto                        /* toolbarStack */
-    1fr                         /* workspaceArea */
-    var(--statusBarHeight, 0);  /* statusBar */
+    var(--titleBarHeight, 0) /* titleBar */
+    var(--menuBarHeight) /* menuBar */
+    auto /* toolbarStack */
+    1fr /* workspaceArea */
+    var(--statusBarHeight, 0); /* statusBar */
   height: 100vh;
   overflow: hidden;
 }
@@ -3310,6 +3465,7 @@ interface TitleBarProps {
 ### 34.3 MenuBar
 
 Props:
+
 ```tsx
 interface MenuBarProps {
   tree: MenuTree;
@@ -3330,6 +3486,7 @@ interface MenuBarProps {
 Props already listed in § 7.3.
 
 Behavior notes:
+
 - `role="toolbar"` + `aria-label="{displayName}"`.
 - Arrow keys move between buttons; Home/End jump to ends.
 - Double-click on gripper docks/undocks (Word 95 behavior).
@@ -3404,6 +3561,7 @@ interface FontDialogValues {
 ```
 
 Structure:
+
 ```
 DialogFrame title="Font"
   Tabs
@@ -3451,7 +3609,7 @@ const FontDialogSchema = z.object({
   fontName: z.string().min(1),
   fontSizePt: z.number().min(1).max(1638).step(0.5),
   characterSpacing: z.object({
-    style: z.enum(['normal','expanded','condensed']),
+    style: z.enum(['normal', 'expanded', 'condensed']),
     byPt: z.number().min(-2000).max(2000),
   }),
   // ...
@@ -3618,88 +3776,88 @@ The UI package is large. We staged its construction in the following rough order
 
 This appendix ensures coverage of every Word 95 feature visible in the UI. The engine owns the feature; the UI provides the surface.
 
-| Word 95 feature | Primary UI surface | Secondary |
-|---|---|---|
-| Open file | FileDialog (via main-process IPC native picker) | MenuBar File > Open |
-| Recent files | Menu File > recents, StartPage Recent column | |
-| Save, Save As | Native save picker | MenuBar, toolbar, Ctrl+S |
-| Print, Print Preview | PrintDialog, PrintPreviewMode (view mode) | |
-| Exit | app.quit command | |
-| Cut/Copy/Paste | Clipboard commands via KeyboardDispatcher | context menu, toolbar |
-| Paste Special | PasteSpecialDialog | |
-| Undo/Redo | engine commands via toolbar dropdowns (multi-undo) | keyboard |
-| Find/Replace/Goto | FindReplaceDialog (modeless), GoToDialog (modal) | |
-| AutoText | AutoTextDialog (subset of AutoCorrectDialog) | |
-| Normal/Outline/Page Layout/Master Document views | ViewMode radio in UIStore; Menu View | |
-| Toolbar toggle | MenuBar View > Toolbars submenu | ContextMenu on toolbar area |
-| Ruler toggle | MenuBar View > Ruler | |
-| Header/Footer | HeaderFooterMode + HeaderFooterToolbar | |
-| Footnotes/Endnotes | FootnoteDialog (Insert > Footnote) | |
-| Annotation/Comments | AnnotationPane below PageHost | |
-| Page Setup | PageSetupDialog | |
-| Line Numbers | LineNumbersDialog (nested from PageSetup) | |
-| Insert Break | BreakDialog | |
-| Insert Page Numbers | PageNumbersDialog | |
-| Insert Date/Time | DateTimeDialog | |
-| Insert Symbol | SymbolDialog | |
-| Insert Field | FieldDialog | |
-| Insert Form Field | FormFieldDialog | |
-| Insert Caption | CaptionDialog | |
-| Insert Cross-reference | CrossReferenceDialog | |
-| Insert Index and Tables | IndexTablesDialog | |
-| Insert File | File picker + options | |
-| Insert Frame | Frame mode | |
-| Insert Picture | File picker | |
-| Insert Object | ObjectDialog (OLE lineage; limited in modern build) | |
-| Insert Database | DatabaseDialog (mail merge source) | |
-| Format Font | FontDialog | |
-| Format Paragraph | ParagraphDialog | |
-| Format Tabs | TabsDialog | |
-| Format Borders and Shading | BordersShadingDialog | |
-| Format Columns | ColumnsDialog | |
-| Format Change Case | ChangeCaseDialog | |
-| Format Drop Cap | DropCapDialog | |
-| Format Bullets and Numbering | BulletNumberingDialog | |
-| Format Heading Numbering | HeadingNumberingDialog | |
-| Format AutoFormat | AutoFormatDialog | |
-| Format Style | StyleDialog | |
-| Format Style Gallery | StyleGalleryDialog | |
-| Format Frame | FrameDialog | |
-| Format Picture | PictureDialog | |
-| Format Drawing Object | DrawingObjectDialog | |
-| Tools Spelling | SpellingDialog | |
-| Tools Grammar | GrammarDialog | |
-| Tools Thesaurus | ThesaurusDialog | |
-| Tools Hyphenation | HyphenationDialog | |
-| Tools Language | LanguageDialog | |
-| Tools Word Count | WordCountDialog | |
-| Tools Envelopes and Labels | EnvelopeLabelsDialog | |
-| Tools Mail Merge | MailMergeHelperDialog | |
-| Tools Protect Document | ProtectDocumentDialog | |
-| Tools Revisions | RevisionsDialog | |
-| Tools Merge Revisions | MergeDocumentsDialog | |
-| Tools Macro | MacroDialog (preserves but does not execute) | |
-| Tools Customize | CustomizeDialog | |
-| Tools Options | OptionsDialog (many tabs) | |
-| Table Insert Table | TableInsertDialog | |
-| Table Insert/Delete Cells/Rows/Columns | commands via menu + context | |
-| Table Merge Cells / Split Cells | commands | |
-| Table Cell Height and Width | CellHeightWidthDialog | |
-| Table Table AutoFormat | TableAutoFormatDialog | |
-| Table Sort | TableSortDialog | |
-| Table Formula | FormulaDialog | |
-| Table Split Table | command | |
-| Table Gridlines toggle | View option | |
-| Window New Window | command | |
-| Window Arrange All / Split / Remove Split | commands | |
-| Window list of open docs | dynamic menu | |
-| Help Contents | HelpViewer | |
-| Help Examples and Demos | HelpViewer demos section | |
-| Help Index | HelpViewer index | |
-| Help Microsoft Word Help Topics | HelpViewer | |
-| Help WordPerfect Help | WordPerfectHelpDialog | |
-| Help Technical Support | HelpViewer topic | |
-| Help About | AboutDialog | |
+| Word 95 feature                                  | Primary UI surface                                  | Secondary                   |
+| ------------------------------------------------ | --------------------------------------------------- | --------------------------- |
+| Open file                                        | FileDialog (via main-process IPC native picker)     | MenuBar File > Open         |
+| Recent files                                     | Menu File > recents, StartPage Recent column        |                             |
+| Save, Save As                                    | Native save picker                                  | MenuBar, toolbar, Ctrl+S    |
+| Print, Print Preview                             | PrintDialog, PrintPreviewMode (view mode)           |                             |
+| Exit                                             | app.quit command                                    |                             |
+| Cut/Copy/Paste                                   | Clipboard commands via KeyboardDispatcher           | context menu, toolbar       |
+| Paste Special                                    | PasteSpecialDialog                                  |                             |
+| Undo/Redo                                        | engine commands via toolbar dropdowns (multi-undo)  | keyboard                    |
+| Find/Replace/Goto                                | FindReplaceDialog (modeless), GoToDialog (modal)    |                             |
+| AutoText                                         | AutoTextDialog (subset of AutoCorrectDialog)        |                             |
+| Normal/Outline/Page Layout/Master Document views | ViewMode radio in UIStore; Menu View                |                             |
+| Toolbar toggle                                   | MenuBar View > Toolbars submenu                     | ContextMenu on toolbar area |
+| Ruler toggle                                     | MenuBar View > Ruler                                |                             |
+| Header/Footer                                    | HeaderFooterMode + HeaderFooterToolbar              |                             |
+| Footnotes/Endnotes                               | FootnoteDialog (Insert > Footnote)                  |                             |
+| Annotation/Comments                              | AnnotationPane below PageHost                       |                             |
+| Page Setup                                       | PageSetupDialog                                     |                             |
+| Line Numbers                                     | LineNumbersDialog (nested from PageSetup)           |                             |
+| Insert Break                                     | BreakDialog                                         |                             |
+| Insert Page Numbers                              | PageNumbersDialog                                   |                             |
+| Insert Date/Time                                 | DateTimeDialog                                      |                             |
+| Insert Symbol                                    | SymbolDialog                                        |                             |
+| Insert Field                                     | FieldDialog                                         |                             |
+| Insert Form Field                                | FormFieldDialog                                     |                             |
+| Insert Caption                                   | CaptionDialog                                       |                             |
+| Insert Cross-reference                           | CrossReferenceDialog                                |                             |
+| Insert Index and Tables                          | IndexTablesDialog                                   |                             |
+| Insert File                                      | File picker + options                               |                             |
+| Insert Frame                                     | Frame mode                                          |                             |
+| Insert Picture                                   | File picker                                         |                             |
+| Insert Object                                    | ObjectDialog (OLE lineage; limited in modern build) |                             |
+| Insert Database                                  | DatabaseDialog (mail merge source)                  |                             |
+| Format Font                                      | FontDialog                                          |                             |
+| Format Paragraph                                 | ParagraphDialog                                     |                             |
+| Format Tabs                                      | TabsDialog                                          |                             |
+| Format Borders and Shading                       | BordersShadingDialog                                |                             |
+| Format Columns                                   | ColumnsDialog                                       |                             |
+| Format Change Case                               | ChangeCaseDialog                                    |                             |
+| Format Drop Cap                                  | DropCapDialog                                       |                             |
+| Format Bullets and Numbering                     | BulletNumberingDialog                               |                             |
+| Format Heading Numbering                         | HeadingNumberingDialog                              |                             |
+| Format AutoFormat                                | AutoFormatDialog                                    |                             |
+| Format Style                                     | StyleDialog                                         |                             |
+| Format Style Gallery                             | StyleGalleryDialog                                  |                             |
+| Format Frame                                     | FrameDialog                                         |                             |
+| Format Picture                                   | PictureDialog                                       |                             |
+| Format Drawing Object                            | DrawingObjectDialog                                 |                             |
+| Tools Spelling                                   | SpellingDialog                                      |                             |
+| Tools Grammar                                    | GrammarDialog                                       |                             |
+| Tools Thesaurus                                  | ThesaurusDialog                                     |                             |
+| Tools Hyphenation                                | HyphenationDialog                                   |                             |
+| Tools Language                                   | LanguageDialog                                      |                             |
+| Tools Word Count                                 | WordCountDialog                                     |                             |
+| Tools Envelopes and Labels                       | EnvelopeLabelsDialog                                |                             |
+| Tools Mail Merge                                 | MailMergeHelperDialog                               |                             |
+| Tools Protect Document                           | ProtectDocumentDialog                               |                             |
+| Tools Revisions                                  | RevisionsDialog                                     |                             |
+| Tools Merge Revisions                            | MergeDocumentsDialog                                |                             |
+| Tools Macro                                      | MacroDialog (preserves but does not execute)        |                             |
+| Tools Customize                                  | CustomizeDialog                                     |                             |
+| Tools Options                                    | OptionsDialog (many tabs)                           |                             |
+| Table Insert Table                               | TableInsertDialog                                   |                             |
+| Table Insert/Delete Cells/Rows/Columns           | commands via menu + context                         |                             |
+| Table Merge Cells / Split Cells                  | commands                                            |                             |
+| Table Cell Height and Width                      | CellHeightWidthDialog                               |                             |
+| Table Table AutoFormat                           | TableAutoFormatDialog                               |                             |
+| Table Sort                                       | TableSortDialog                                     |                             |
+| Table Formula                                    | FormulaDialog                                       |                             |
+| Table Split Table                                | command                                             |                             |
+| Table Gridlines toggle                           | View option                                         |                             |
+| Window New Window                                | command                                             |                             |
+| Window Arrange All / Split / Remove Split        | commands                                            |                             |
+| Window list of open docs                         | dynamic menu                                        |                             |
+| Help Contents                                    | HelpViewer                                          |                             |
+| Help Examples and Demos                          | HelpViewer demos section                            |                             |
+| Help Index                                       | HelpViewer index                                    |                             |
+| Help Microsoft Word Help Topics                  | HelpViewer                                          |                             |
+| Help WordPerfect Help                            | WordPerfectHelpDialog                               |                             |
+| Help Technical Support                           | HelpViewer topic                                    |                             |
+| Help About                                       | AboutDialog                                         |                             |
 
 ---
 
@@ -3716,7 +3874,7 @@ const meta: Meta<typeof Button> = {
   title: 'Primitives/Button',
   component: Button,
   parameters: { layout: 'centered', theme: 'word95' },
-  argTypes: { kind: { control: 'select', options: ['default','cancel','normal','toolbar'] } },
+  argTypes: { kind: { control: 'select', options: ['default', 'cancel', 'normal', 'toolbar'] } },
 };
 
 export default meta;
@@ -3726,7 +3884,12 @@ export const Default: Story = { args: { label: 'OK', kind: 'default', onClick: (
 export const Cancel: Story = { args: { label: 'Cancel', kind: 'cancel', onClick: () => {} } };
 export const Disabled: Story = { args: { label: 'OK', kind: 'default', disabled: true } };
 export const WithIcon: Story = { args: { label: 'Save', icon: 'file.save' } };
-export const Pressed: Story = { args: { label: 'Bold', kind: 'toolbar' }, play: async ({ canvasElement }) => { /* press */ } };
+export const Pressed: Story = {
+  args: { label: 'Bold', kind: 'toolbar' },
+  play: async ({ canvasElement }) => {
+    /* press */
+  },
+};
 ```
 
 ### 38.2 Interaction tests
@@ -3747,33 +3910,33 @@ Every story that needs document state uses `renderWithProviders` (a test utility
 
 A small extract showing how commands surface across UI:
 
-| Command ID | Menu | Toolbar (Standard) | Toolbar (Formatting) | Accelerator | Context menu |
-|---|---|---|---|---|---|
-| `file.new` | File > New... | New button | | Ctrl+N | |
-| `file.open` | File > Open... | Open button | | Ctrl+O | |
-| `file.save` | File > Save | Save button | | Ctrl+S | |
-| `edit.cut` | Edit > Cut | Cut button | | Ctrl+X | text |
-| `edit.copy` | Edit > Copy | Copy button | | Ctrl+C | text |
-| `edit.paste` | Edit > Paste | Paste button | | Ctrl+V | text |
-| `edit.undo` | Edit > Undo | Undo dropdown | | Ctrl+Z | |
-| `format.bold` | Format > Font... (in Font style) | | Bold button | Ctrl+B | text |
-| `format.italic` | Format > Font... | | Italic button | Ctrl+I | text |
-| `format.underline` | Format > Font... | | Underline button | Ctrl+U | text |
-| `format.alignLeft` | Format > Paragraph... | | Align Left button | Ctrl+L | text |
-| `format.alignCenter` | Format > Paragraph... | | Align Center | Ctrl+E | text |
-| `format.alignRight` | Format > Paragraph... | | Align Right | Ctrl+R | text |
-| `format.justify` | Format > Paragraph... | | Justify | Ctrl+J | text |
-| `insert.hyperlink` | Insert > Hyperlink... | | | Ctrl+K | text |
-| `insert.pageBreak` | Insert > Break... | | | Ctrl+Enter | |
-| `view.normal` | View > Normal | | | Alt+Ctrl+N | |
-| `view.outline` | View > Outline | | | Alt+Ctrl+O | |
-| `view.pageLayout` | View > Page Layout | | | Alt+Ctrl+P | |
-| `tools.spelling` | Tools > Spelling | Spelling button | | F7 | |
-| `tools.thesaurus` | Tools > Thesaurus... | | | Shift+F7 | text |
-| `tools.wordCount` | Tools > Word Count... | | | Ctrl+Shift+G | |
-| `table.insertRow` | Table > Insert Rows | | | | table |
-| `table.deleteRow` | Table > Delete Rows | | | | table |
-| `window.next` | Window > 1..N | | | Ctrl+F6 | |
+| Command ID           | Menu                             | Toolbar (Standard) | Toolbar (Formatting) | Accelerator  | Context menu |
+| -------------------- | -------------------------------- | ------------------ | -------------------- | ------------ | ------------ |
+| `file.new`           | File > New...                    | New button         |                      | Ctrl+N       |              |
+| `file.open`          | File > Open...                   | Open button        |                      | Ctrl+O       |              |
+| `file.save`          | File > Save                      | Save button        |                      | Ctrl+S       |              |
+| `edit.cut`           | Edit > Cut                       | Cut button         |                      | Ctrl+X       | text         |
+| `edit.copy`          | Edit > Copy                      | Copy button        |                      | Ctrl+C       | text         |
+| `edit.paste`         | Edit > Paste                     | Paste button       |                      | Ctrl+V       | text         |
+| `edit.undo`          | Edit > Undo                      | Undo dropdown      |                      | Ctrl+Z       |              |
+| `format.bold`        | Format > Font... (in Font style) |                    | Bold button          | Ctrl+B       | text         |
+| `format.italic`      | Format > Font...                 |                    | Italic button        | Ctrl+I       | text         |
+| `format.underline`   | Format > Font...                 |                    | Underline button     | Ctrl+U       | text         |
+| `format.alignLeft`   | Format > Paragraph...            |                    | Align Left button    | Ctrl+L       | text         |
+| `format.alignCenter` | Format > Paragraph...            |                    | Align Center         | Ctrl+E       | text         |
+| `format.alignRight`  | Format > Paragraph...            |                    | Align Right          | Ctrl+R       | text         |
+| `format.justify`     | Format > Paragraph...            |                    | Justify              | Ctrl+J       | text         |
+| `insert.hyperlink`   | Insert > Hyperlink...            |                    |                      | Ctrl+K       | text         |
+| `insert.pageBreak`   | Insert > Break...                |                    |                      | Ctrl+Enter   |              |
+| `view.normal`        | View > Normal                    |                    |                      | Alt+Ctrl+N   |              |
+| `view.outline`       | View > Outline                   |                    |                      | Alt+Ctrl+O   |              |
+| `view.pageLayout`    | View > Page Layout               |                    |                      | Alt+Ctrl+P   |              |
+| `tools.spelling`     | Tools > Spelling                 | Spelling button    |                      | F7           |              |
+| `tools.thesaurus`    | Tools > Thesaurus...             |                    |                      | Shift+F7     | text         |
+| `tools.wordCount`    | Tools > Word Count...            |                    |                      | Ctrl+Shift+G |              |
+| `table.insertRow`    | Table > Insert Rows              |                    |                      |              | table        |
+| `table.deleteRow`    | Table > Delete Rows              |                    |                      |              | table        |
+| `window.next`        | Window > 1..N                    |                    |                      | Ctrl+F6      |              |
 
 ---
 
@@ -3800,10 +3963,10 @@ export interface MenuBarProps {
 
 export function MenuBar({ docId }: MenuBarProps) {
   const tree = useMenuTree(docId);
-  const nav = useUIStore(s => s.menuNavigation);
-  const openMenu = useUIStore(s => s.openMenu);
-  const closeMenu = useUIStore(s => s.closeMenu);
-  const setMnemonicsVisible = useUIStore(s => s.setMnemonicsVisible);
+  const nav = useUIStore((s) => s.menuNavigation);
+  const openMenu = useUIStore((s) => s.openMenu);
+  const closeMenu = useUIStore((s) => s.closeMenu);
+  const setMnemonicsVisible = useUIStore((s) => s.setMnemonicsVisible);
   const barRef = React.useRef<HTMLDivElement>(null);
 
   // Alt key handling
@@ -3833,13 +3996,8 @@ export function MenuBar({ docId }: MenuBarProps) {
   const activeTopId = nav.activePath[0] ?? null;
 
   return (
-    <div
-      ref={barRef}
-      role="menubar"
-      aria-label="Application menu"
-      className={styles.menuBar}
-    >
-      {tree.root.map(node => (
+    <div ref={barRef} role="menubar" aria-label="Application menu" className={styles.menuBar}>
+      {tree.root.map((node) => (
         <MenuItem
           key={node.id}
           node={node}
@@ -3847,14 +4005,16 @@ export function MenuBar({ docId }: MenuBarProps) {
           activePath={nav.activePath}
           mnemonicsVisible={nav.mnemonicsVisible}
           onActivate={() => openMenu([node.id], 'mouse')}
-          onHover={() => { if (activeTopId !== null && activeTopId !== node.id) openMenu([node.id], 'mouse'); }}
+          onHover={() => {
+            if (activeTopId !== null && activeTopId !== node.id) openMenu([node.id], 'mouse');
+          }}
           onSubmenuOpen={() => {}}
         />
       ))}
       {activeTopId && (
         <SubMenu
           parentPath={[activeTopId]}
-          nodes={tree.root.find(n => n.id === activeTopId)?.children ?? []}
+          nodes={tree.root.find((n) => n.id === activeTopId)?.children ?? []}
           onClose={closeMenu}
         />
       )}
@@ -3879,6 +4039,7 @@ export function MenuBar({ docId }: MenuBarProps) {
 ## 42. Appendix — Telemetry hooks (optional, off by default)
 
 If the user opts in (Options > General > Send usage data), the UI emits events:
+
 - `ui.menu.opened`, `ui.menu.command`, `ui.dialog.opened`, `ui.dialog.submitted`, `ui.toolbar.buttonPressed`, `ui.theme.changed`, `ui.customize.saved`.
 
 All events are anonymized; no document content leaves the machine. Telemetry is strictly off by default.

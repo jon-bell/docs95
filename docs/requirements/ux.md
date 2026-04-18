@@ -7,11 +7,13 @@ This document specifies the visible surface and tactile interaction model of the
 The target audience for this spec is an implementing engineer who has **never used Word 95**. Every behavior, cursor, shortcut, color, and pixel size that matters is stated here. When a source disagrees with itself, the more conservative (more faithful) interpretation is chosen and a note explains why.
 
 Units:
+
 - "px" means CSS pixels at 100% OS scale (device-independent); implementations must pixel-snap bitmap icons at integer zoom factors.
 - "pt" means typographic point (1/72 in).
 - Colors are hex sRGB unless a Windows system color alias is indicated (e.g., `COLOR_3DFACE`).
 
 Source references (used throughout and cited in Appendix A):
+
 - WinWorldPC Word 95 archive (screenshots)
 - Internet Archive "Running Microsoft Word 7 for Windows 95" (Microsoft Press, 1995)
 - "The Windows Interface Guidelines for Software Design" (Microsoft Press, 1995)
@@ -78,6 +80,7 @@ A child document window has, top to bottom:
 4. **Client area** — white (or COLOR_WINDOW). Hosts the rendered document canvas (page-shaped white rectangles on a gray background in Page Layout view, or a single continuous text stream in Normal view).
 
 Active vs inactive child:
+
 - Active child title bar: system "active caption" gradient; text white.
 - Inactive child title bar: flat COLOR_INACTIVECAPTION gray; text dark gray.
 
@@ -102,7 +105,7 @@ Keyboard to open: Alt+Space (parent) or Alt+Hyphen (Alt+`-`) (active child).
 - **Opening a new document** (`File → New`, Ctrl+N) creates a new child at the default size (roughly 80% of workspace, cascaded offset from the last).
 - **Cascading new children**: each newly created or opened window is positioned 24 px right and 24 px down from the previous child's top-left, wrapping when it would go off the workspace bottom.
 - **Arrange All** (`Window → Arrange All`): tiles all non-minimized children horizontally (side by side if workspace is wider than tall, otherwise vertically) filling the full workspace minus the horizontal strip at the bottom reserved for minimized icons (see 1.6). Each tile gets an equal share.
-- **Cascade** (`Window → Cascade`, not in default Window menu in Word 95 — Word 95's Window menu has only New Window, Arrange All, Split, and the document list; we include Cascade as a v1 extension for parity with every other MDI app of the era). *Optional; if omitted, ensure Arrange All is present.*
+- **Cascade** (`Window → Cascade`, not in default Window menu in Word 95 — Word 95's Window menu has only New Window, Arrange All, Split, and the document list; we include Cascade as a v1 extension for parity with every other MDI app of the era). _Optional; if omitted, ensure Arrange All is present._
 - **Maximize / minimize / restore** each child via its chrome buttons or the system menu.
 - **Window list in Window menu**: the Window menu lists every open document, numbered 1–9, with a check by the active one. Keyboard: Alt+W, then digit.
 - **Next / previous window**: Ctrl+F6 / Ctrl+Shift+F6 cycles forward / backward.
@@ -166,7 +169,7 @@ On macOS, the title appears centered per the HIG; the menu bar is the OS global 
 
 Menu items: File, Edit, View, Insert, Format, Tools, Table, Window, Help. Mnemonics are shown as underlined letters when the Alt key is held (Windows convention post-98 hid mnemonics by default; Word 95 **always** showed them — we follow Word 95 and **always** show mnemonics).
 
-Mnemonic letters (underline shown **always**): F**ile, E**dit, V**iew, I**nsert, F**o**rmat, T**ools, T**a**ble, W**indow, H**elp.
+Mnemonic letters (underline shown **always**): F**ile, E**dit, V**iew, I**nsert, F**o**rmat, T**ools, T**a**ble, W**indow, H\*\*elp.
 
 Note the non-first-letter mnemonics: "F**o**rmat" (because F is taken by File), "T**a**ble" (because T is taken by Tools).
 
@@ -447,6 +450,7 @@ Help
 ### 3.5 Submenus
 
 Cascading submenus used by Word 95:
+
 - Edit → AutoText → (list of autotext entries and "New...").
 - Insert → Break → (dialog — not a submenu actually; "Break" opens a modal. Some Win95 apps used a submenu; Word 95 uses a dialog. We follow Word 95 and open a dialog.)
 - View → Toolbars → (list of toolbars with checks + "Customize..." at the bottom).
@@ -468,6 +472,7 @@ macOS-specific shortcut mappings: use **Cmd** in place of **Ctrl** for every ent
 Different context menus per object under the pointer. Triggered by right-click (Windows/Linux), two-finger tap or Ctrl-click (macOS), or Shift+F10 from keyboard (target is current selection / caret).
 
 **Text context menu** (when right-click in body text, no special object):
+
 ```
 ├── Cut
 ├── Copy
@@ -482,6 +487,7 @@ Different context menus per object under the pointer. Triggered by right-click (
 ```
 
 **Spelling error context menu** (right-click word underlined red):
+
 ```
 ├── <suggestion 1>
 ├── <suggestion 2>
@@ -499,6 +505,7 @@ Different context menus per object under the pointer. Triggered by right-click (
 **Grammar error** (green-underlined in v2; dialog-based only in v1): similar structure but starts with grammar advice.
 
 **Table cell context menu**:
+
 ```
 ├── Cut / Copy / Paste
 ├── ───────────────
@@ -518,6 +525,7 @@ Different context menus per object under the pointer. Triggered by right-click (
 ```
 
 **Image / picture context menu**:
+
 ```
 ├── Cut / Copy / Paste
 ├── ───────────────
@@ -530,6 +538,7 @@ Different context menus per object under the pointer. Triggered by right-click (
 ```
 
 **Hyperlink context menu** (v2 — Word 95 did not have them as a first-class construct but did have `HYPERLINK` fields we honor):
+
 ```
 ├── Open Hyperlink
 ├── Copy Hyperlink
@@ -538,6 +547,7 @@ Different context menus per object under the pointer. Triggered by right-click (
 ```
 
 **Header / footer context menu** — switches to header/footer edit mode; includes standard text actions plus:
+
 ```
 ├── Page Setup...
 ├── Same as Previous     (section breaks only)
@@ -559,23 +569,24 @@ Different context menus per object under the pointer. Triggered by right-click (
 
 Eight shipping toolbars (same as Word 95):
 
-| Toolbar      | Default state               | Rows | Notes |
-|--------------|-----------------------------|------|-------|
-| Standard     | Docked top, row 1           | 1    | File/Edit/layout/zoom core icons |
-| Formatting   | Docked top, row 2           | 1    | Font, size, B/I/U, alignment, indents, bullets |
-| Borders      | Hidden                      | 1    | Shown when cursor is in a table (optional) |
-| Database     | Hidden                      | 1    | Database field insertion |
-| Drawing      | Hidden                      | 1    | Shapes, text box, callouts |
-| Forms        | Hidden                      | 1    | Form fields, form design |
-| Mail Merge   | Hidden                      | 1    | Mail merge helpers |
-| Microsoft    | Hidden                      | 1    | Launch other Office apps — v1 is a stub; v2 is hidden |
-| TipWizard    | Hidden (toggled by user)    | 1    | Shows a tip strip |
+| Toolbar    | Default state            | Rows | Notes                                                 |
+| ---------- | ------------------------ | ---- | ----------------------------------------------------- |
+| Standard   | Docked top, row 1        | 1    | File/Edit/layout/zoom core icons                      |
+| Formatting | Docked top, row 2        | 1    | Font, size, B/I/U, alignment, indents, bullets        |
+| Borders    | Hidden                   | 1    | Shown when cursor is in a table (optional)            |
+| Database   | Hidden                   | 1    | Database field insertion                              |
+| Drawing    | Hidden                   | 1    | Shapes, text box, callouts                            |
+| Forms      | Hidden                   | 1    | Form fields, form design                              |
+| Mail Merge | Hidden                   | 1    | Mail merge helpers                                    |
+| Microsoft  | Hidden                   | 1    | Launch other Office apps — v1 is a stub; v2 is hidden |
+| TipWizard  | Hidden (toggled by user) | 1    | Shows a tip strip                                     |
 
 ### 4.2 Button and icon metrics
 
 Word 95 toolbar button bitmaps are **16×15** pixels (height 15, not 16 — verified by inspecting the `.BMP` strips embedded in the Word 95 `WORDxx.DLL` resources). The button **chrome** — the visible bevel — is **22×22**, so each icon sits centered in 22 px with 3 px top / 4 px bottom and 3 px each side of clear space.
 
 Our implementation:
+
 - Icons are **16×16 SVGs**, but we render them at **16×15** at 100% zoom by cropping the bottom row (transparent in our authored icons).
 - The bevel chrome is **22×22** with 1 px border outside and 1 px inside — i.e., the clickable hit region is 22×22.
 - At OS scale > 100%, we switch to 2× (32×32) and 3× (48×48) raster renders of the SVG with crisp-edge image rendering.
@@ -585,17 +596,18 @@ Dropdown arrows on combo/split buttons: a 11×22 strip to the right of the 22×2
 
 ### 4.3 Button states
 
-| State              | Visual |
-|--------------------|--------|
-| Default (up)       | flat gray (`COLOR_3DFACE`), no bevel |
-| Hover (hot)        | 1 px raised bevel (light top/left, dark bottom/right) |
-| Pressed            | 1 px sunken bevel |
-| Toggled (sticky)   | 1 px sunken bevel with slightly darker (1-shade-darker) background |
-| Disabled           | grayscaled icon + flat, same as default |
-| Disabled + hover   | no bevel change |
-| Focused (kbd)      | 1 px dotted rectangle inside the chrome |
+| State            | Visual                                                             |
+| ---------------- | ------------------------------------------------------------------ |
+| Default (up)     | flat gray (`COLOR_3DFACE`), no bevel                               |
+| Hover (hot)      | 1 px raised bevel (light top/left, dark bottom/right)              |
+| Pressed          | 1 px sunken bevel                                                  |
+| Toggled (sticky) | 1 px sunken bevel with slightly darker (1-shade-darker) background |
+| Disabled         | grayscaled icon + flat, same as default                            |
+| Disabled + hover | no bevel change                                                    |
+| Focused (kbd)    | 1 px dotted rectangle inside the chrome                            |
 
 Rendering details:
+
 - Bevel colors: light = `COLOR_3DHILIGHT` (`#FFFFFF`), dark = `COLOR_3DSHADOW` (`#808080`).
 - Disabled icon: replace all non-transparent pixels with two draws: (a) a 1 px white offset to the down-right, (b) the pixels themselves in `#808080`. This is the classic Win95 etched disabled glyph.
 
@@ -670,60 +682,60 @@ When the outer frame is narrower than the sum of visible toolbars on a dock row,
 
 The `Standard` toolbar, left to right:
 
-| # | Control            | Type    | Tooltip              | Action |
-|---|--------------------|---------|----------------------|--------|
-| 1 | New (blank doc)    | button  | New                  | File → New (default template) |
-| 2 | Open               | button  | Open                 | File → Open... |
-| 3 | Save               | button  | Save                 | File → Save |
-| 4 | Print              | button  | Print                | File → Print (immediate) |
-| 5 | Print Preview      | button  | Print Preview        | File → Print Preview |
-| 6 | Spelling           | button  | Spelling             | Tools → Spelling... |
-|  | ──sep──            |         |                      |  |
-| 7 | Cut                | button  | Cut                  | Edit → Cut |
-| 8 | Copy               | button  | Copy                 | Edit → Copy |
-| 9 | Paste              | button  | Paste                | Edit → Paste |
-| 10| Format Painter     | button  | Format Painter       | toggle; single-click = one-shot; double-click = sticky |
-|  | ──sep──            |         |                      |  |
-| 11| Undo               | split   | Undo                 | left = undo; dropdown shows history stack |
-| 12| Redo               | split   | Redo                 | left = redo; dropdown shows redo stack |
-|  | ──sep──            |         |                      |  |
-| 13| AutoFormat         | button  | AutoFormat           | Format → AutoFormat (no dialog — immediate apply) |
-| 14| Insert Address     | button  | Insert Address       | open address picker |
-| 15| Insert Table       | dropdown| Insert Table         | grid popup; drag to choose rows/cols |
-| 16| Insert MS Excel    | dropdown| Insert Excel Worksheet| grid popup for worksheet dimensions |
-| 17| Columns            | dropdown| Columns              | grid popup to choose 1–6 columns |
-| 18| Drawing            | toggle  | Drawing              | show/hide Drawing toolbar |
-| 19| Show ¶             | toggle  | Show/Hide ¶          | toggle nonprinting character display |
-|  | ──sep──            |         |                      |  |
-| 20| Zoom               | combo   | Zoom Control         | dropdown: 50%, 75%, 100%, 150%, 200%, Whole Page, Page Width, Two Pages |
-| 21| TipWizard          | toggle  | TipWizard            | show/hide TipWizard toolbar |
-| 22| Help               | button  | Help                 | enters "help mode" cursor; click to query |
+| #   | Control         | Type     | Tooltip                | Action                                                                  |
+| --- | --------------- | -------- | ---------------------- | ----------------------------------------------------------------------- |
+| 1   | New (blank doc) | button   | New                    | File → New (default template)                                           |
+| 2   | Open            | button   | Open                   | File → Open...                                                          |
+| 3   | Save            | button   | Save                   | File → Save                                                             |
+| 4   | Print           | button   | Print                  | File → Print (immediate)                                                |
+| 5   | Print Preview   | button   | Print Preview          | File → Print Preview                                                    |
+| 6   | Spelling        | button   | Spelling               | Tools → Spelling...                                                     |
+|     | ──sep──         |          |                        |                                                                         |
+| 7   | Cut             | button   | Cut                    | Edit → Cut                                                              |
+| 8   | Copy            | button   | Copy                   | Edit → Copy                                                             |
+| 9   | Paste           | button   | Paste                  | Edit → Paste                                                            |
+| 10  | Format Painter  | button   | Format Painter         | toggle; single-click = one-shot; double-click = sticky                  |
+|     | ──sep──         |          |                        |                                                                         |
+| 11  | Undo            | split    | Undo                   | left = undo; dropdown shows history stack                               |
+| 12  | Redo            | split    | Redo                   | left = redo; dropdown shows redo stack                                  |
+|     | ──sep──         |          |                        |                                                                         |
+| 13  | AutoFormat      | button   | AutoFormat             | Format → AutoFormat (no dialog — immediate apply)                       |
+| 14  | Insert Address  | button   | Insert Address         | open address picker                                                     |
+| 15  | Insert Table    | dropdown | Insert Table           | grid popup; drag to choose rows/cols                                    |
+| 16  | Insert MS Excel | dropdown | Insert Excel Worksheet | grid popup for worksheet dimensions                                     |
+| 17  | Columns         | dropdown | Columns                | grid popup to choose 1–6 columns                                        |
+| 18  | Drawing         | toggle   | Drawing                | show/hide Drawing toolbar                                               |
+| 19  | Show ¶          | toggle   | Show/Hide ¶            | toggle nonprinting character display                                    |
+|     | ──sep──         |          |                        |                                                                         |
+| 20  | Zoom            | combo    | Zoom Control           | dropdown: 50%, 75%, 100%, 150%, 200%, Whole Page, Page Width, Two Pages |
+| 21  | TipWizard       | toggle   | TipWizard              | show/hide TipWizard toolbar                                             |
+| 22  | Help            | button   | Help                   | enters "help mode" cursor; click to query                               |
 
 The `Formatting` toolbar, left to right:
 
-| # | Control       | Type    | Tooltip      | Action |
-|---|---------------|---------|--------------|--------|
-| 1 | Style         | combo   | Style        | dropdown list of styles |
-| 2 | Font          | combo   | Font         | dropdown of fonts (see §4.10) |
-| 3 | Size          | combo   | Font Size    | dropdown of common sizes + free entry |
-|  | ──sep──       |         |              |  |
-| 4 | Bold          | toggle  | Bold         | Ctrl+B |
-| 5 | Italic        | toggle  | Italic       | Ctrl+I |
-| 6 | Underline     | toggle  | Underline    | Ctrl+U |
-|  | ──sep──       |         |              |  |
-| 7 | Align Left    | radio   | Align Left   | Ctrl+L |
-| 8 | Align Center  | radio   | Center       | Ctrl+E |
-| 9 | Align Right   | radio   | Align Right  | Ctrl+R |
-| 10| Justify       | radio   | Justify      | Ctrl+J |
-|  | ──sep──       |         |              |  |
-| 11| Numbered list | toggle  | Numbered List| toggles list numbering |
-| 12| Bullet list   | toggle  | Bulleted List| toggles bullet |
-| 13| Decrease Indent|button  | Decrease Indent | Ctrl+Shift+M |
-| 14| Increase Indent|button  | Increase Indent | Ctrl+M |
-|  | ──sep──       |         |              |  |
-| 15| Borders       | toggle  | Borders      | show/hide Borders toolbar |
-| 16| Highlight     | split   | Highlight    | main = apply last color; dropdown = color picker |
-| 17| Font Color    | split   | Font Color   | main = apply last; dropdown = color picker |
+| #   | Control         | Type   | Tooltip         | Action                                           |
+| --- | --------------- | ------ | --------------- | ------------------------------------------------ |
+| 1   | Style           | combo  | Style           | dropdown list of styles                          |
+| 2   | Font            | combo  | Font            | dropdown of fonts (see §4.10)                    |
+| 3   | Size            | combo  | Font Size       | dropdown of common sizes + free entry            |
+|     | ──sep──         |        |                 |                                                  |
+| 4   | Bold            | toggle | Bold            | Ctrl+B                                           |
+| 5   | Italic          | toggle | Italic          | Ctrl+I                                           |
+| 6   | Underline       | toggle | Underline       | Ctrl+U                                           |
+|     | ──sep──         |        |                 |                                                  |
+| 7   | Align Left      | radio  | Align Left      | Ctrl+L                                           |
+| 8   | Align Center    | radio  | Center          | Ctrl+E                                           |
+| 9   | Align Right     | radio  | Align Right     | Ctrl+R                                           |
+| 10  | Justify         | radio  | Justify         | Ctrl+J                                           |
+|     | ──sep──         |        |                 |                                                  |
+| 11  | Numbered list   | toggle | Numbered List   | toggles list numbering                           |
+| 12  | Bullet list     | toggle | Bulleted List   | toggles bullet                                   |
+| 13  | Decrease Indent | button | Decrease Indent | Ctrl+Shift+M                                     |
+| 14  | Increase Indent | button | Increase Indent | Ctrl+M                                           |
+|     | ──sep──         |        |                 |                                                  |
+| 15  | Borders         | toggle | Borders         | show/hide Borders toolbar                        |
+| 16  | Highlight       | split  | Highlight       | main = apply last color; dropdown = color picker |
+| 17  | Font Color      | split  | Font Color      | main = apply last; dropdown = color picker       |
 
 ### 4.10 Combo boxes in toolbars
 
@@ -760,6 +772,7 @@ Color grid popup: 5×5 of 15×15 color swatches with 1 px divider, preset palett
 ### 4.13 Customize dialog (overview)
 
 `Tools → Customize...` opens a tabbed modal (see §5):
+
 - **Toolbars** — list of toolbars with checkboxes; New, Reset, Rename, Delete buttons; drag a button off a live toolbar to remove while the dialog is open.
 - **Menus** — similar for menu items.
 - **Keyboard** — assign shortcuts.
@@ -805,6 +818,7 @@ Color grid popup: 5×5 of 15×15 color swatches with 1 px divider, preset palett
 ```
 
 Metrics:
+
 - Title bar: 18 px, standard Win95 caption, gradient or flat per active/inactive.
 - Help `?` button (16×14): to the **left** of the close `X` in the title bar (Win95 "context help" button). Clicking turns the cursor into `pointer+?`; the next click on a control shows its context help topic.
 - Close `X` (16×14): cancels the dialog (same as Cancel). Keyboard: Esc.
@@ -823,18 +837,18 @@ Metrics:
 
 ### 5.4 Control types and metrics
 
-| Control    | Metric                                                 |
-|------------|--------------------------------------------------------|
-| Label      | Tahoma 8 pt; trailing `:`; right-padded by 8 px        |
-| Text edit  | 21 px tall; 1 px sunken border; white bg; black text   |
-| Combobox   | 21 px tall; dropdown arrow 17×19 at right              |
-| Checkbox   | 13×13 box + 6 px gap + label                           |
-| Radio      | 13×13 round + 6 px gap + label                         |
-| Spin box   | text edit + 17×10 up and 17×10 down stacked at right   |
-| Button     | 22 px tall, min width 75 px                            |
-| List box   | 1 px sunken border; row height 16 px                   |
-| Group box  | 3D etched rect; label starts at x=8 on top edge        |
-| Slider     | used rarely (Options → User Info doesn't use sliders); horizontal track 4 px, thumb 11×20 |
+| Control   | Metric                                                                                    |
+| --------- | ----------------------------------------------------------------------------------------- |
+| Label     | Tahoma 8 pt; trailing `:`; right-padded by 8 px                                           |
+| Text edit | 21 px tall; 1 px sunken border; white bg; black text                                      |
+| Combobox  | 21 px tall; dropdown arrow 17×19 at right                                                 |
+| Checkbox  | 13×13 box + 6 px gap + label                                                              |
+| Radio     | 13×13 round + 6 px gap + label                                                            |
+| Spin box  | text edit + 17×10 up and 17×10 down stacked at right                                      |
+| Button    | 22 px tall, min width 75 px                                                               |
+| List box  | 1 px sunken border; row height 16 px                                                      |
+| Group box | 3D etched rect; label starts at x=8 on top edge                                           |
+| Slider    | used rarely (Options → User Info doesn't use sliders); horizontal track 4 px, thumb 11×20 |
 
 ### 5.5 Tab order and mnemonics
 
@@ -905,6 +919,7 @@ Four tabs: **Margins**, **Paper Size**, **Paper Source**, **Layout**.
 #### 5.7.4 Break (Insert → Break)
 
 Single-pane modal:
+
 - Radio group: ( ) Page Break (Ctrl+Enter), ( ) Column Break (Ctrl+Shift+Enter), ( ) Section Breaks: ( ) Next Page, ( ) Continuous, ( ) Even Page, ( ) Odd Page.
 - OK, Cancel, Help.
 
@@ -917,6 +932,7 @@ Each tab is a dense grid of checkboxes and dropdowns. Row heights 18–22 px.
 #### 5.7.6 AutoCorrect (Tools → AutoCorrect)
 
 Single pane:
+
 - [x] Change 'Straight Quotes' to 'Smart Quotes'
 - [x] Correct TWo INitial CApitals
 - [x] Capitalize First Letter of Sentences
@@ -927,6 +943,7 @@ Single pane:
 #### 5.7.7 Mail Merge Helper
 
 A centered modal "wizard-like" window with three numbered buttons:
+
 - **1 Main Document** — Create dropdown (Form Letters, Mailing Labels, Envelopes, Catalog)
 - **2 Data Source** — Get Data dropdown (Create Data Source, Open Data Source, Use Address Book, Header Options)
 - **3 Merge the Data with the Document** — Merge button; opens sub-dialog
@@ -984,6 +1001,7 @@ Two tabs: **Borders**, **Shading**.
 #### 5.7.14 Style
 
 Complex modal:
+
 - Styles list (left, 40% width, scrolling list of style names — those matching the List filter).
 - List filter dropdown (All Styles, Styles in Use, User-Defined Styles).
 - Description pane (right, bottom) showing the composition of the selected style.
@@ -1016,6 +1034,7 @@ Complex modal:
 ```
 
 Modeless rules:
+
 - The dialog stays open while the user interacts with the document.
 - Focus can move to the document and back. Enter in the document does not close the dialog.
 - Only one Find and Replace dialog exists per process — opening it when already open simply raises + selects the right tab.
@@ -1023,6 +1042,7 @@ Modeless rules:
 - Closing the dialog preserves its state (last Find/Replace strings and options) for the life of the process.
 
 Go To tab:
+
 - "Go to What" listbox: Page, Section, Line, Bookmark, Comment, Footnote, Endnote, Field, Table, Graphic, Equation, Object, Heading.
 - Contextual entry field on the right: "Enter page number" etc.
 - Supports `+N` / `-N` relative navigation and `N%` percent-of-document.
@@ -1031,6 +1051,7 @@ Go To tab:
 ### 5.9 Open / Save As dialogs
 
 Use the OS native file dialogs with these extensions:
+
 - Save As dropdown "Save File as Type" defaults to `Word Document (*.docx)`.
 - Tools menu in the dialog offers: General Options (our own subdialog for password + read-only), Save Options (version mgmt), Network Options, Print.
 
@@ -1067,6 +1088,7 @@ Word 95's Help Topics viewer had three tabs: **Contents**, **Index**, **Find**. 
 ### 6.2 Units
 
 From `Tools → Options → General → Measurement units`:
+
 - Inches (default en-US)
 - Centimeters
 - Millimeters
@@ -1086,6 +1108,7 @@ At the top of the ruler, three markers:
 Dragging the left indent rectangle moves **both** the hanging and left markers (preserving relative offset).
 
 At the right edge:
+
 - **Right indent marker**: 7×7 upward triangle, at x = (right indent from right margin).
 
 ### 6.4 Tab stops and tab-type selector
@@ -1102,6 +1125,7 @@ At the far left of the ruler area (in the 18-px gutter to the left of the zero m
 Cycling order: Left → Center → Right → Decimal → Bar → (repeat).
 
 Setting tab stops:
+
 - **Click** on the ruler horizontal face: inserts a tab stop of the current selected type at that x.
 - **Drag** a tab: moves it.
 - **Drag off** (pull downward more than 8 px below the ruler): removes the tab.
@@ -1118,6 +1142,7 @@ The margin regions at the far left and far right of the ruler are darker gray. T
 ### 6.6 Column separators
 
 When a section has multiple columns, the ruler shows:
+
 - Each column as a white band.
 - Gaps between columns as darker gray bands.
 - Boundaries draggable to resize columns (only when "Equal column width" is off).
@@ -1132,14 +1157,14 @@ Shown only in **Page Layout** view when `View → Ruler` is on. Width 18 px, run
 
 ### 6.8 Ruler interactions summary
 
-| Target                   | Cursor             | Click          | Drag                          | Double-click                   |
-|--------------------------|--------------------|----------------|-------------------------------|--------------------------------|
-| Empty content ruler area | I-beam, normal     | Add tab of type| —                             | Open Tabs dialog               |
-| Tab marker               | Horizontal arrow   | Select         | Move; off = remove            | Open Tabs dialog at that tab   |
-| Indent marker            | Horizontal arrow   | Focus          | Move indent                   | Open Paragraph dialog          |
-| Margin boundary          | Horizontal arrow   | —              | Move margin                   | Open Page Setup → Margins      |
-| Column separator         | Horizontal arrow   | —              | Resize columns                | Open Format → Columns          |
-| Tab-type selector        | Arrow              | Cycle tab type | —                             | —                              |
+| Target                   | Cursor           | Click           | Drag               | Double-click                 |
+| ------------------------ | ---------------- | --------------- | ------------------ | ---------------------------- |
+| Empty content ruler area | I-beam, normal   | Add tab of type | —                  | Open Tabs dialog             |
+| Tab marker               | Horizontal arrow | Select          | Move; off = remove | Open Tabs dialog at that tab |
+| Indent marker            | Horizontal arrow | Focus           | Move indent        | Open Paragraph dialog        |
+| Margin boundary          | Horizontal arrow | —               | Move margin        | Open Page Setup → Margins    |
+| Column separator         | Horizontal arrow | —               | Resize columns     | Open Format → Columns        |
+| Tab-type selector        | Arrow            | Cycle tab type  | —                  | —                            |
 
 ---
 
@@ -1151,266 +1176,267 @@ Where Word 95 published a shortcut, we list it. Where we add one for a modern fe
 
 ### 7.1 File commands
 
-| Action                    | Windows/Linux      | macOS              | Notes |
-|---------------------------|--------------------|--------------------|-------|
-| New (default template)    | Ctrl+N             | Cmd+N              | |
-| New... (template chooser) | Ctrl+Shift+N       | Cmd+Shift+N        | (add) — Word 95 Ctrl+Shift+N is Normal style; we keep that there, move new-template to Ctrl+Alt+N |
-| Open                      | Ctrl+O             | Cmd+O              | |
-| Open                      | Ctrl+F12           | Cmd+F12            | alt binding |
-| Close                     | Ctrl+W             | Cmd+W              | |
-| Close (child)             | Ctrl+F4            | Cmd+F4             | |
-| Save                      | Ctrl+S             | Cmd+S              | |
-| Save                      | Shift+F12          | Shift+F12          | alt binding |
-| Save As                   | F12                | F12                | |
-| Print                     | Ctrl+P             | Cmd+P              | |
-| Print                     | Ctrl+Shift+F12     | Cmd+Shift+F12      | alt binding |
-| Print Preview             | Ctrl+F2            | Cmd+F2             | |
-| Exit                      | Alt+F4             | Cmd+Q              | OS standard |
+| Action                    | Windows/Linux  | macOS         | Notes                                                                                             |
+| ------------------------- | -------------- | ------------- | ------------------------------------------------------------------------------------------------- |
+| New (default template)    | Ctrl+N         | Cmd+N         |                                                                                                   |
+| New... (template chooser) | Ctrl+Shift+N   | Cmd+Shift+N   | (add) — Word 95 Ctrl+Shift+N is Normal style; we keep that there, move new-template to Ctrl+Alt+N |
+| Open                      | Ctrl+O         | Cmd+O         |                                                                                                   |
+| Open                      | Ctrl+F12       | Cmd+F12       | alt binding                                                                                       |
+| Close                     | Ctrl+W         | Cmd+W         |                                                                                                   |
+| Close (child)             | Ctrl+F4        | Cmd+F4        |                                                                                                   |
+| Save                      | Ctrl+S         | Cmd+S         |                                                                                                   |
+| Save                      | Shift+F12      | Shift+F12     | alt binding                                                                                       |
+| Save As                   | F12            | F12           |                                                                                                   |
+| Print                     | Ctrl+P         | Cmd+P         |                                                                                                   |
+| Print                     | Ctrl+Shift+F12 | Cmd+Shift+F12 | alt binding                                                                                       |
+| Print Preview             | Ctrl+F2        | Cmd+F2        |                                                                                                   |
+| Exit                      | Alt+F4         | Cmd+Q         | OS standard                                                                                       |
 
 ### 7.2 Edit commands
 
-| Action                    | Windows/Linux      | macOS              | Notes |
-|---------------------------|--------------------|--------------------|-------|
-| Undo                      | Ctrl+Z             | Cmd+Z              | |
-| Undo                      | Alt+Backspace      | Option+Delete      | alt binding |
-| Redo                      | Ctrl+Y             | Cmd+Y              | |
-| Repeat last action        | F4                 | F4                 | if no redo available |
-| Cut                       | Ctrl+X             | Cmd+X              | |
-| Cut                       | Shift+Del          | Shift+Del          | alt binding |
-| Copy                      | Ctrl+C             | Cmd+C              | |
-| Copy                      | Ctrl+Insert        | Cmd+Insert         | alt binding |
-| Paste                     | Ctrl+V             | Cmd+V              | |
-| Paste                     | Shift+Insert       | Shift+Insert       | alt binding |
-| Paste Special             | Ctrl+Alt+V         | Cmd+Option+V       | (add) |
-| Clear                     | Del                | Delete             | selection only |
-| Select All                | Ctrl+A             | Cmd+A              | |
-| Select All                | Ctrl+Num5          | Cmd+Num5           | alt binding |
-| Find                      | Ctrl+F             | Cmd+F              | |
-| Replace                   | Ctrl+H             | Cmd+H (conflict: macOS uses Cmd+H for Hide App; we use **Cmd+Shift+H**)  |
-| Go To                     | Ctrl+G             | Cmd+G              | |
-| Go To                     | F5                 | F5                 | alt binding |
-| Find Next                 | Shift+F4           | Shift+F4           | repeats last find |
-| Find Next                 | Ctrl+Alt+Y         | Cmd+Option+Y       | alt binding |
+| Action             | Windows/Linux | macOS                                                                   | Notes                |
+| ------------------ | ------------- | ----------------------------------------------------------------------- | -------------------- |
+| Undo               | Ctrl+Z        | Cmd+Z                                                                   |                      |
+| Undo               | Alt+Backspace | Option+Delete                                                           | alt binding          |
+| Redo               | Ctrl+Y        | Cmd+Y                                                                   |                      |
+| Repeat last action | F4            | F4                                                                      | if no redo available |
+| Cut                | Ctrl+X        | Cmd+X                                                                   |                      |
+| Cut                | Shift+Del     | Shift+Del                                                               | alt binding          |
+| Copy               | Ctrl+C        | Cmd+C                                                                   |                      |
+| Copy               | Ctrl+Insert   | Cmd+Insert                                                              | alt binding          |
+| Paste              | Ctrl+V        | Cmd+V                                                                   |                      |
+| Paste              | Shift+Insert  | Shift+Insert                                                            | alt binding          |
+| Paste Special      | Ctrl+Alt+V    | Cmd+Option+V                                                            | (add)                |
+| Clear              | Del           | Delete                                                                  | selection only       |
+| Select All         | Ctrl+A        | Cmd+A                                                                   |                      |
+| Select All         | Ctrl+Num5     | Cmd+Num5                                                                | alt binding          |
+| Find               | Ctrl+F        | Cmd+F                                                                   |                      |
+| Replace            | Ctrl+H        | Cmd+H (conflict: macOS uses Cmd+H for Hide App; we use **Cmd+Shift+H**) |
+| Go To              | Ctrl+G        | Cmd+G                                                                   |                      |
+| Go To              | F5            | F5                                                                      | alt binding          |
+| Find Next          | Shift+F4      | Shift+F4                                                                | repeats last find    |
+| Find Next          | Ctrl+Alt+Y    | Cmd+Option+Y                                                            | alt binding          |
 
 ### 7.3 View commands
 
-| Action                    | Windows/Linux      | macOS              |
-|---------------------------|--------------------|--------------------|
-| Normal view               | Ctrl+Alt+N         | Cmd+Option+N       |
-| Outline view              | Ctrl+Alt+O         | Cmd+Option+O       |
-| Page Layout view          | Ctrl+Alt+P         | Cmd+Option+P       |
-| Master Document view      | (menu only)        | (menu only)        |
-| Full Screen               | (menu only)        | (menu only)        |
-| Toggle field codes        | Alt+F9             | Option+F9          |
-| Toggle selected field     | Shift+F9           | Shift+F9           |
-| Update field              | F9                 | F9                 |
-| Insert empty field        | Ctrl+F9            | Cmd+F9             |
-| Next field                | F11                | F11                |
-| Previous field            | Shift+F11          | Shift+F11          |
-| Lock field                | Ctrl+F11           | Cmd+F11            |
-| Unlink field (convert to text) | Ctrl+Shift+F9 | Cmd+Shift+F9       |
+| Action                         | Windows/Linux | macOS        |
+| ------------------------------ | ------------- | ------------ |
+| Normal view                    | Ctrl+Alt+N    | Cmd+Option+N |
+| Outline view                   | Ctrl+Alt+O    | Cmd+Option+O |
+| Page Layout view               | Ctrl+Alt+P    | Cmd+Option+P |
+| Master Document view           | (menu only)   | (menu only)  |
+| Full Screen                    | (menu only)   | (menu only)  |
+| Toggle field codes             | Alt+F9        | Option+F9    |
+| Toggle selected field          | Shift+F9      | Shift+F9     |
+| Update field                   | F9            | F9           |
+| Insert empty field             | Ctrl+F9       | Cmd+F9       |
+| Next field                     | F11           | F11          |
+| Previous field                 | Shift+F11     | Shift+F11    |
+| Lock field                     | Ctrl+F11      | Cmd+F11      |
+| Unlink field (convert to text) | Ctrl+Shift+F9 | Cmd+Shift+F9 |
 
 ### 7.4 Insert commands
 
-| Action                    | Windows/Linux      | macOS              |
-|---------------------------|--------------------|--------------------|
-| Page break                | Ctrl+Enter         | Cmd+Enter          |
-| Column break              | Ctrl+Shift+Enter   | Cmd+Shift+Enter    |
-| Line break (soft)         | Shift+Enter        | Shift+Enter        |
-| Non-breaking space        | Ctrl+Shift+Space   | Cmd+Shift+Space    |
-| Non-breaking hyphen       | Ctrl+Shift+Hyphen  | Cmd+Shift+Hyphen   |
-| Optional hyphen           | Ctrl+Hyphen        | Cmd+Hyphen         |
-| Em dash                   | Ctrl+Alt+Num-      | Cmd+Option+Num-    |
-| En dash                   | Ctrl+Num-          | Cmd+Num-           |
-| Copyright ©               | Ctrl+Alt+C         | Cmd+Option+C       |
-| Registered ®              | Ctrl+Alt+R         | Cmd+Option+R       |
-| Trademark ™               | Ctrl+Alt+T         | Cmd+Option+T       |
-| Ellipsis …                | Ctrl+Alt+.         | Cmd+Option+.       |
-| Footnote                  | Ctrl+Alt+F         | Cmd+Option+F       |
-| Endnote                   | Ctrl+Alt+D         | Cmd+Option+D       |
-| AutoText entry (expand)   | F3                 | F3                 |
-| AutoText (new from selection) | Alt+F3         | Option+F3          |
-| Date field                | Alt+Shift+D        | Option+Shift+D     |
-| Time field                | Alt+Shift+T        | Option+Shift+T     |
-| Page number field         | Alt+Shift+P        | Option+Shift+P     |
-| Comment (annotation)      | Ctrl+Alt+A         | Cmd+Option+A       |
-| Symbol dialog             | (menu only)        | (menu only)        |
+| Action                        | Windows/Linux     | macOS            |
+| ----------------------------- | ----------------- | ---------------- |
+| Page break                    | Ctrl+Enter        | Cmd+Enter        |
+| Column break                  | Ctrl+Shift+Enter  | Cmd+Shift+Enter  |
+| Line break (soft)             | Shift+Enter       | Shift+Enter      |
+| Non-breaking space            | Ctrl+Shift+Space  | Cmd+Shift+Space  |
+| Non-breaking hyphen           | Ctrl+Shift+Hyphen | Cmd+Shift+Hyphen |
+| Optional hyphen               | Ctrl+Hyphen       | Cmd+Hyphen       |
+| Em dash                       | Ctrl+Alt+Num-     | Cmd+Option+Num-  |
+| En dash                       | Ctrl+Num-         | Cmd+Num-         |
+| Copyright ©                   | Ctrl+Alt+C        | Cmd+Option+C     |
+| Registered ®                  | Ctrl+Alt+R        | Cmd+Option+R     |
+| Trademark ™                   | Ctrl+Alt+T        | Cmd+Option+T     |
+| Ellipsis …                    | Ctrl+Alt+.        | Cmd+Option+.     |
+| Footnote                      | Ctrl+Alt+F        | Cmd+Option+F     |
+| Endnote                       | Ctrl+Alt+D        | Cmd+Option+D     |
+| AutoText entry (expand)       | F3                | F3               |
+| AutoText (new from selection) | Alt+F3            | Option+F3        |
+| Date field                    | Alt+Shift+D       | Option+Shift+D   |
+| Time field                    | Alt+Shift+T       | Option+Shift+T   |
+| Page number field             | Alt+Shift+P       | Option+Shift+P   |
+| Comment (annotation)          | Ctrl+Alt+A        | Cmd+Option+A     |
+| Symbol dialog                 | (menu only)       | (menu only)      |
 
 ### 7.5 Format — Character
 
-| Action                    | Windows/Linux      | macOS              |
-|---------------------------|--------------------|--------------------|
-| Font dialog               | Ctrl+D             | Cmd+D              |
-| Bold                      | Ctrl+B             | Cmd+B              |
-| Bold                      | Ctrl+Shift+B       | Cmd+Shift+B        |
-| Italic                    | Ctrl+I             | Cmd+I              |
-| Italic                    | Ctrl+Shift+I       | Cmd+Shift+I        |
-| Underline                 | Ctrl+U             | Cmd+U              |
-| Underline                 | Ctrl+Shift+U       | Cmd+Shift+U        |
-| Word underline            | Ctrl+Shift+W       | Cmd+Shift+W        |
-| Double underline          | Ctrl+Shift+D       | Cmd+Shift+D        |
-| Subscript                 | Ctrl+=             | Cmd+=              |
-| Superscript               | Ctrl+Shift+=       | Cmd+Shift+=        |
-| Small caps                | Ctrl+Shift+K       | Cmd+Shift+K        |
-| All caps                  | Ctrl+Shift+A       | Cmd+Shift+A        |
-| Hidden text               | Ctrl+Shift+H       | (conflict with Replace; use Ctrl+Alt+Shift+H) |
-| Change case               | Shift+F3           | Shift+F3           | cycles Sentence/lower/UPPER/Title/tOGGLE on each press |
-| Increase font size 1 pt   | Ctrl+]             | Cmd+]              |
-| Decrease font size 1 pt   | Ctrl+[             | Cmd+[              |
-| Grow to next size in list | Ctrl+Shift+.       | Cmd+Shift+.        |
-| Shrink to prev size       | Ctrl+Shift+,       | Cmd+Shift+,        |
-| Symbol font               | Ctrl+Shift+Q       | Cmd+Shift+Q        |
-| Reset character format    | Ctrl+Space         | Cmd+Space (macOS Spotlight conflict; we use **Cmd+Shift+Z** — no, conflict again — use **Cmd+Option+Space**) |
-| Reset character format    | Ctrl+Shift+Z       | Cmd+Shift+Z        | alt binding |
-| Copy formatting           | Ctrl+Shift+C       | Cmd+Shift+C        | Format Painter |
-| Paste formatting          | Ctrl+Shift+V       | Cmd+Shift+V        |
+| Action                    | Windows/Linux | macOS                                                                                                        |
+| ------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| Font dialog               | Ctrl+D        | Cmd+D                                                                                                        |
+| Bold                      | Ctrl+B        | Cmd+B                                                                                                        |
+| Bold                      | Ctrl+Shift+B  | Cmd+Shift+B                                                                                                  |
+| Italic                    | Ctrl+I        | Cmd+I                                                                                                        |
+| Italic                    | Ctrl+Shift+I  | Cmd+Shift+I                                                                                                  |
+| Underline                 | Ctrl+U        | Cmd+U                                                                                                        |
+| Underline                 | Ctrl+Shift+U  | Cmd+Shift+U                                                                                                  |
+| Word underline            | Ctrl+Shift+W  | Cmd+Shift+W                                                                                                  |
+| Double underline          | Ctrl+Shift+D  | Cmd+Shift+D                                                                                                  |
+| Subscript                 | Ctrl+=        | Cmd+=                                                                                                        |
+| Superscript               | Ctrl+Shift+=  | Cmd+Shift+=                                                                                                  |
+| Small caps                | Ctrl+Shift+K  | Cmd+Shift+K                                                                                                  |
+| All caps                  | Ctrl+Shift+A  | Cmd+Shift+A                                                                                                  |
+| Hidden text               | Ctrl+Shift+H  | (conflict with Replace; use Ctrl+Alt+Shift+H)                                                                |
+| Change case               | Shift+F3      | Shift+F3                                                                                                     | cycles Sentence/lower/UPPER/Title/tOGGLE on each press |
+| Increase font size 1 pt   | Ctrl+]        | Cmd+]                                                                                                        |
+| Decrease font size 1 pt   | Ctrl+[        | Cmd+[                                                                                                        |
+| Grow to next size in list | Ctrl+Shift+.  | Cmd+Shift+.                                                                                                  |
+| Shrink to prev size       | Ctrl+Shift+,  | Cmd+Shift+,                                                                                                  |
+| Symbol font               | Ctrl+Shift+Q  | Cmd+Shift+Q                                                                                                  |
+| Reset character format    | Ctrl+Space    | Cmd+Space (macOS Spotlight conflict; we use **Cmd+Shift+Z** — no, conflict again — use **Cmd+Option+Space**) |
+| Reset character format    | Ctrl+Shift+Z  | Cmd+Shift+Z                                                                                                  | alt binding                                            |
+| Copy formatting           | Ctrl+Shift+C  | Cmd+Shift+C                                                                                                  | Format Painter                                         |
+| Paste formatting          | Ctrl+Shift+V  | Cmd+Shift+V                                                                                                  |
 
 ### 7.6 Format — Paragraph
 
-| Action                    | Windows/Linux      | macOS              |
-|---------------------------|--------------------|--------------------|
-| Align left                | Ctrl+L             | Cmd+L              |
-| Center                    | Ctrl+E             | Cmd+E              |
-| Align right               | Ctrl+R             | Cmd+R              |
-| Justify                   | Ctrl+J             | Cmd+J              |
-| Single line spacing       | Ctrl+1             | Cmd+1              |
-| Double line spacing       | Ctrl+2             | Cmd+2              |
-| 1.5 line spacing          | Ctrl+5             | Cmd+5              |
-| Add 12 pt before para     | Ctrl+0 (zero)      | Cmd+0              | toggles |
-| Increase indent (next tab)| Ctrl+M             | Cmd+M              |
-| Decrease indent           | Ctrl+Shift+M       | Cmd+Shift+M        |
-| Hanging indent            | Ctrl+T             | Cmd+T              |
-| Reduce hanging indent     | Ctrl+Shift+T       | Cmd+Shift+T        |
-| Reset paragraph format    | Ctrl+Q             | Cmd+Q (conflict: Cmd+Q quits; use **Cmd+Option+Q**) |
+| Action                     | Windows/Linux | macOS                                               |
+| -------------------------- | ------------- | --------------------------------------------------- | ------- |
+| Align left                 | Ctrl+L        | Cmd+L                                               |
+| Center                     | Ctrl+E        | Cmd+E                                               |
+| Align right                | Ctrl+R        | Cmd+R                                               |
+| Justify                    | Ctrl+J        | Cmd+J                                               |
+| Single line spacing        | Ctrl+1        | Cmd+1                                               |
+| Double line spacing        | Ctrl+2        | Cmd+2                                               |
+| 1.5 line spacing           | Ctrl+5        | Cmd+5                                               |
+| Add 12 pt before para      | Ctrl+0 (zero) | Cmd+0                                               | toggles |
+| Increase indent (next tab) | Ctrl+M        | Cmd+M                                               |
+| Decrease indent            | Ctrl+Shift+M  | Cmd+Shift+M                                         |
+| Hanging indent             | Ctrl+T        | Cmd+T                                               |
+| Reduce hanging indent      | Ctrl+Shift+T  | Cmd+Shift+T                                         |
+| Reset paragraph format     | Ctrl+Q        | Cmd+Q (conflict: Cmd+Q quits; use **Cmd+Option+Q**) |
 
 ### 7.7 Format — Styles
 
-| Action                    | Windows/Linux      | macOS              |
-|---------------------------|--------------------|--------------------|
-| Style dialog              | Ctrl+Shift+S       | Cmd+Shift+S        | (conflict with Save As in some apps — Word uses Ctrl+Shift+S) |
-| Normal style              | Ctrl+Shift+N       | Cmd+Shift+N        |
-| Heading 1                 | Ctrl+Alt+1         | Cmd+Option+1       |
-| Heading 2                 | Ctrl+Alt+2         | Cmd+Option+2       |
-| Heading 3                 | Ctrl+Alt+3         | Cmd+Option+3       |
-| List bullet (style)       | Ctrl+Shift+L       | Cmd+Shift+L        |
+| Action              | Windows/Linux | macOS        |
+| ------------------- | ------------- | ------------ | ------------------------------------------------------------- |
+| Style dialog        | Ctrl+Shift+S  | Cmd+Shift+S  | (conflict with Save As in some apps — Word uses Ctrl+Shift+S) |
+| Normal style        | Ctrl+Shift+N  | Cmd+Shift+N  |
+| Heading 1           | Ctrl+Alt+1    | Cmd+Option+1 |
+| Heading 2           | Ctrl+Alt+2    | Cmd+Option+2 |
+| Heading 3           | Ctrl+Alt+3    | Cmd+Option+3 |
+| List bullet (style) | Ctrl+Shift+L  | Cmd+Shift+L  |
 
 ### 7.8 Navigation
 
-| Action                           | Windows/Linux      | macOS              |
-|----------------------------------|--------------------|--------------------|
-| One char left/right              | ←  →               | ←  →               |
-| One line up/down                 | ↑  ↓               | ↑  ↓               |
-| One word left/right              | Ctrl+←  Ctrl+→     | Option+←  Option+→ |
-| Beginning / end of line          | Home  End          | Cmd+←  Cmd+→       |
-| Beginning / end of document      | Ctrl+Home  Ctrl+End| Cmd+Home  Cmd+End  |
-| One screen up / down             | PageUp  PageDown   | PageUp  PageDown   |
-| Top / bottom of window           | Ctrl+Alt+PageUp / PageDown | Cmd+Option+PageUp / PageDown |
-| Next / previous paragraph        | Ctrl+↑  Ctrl+↓     | Option+↑  Option+↓ |
-| Previous caret position          | Shift+F5           | Shift+F5           | up to last 3 |
-| Begin of next page (print layout)| Ctrl+PageDown      | Cmd+PageDown       |
-| Begin of previous page           | Ctrl+PageUp        | Cmd+PageUp         |
-| Go to next footnote              | (menu only)        | (menu only)        |
-| Go to next comment               | (menu only)        | (menu only)        |
+| Action                            | Windows/Linux              | macOS                        |
+| --------------------------------- | -------------------------- | ---------------------------- | ------------ |
+| One char left/right               | ← →                        | ← →                          |
+| One line up/down                  | ↑ ↓                        | ↑ ↓                          |
+| One word left/right               | Ctrl+← Ctrl+→              | Option+← Option+→            |
+| Beginning / end of line           | Home End                   | Cmd+← Cmd+→                  |
+| Beginning / end of document       | Ctrl+Home Ctrl+End         | Cmd+Home Cmd+End             |
+| One screen up / down              | PageUp PageDown            | PageUp PageDown              |
+| Top / bottom of window            | Ctrl+Alt+PageUp / PageDown | Cmd+Option+PageUp / PageDown |
+| Next / previous paragraph         | Ctrl+↑ Ctrl+↓              | Option+↑ Option+↓            |
+| Previous caret position           | Shift+F5                   | Shift+F5                     | up to last 3 |
+| Begin of next page (print layout) | Ctrl+PageDown              | Cmd+PageDown                 |
+| Begin of previous page            | Ctrl+PageUp                | Cmd+PageUp                   |
+| Go to next footnote               | (menu only)                | (menu only)                  |
+| Go to next comment                | (menu only)                | (menu only)                  |
 
 ### 7.9 Selection
 
-| Action                           | Windows/Linux      | macOS              |
-|----------------------------------|--------------------|--------------------|
-| Extend right char                | Shift+→            | Shift+→            |
-| Extend left char                 | Shift+←            | Shift+←            |
-| Extend right word                | Ctrl+Shift+→       | Option+Shift+→     |
-| Extend left word                 | Ctrl+Shift+←       | Option+Shift+←     |
-| Extend to line end               | Shift+End          | Cmd+Shift+→        |
-| Extend to line start             | Shift+Home         | Cmd+Shift+←        |
-| Extend down line                 | Shift+↓            | Shift+↓            |
-| Extend up line                   | Shift+↑            | Shift+↑            |
-| Extend to para end               | Ctrl+Shift+↓       | Option+Shift+↓     |
-| Extend to para start             | Ctrl+Shift+↑       | Option+Shift+↑     |
-| Extend to doc end                | Ctrl+Shift+End     | Cmd+Shift+End      |
-| Extend to doc start              | Ctrl+Shift+Home    | Cmd+Shift+Home     |
-| Extend one screen down           | Shift+PageDown     | Shift+PageDown     |
-| Extend one screen up             | Shift+PageUp       | Shift+PageUp       |
-| Extend to window end             | Ctrl+Alt+Shift+PageDown | Cmd+Option+Shift+PageDown |
-| Enter Extend Mode                | F8                 | F8                 |
-| Grow in Extend Mode              | F8                 | F8                 | word / sentence / paragraph / section / doc |
-| Shrink in Extend Mode            | Shift+F8           | Shift+F8           |
-| Column (block) select mode       | Ctrl+Shift+F8      | Cmd+Shift+F8       |
-| Cancel extend                    | Esc                | Esc                |
-| Whole document                   | Ctrl+A / Ctrl+Num5 | Cmd+A              |
+| Action                     | Windows/Linux           | macOS                     |
+| -------------------------- | ----------------------- | ------------------------- | ------------------------------------------- |
+| Extend right char          | Shift+→                 | Shift+→                   |
+| Extend left char           | Shift+←                 | Shift+←                   |
+| Extend right word          | Ctrl+Shift+→            | Option+Shift+→            |
+| Extend left word           | Ctrl+Shift+←            | Option+Shift+←            |
+| Extend to line end         | Shift+End               | Cmd+Shift+→               |
+| Extend to line start       | Shift+Home              | Cmd+Shift+←               |
+| Extend down line           | Shift+↓                 | Shift+↓                   |
+| Extend up line             | Shift+↑                 | Shift+↑                   |
+| Extend to para end         | Ctrl+Shift+↓            | Option+Shift+↓            |
+| Extend to para start       | Ctrl+Shift+↑            | Option+Shift+↑            |
+| Extend to doc end          | Ctrl+Shift+End          | Cmd+Shift+End             |
+| Extend to doc start        | Ctrl+Shift+Home         | Cmd+Shift+Home            |
+| Extend one screen down     | Shift+PageDown          | Shift+PageDown            |
+| Extend one screen up       | Shift+PageUp            | Shift+PageUp              |
+| Extend to window end       | Ctrl+Alt+Shift+PageDown | Cmd+Option+Shift+PageDown |
+| Enter Extend Mode          | F8                      | F8                        |
+| Grow in Extend Mode        | F8                      | F8                        | word / sentence / paragraph / section / doc |
+| Shrink in Extend Mode      | Shift+F8                | Shift+F8                  |
+| Column (block) select mode | Ctrl+Shift+F8           | Cmd+Shift+F8              |
+| Cancel extend              | Esc                     | Esc                       |
+| Whole document             | Ctrl+A / Ctrl+Num5      | Cmd+A                     |
 
 ### 7.10 Tables
 
-| Action                           | Windows/Linux      | macOS              |
-|----------------------------------|--------------------|--------------------|
-| Next cell                        | Tab                | Tab                |
-| Previous cell                    | Shift+Tab          | Shift+Tab          |
-| Insert tab char in cell          | Ctrl+Tab           | Cmd+Tab (OS conflict — we use **Ctrl+Tab** even on macOS since macOS does not reserve Ctrl+Tab for app switching) |
-| Select entire table              | Alt+Num5 (NumLock off) | Option+Num5 |
-| Select row                       | (menu)             | (menu)             |
-| Select column                    | (menu)             | (menu)             |
+| Action                  | Windows/Linux          | macOS                                                                                                             |
+| ----------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Next cell               | Tab                    | Tab                                                                                                               |
+| Previous cell           | Shift+Tab              | Shift+Tab                                                                                                         |
+| Insert tab char in cell | Ctrl+Tab               | Cmd+Tab (OS conflict — we use **Ctrl+Tab** even on macOS since macOS does not reserve Ctrl+Tab for app switching) |
+| Select entire table     | Alt+Num5 (NumLock off) | Option+Num5                                                                                                       |
+| Select row              | (menu)                 | (menu)                                                                                                            |
+| Select column           | (menu)                 | (menu)                                                                                                            |
 
 ### 7.11 Outline view
 
-| Action                           | Windows/Linux      | macOS              |
-|----------------------------------|--------------------|--------------------|
-| Promote                          | Alt+Shift+←        | Option+Shift+←     |
-| Demote                           | Alt+Shift+→        | Option+Shift+→     |
-| Demote to body text              | Ctrl+Shift+N       | Cmd+Shift+N        |
-| Move up                          | Alt+Shift+↑        | Option+Shift+↑     |
-| Move down                        | Alt+Shift+↓        | Option+Shift+↓     |
-| Expand                           | Alt+Shift++        | Option+Shift++     |
-| Collapse                         | Alt+Shift+-        | Option+Shift+-     |
-| Expand all                       | Alt+Shift+A        | Option+Shift+A     |
-| Show headings (levels 1–9)       | Alt+Shift+1 … 9    | Option+Shift+1 … 9 |
-| Show all levels                  | Alt+Shift+A        | Option+Shift+A     |
-| Show first line only             | Alt+Shift+L        | Option+Shift+L     |
+| Action                     | Windows/Linux   | macOS              |
+| -------------------------- | --------------- | ------------------ |
+| Promote                    | Alt+Shift+←     | Option+Shift+←     |
+| Demote                     | Alt+Shift+→     | Option+Shift+→     |
+| Demote to body text        | Ctrl+Shift+N    | Cmd+Shift+N        |
+| Move up                    | Alt+Shift+↑     | Option+Shift+↑     |
+| Move down                  | Alt+Shift+↓     | Option+Shift+↓     |
+| Expand                     | Alt+Shift++     | Option+Shift++     |
+| Collapse                   | Alt+Shift+-     | Option+Shift+-     |
+| Expand all                 | Alt+Shift+A     | Option+Shift+A     |
+| Show headings (levels 1–9) | Alt+Shift+1 … 9 | Option+Shift+1 … 9 |
+| Show all levels            | Alt+Shift+A     | Option+Shift+A     |
+| Show first line only       | Alt+Shift+L     | Option+Shift+L     |
 
 ### 7.12 Spelling, Thesaurus, Language
 
-| Action                           | Windows/Linux      | macOS              |
-|----------------------------------|--------------------|--------------------|
-| Spelling                         | F7                 | F7                 |
-| Thesaurus                        | Shift+F7           | Shift+F7           |
-| Grammar                          | (menu only)        | (menu only)        |
-| Set Language                     | (menu only)        | (menu only)        |
-| Word Count                       | (menu only)        | (menu only)        |
+| Action       | Windows/Linux | macOS       |
+| ------------ | ------------- | ----------- |
+| Spelling     | F7            | F7          |
+| Thesaurus    | Shift+F7      | Shift+F7    |
+| Grammar      | (menu only)   | (menu only) |
+| Set Language | (menu only)   | (menu only) |
+| Word Count   | (menu only)   | (menu only) |
 
 ### 7.13 Help
 
-| Action                           | Windows/Linux      | macOS              |
-|----------------------------------|--------------------|--------------------|
-| Context-sensitive help           | F1                 | F1                 |
-| Help mode (click to query)       | Shift+F1           | Shift+F1           |
-| What's This? on dialog           | Shift+F1           | Shift+F1           |
+| Action                     | Windows/Linux | macOS    |
+| -------------------------- | ------------- | -------- |
+| Context-sensitive help     | F1            | F1       |
+| Help mode (click to query) | Shift+F1      | Shift+F1 |
+| What's This? on dialog     | Shift+F1      | Shift+F1 |
 
 ### 7.14 Window management
 
-| Action                           | Windows/Linux      | macOS              |
-|----------------------------------|--------------------|--------------------|
-| Next document window             | Ctrl+F6            | Cmd+`              |
-| Previous document window         | Ctrl+Shift+F6      | Cmd+Shift+`        |
-| Active child system menu         | Alt+Hyphen         | Control+Hyphen     |
-| Parent frame system menu         | Alt+Space          | Control+Space (macOS conflict — use **Control+Option+Space**) |
-| Maximize child                   | Ctrl+F10           | Cmd+Control+F      |
-| Restore child                    | Ctrl+F5            | Cmd+Control+R      |
-| Move child (keyboard)            | Ctrl+F7 then arrows| Cmd+Control+M then arrows |
-| Size child (keyboard)            | Ctrl+F8 then arrows| Cmd+Control+S then arrows |
+| Action                   | Windows/Linux       | macOS                                                         |
+| ------------------------ | ------------------- | ------------------------------------------------------------- |
+| Next document window     | Ctrl+F6             | Cmd+`                                                         |
+| Previous document window | Ctrl+Shift+F6       | Cmd+Shift+`                                                   |
+| Active child system menu | Alt+Hyphen          | Control+Hyphen                                                |
+| Parent frame system menu | Alt+Space           | Control+Space (macOS conflict — use **Control+Option+Space**) |
+| Maximize child           | Ctrl+F10            | Cmd+Control+F                                                 |
+| Restore child            | Ctrl+F5             | Cmd+Control+R                                                 |
+| Move child (keyboard)    | Ctrl+F7 then arrows | Cmd+Control+M then arrows                                     |
+| Size child (keyboard)    | Ctrl+F8 then arrows | Cmd+Control+S then arrows                                     |
 
 ### 7.15 Macro, Customize, Misc
 
-| Action                           | Windows/Linux      | macOS              |
-|----------------------------------|--------------------|--------------------|
-| Run macro                        | Alt+F8             | Option+F8          |
-| Macro editor (VBA)               | Alt+F11            | Option+F11         |
-| Stop recording macro             | (Tools menu)       | (Tools menu)       |
-| Customize keyboard               | (Tools → Customize → Keyboard) | (same) |
-| Open What's This? (Shift+F1 cursor) | Shift+F1        | Shift+F1           |
+| Action                              | Windows/Linux                  | macOS        |
+| ----------------------------------- | ------------------------------ | ------------ |
+| Run macro                           | Alt+F8                         | Option+F8    |
+| Macro editor (VBA)                  | Alt+F11                        | Option+F11   |
+| Stop recording macro                | (Tools menu)                   | (Tools menu) |
+| Customize keyboard                  | (Tools → Customize → Keyboard) | (same)       |
+| Open What's This? (Shift+F1 cursor) | Shift+F1                       | Shift+F1     |
 
 This table totals **~220 entries**. A full machine-readable map is in `/src/config/shortcuts.ts` (to be authored by the implementing agent).
 
 ### 7.16 Shortcut visualization convention
 
 In menus the shortcut is displayed right-aligned in the accelerator column using this rendering:
+
 - Mod keys in order: Ctrl, Alt, Shift (Windows/Linux); Cmd, Option, Shift, Control (macOS with Apple glyphs ⌘ ⌥ ⇧ ⌃).
 - Keys joined by `+`.
 - Letters uppercase.
@@ -1424,34 +1450,34 @@ In menus the shortcut is displayed right-aligned in the accelerator column using
 
 ### 8.1 In-document mouse actions
 
-| Gesture                         | Effect                                                         |
-|---------------------------------|----------------------------------------------------------------|
-| Single left click               | Position caret at hit location; collapse selection             |
-| Double left click               | Select word under pointer                                      |
-| Triple left click               | Select paragraph under pointer                                 |
-| Ctrl+left click                 | Select sentence under pointer                                  |
-| Shift+left click                | Extend selection from current anchor to click point            |
-| Shift+double click              | Extend selection to word boundary past click point             |
-| Left click + drag               | Make stream selection; auto-scroll if near edges               |
-| Alt+left click + drag           | Column (block / rectangular) selection                         |
-| Ctrl+left click + drag          | (no-op except when on selected text — see drag-drop below)    |
-| Right click                     | Open context menu for object under pointer                     |
-| Middle click                    | v2: autoscroll mode (Win95 did not have this; IE did); v1 no-op |
-| Scroll wheel                    | Scroll document by N lines (config, default 3)                 |
-| Shift+scroll                    | Horizontal scroll by N columns                                 |
-| Ctrl+scroll                     | Zoom in/out by 10% per tick — our modern addition              |
+| Gesture                | Effect                                                          |
+| ---------------------- | --------------------------------------------------------------- |
+| Single left click      | Position caret at hit location; collapse selection              |
+| Double left click      | Select word under pointer                                       |
+| Triple left click      | Select paragraph under pointer                                  |
+| Ctrl+left click        | Select sentence under pointer                                   |
+| Shift+left click       | Extend selection from current anchor to click point             |
+| Shift+double click     | Extend selection to word boundary past click point              |
+| Left click + drag      | Make stream selection; auto-scroll if near edges                |
+| Alt+left click + drag  | Column (block / rectangular) selection                          |
+| Ctrl+left click + drag | (no-op except when on selected text — see drag-drop below)      |
+| Right click            | Open context menu for object under pointer                      |
+| Middle click           | v2: autoscroll mode (Win95 did not have this; IE did); v1 no-op |
+| Scroll wheel           | Scroll document by N lines (config, default 3)                  |
+| Shift+scroll           | Horizontal scroll by N columns                                  |
+| Ctrl+scroll            | Zoom in/out by 10% per tick — our modern addition               |
 
 ### 8.2 Selection gutter (left margin)
 
-The 16 px strip to the left of the body text but inside the page (the *selection bar* or *gutter*). Cursor in the gutter: right-pointing arrow `►` (reflected — actually it is the standard Windows `IDC_ARROW` rotated, but Word 95 uses a specific selection-bar cursor which is the arrow pointing up-and-right; we faithfully redraw it).
+The 16 px strip to the left of the body text but inside the page (the _selection bar_ or _gutter_). Cursor in the gutter: right-pointing arrow `►` (reflected — actually it is the standard Windows `IDC_ARROW` rotated, but Word 95 uses a specific selection-bar cursor which is the arrow pointing up-and-right; we faithfully redraw it).
 
-| Gesture in gutter              | Effect                                    |
-|--------------------------------|-------------------------------------------|
-| Single click                   | Select that line                          |
-| Click + drag vertically        | Select multiple lines                     |
-| Double click                   | Select that paragraph                     |
-| Triple click                   | Select entire document                    |
-| Ctrl+click                     | Select entire document                    |
+| Gesture in gutter       | Effect                 |
+| ----------------------- | ---------------------- |
+| Single click            | Select that line       |
+| Click + drag vertically | Select multiple lines  |
+| Double click            | Select that paragraph  |
+| Triple click            | Select entire document |
+| Ctrl+click              | Select entire document |
 
 ### 8.3 Drag-and-drop text
 
@@ -1476,20 +1502,20 @@ The 16 px strip to the left of the body text but inside the page (the *selection
 
 ### 8.6 Cursors
 
-| Cursor                              | Context                                                |
-|-------------------------------------|--------------------------------------------------------|
-| I-beam                              | Over body text (default)                               |
-| Left-pointing arrow up-and-right    | Selection gutter                                       |
-| Standard arrow                      | Over chrome (menus, toolbars, scrollbars)              |
-| Crosshair                           | In drawing mode (after selecting a drawing tool)       |
-| Move (4-arrow)                      | Over a selected range (drag-to-move)                   |
-| Move with + badge                   | Ctrl+drag over selection (drag-to-copy)                |
-| No-drop (circle with slash)         | Drag over a read-only region                           |
-| Double-arrow horizontal             | Column border, indent marker, margin boundary          |
-| Double-arrow vertical               | Row border, split bar, horizontal scrollbar resize     |
-| Help (arrow + ?)                    | In Shift+F1 help mode, until a target is clicked       |
-| Wait (hourglass / spinner)          | During long operations (save, open, spellcheck of doc) |
-| Progress (arrow + hourglass)        | Background work ongoing but UI responsive              |
+| Cursor                           | Context                                                |
+| -------------------------------- | ------------------------------------------------------ |
+| I-beam                           | Over body text (default)                               |
+| Left-pointing arrow up-and-right | Selection gutter                                       |
+| Standard arrow                   | Over chrome (menus, toolbars, scrollbars)              |
+| Crosshair                        | In drawing mode (after selecting a drawing tool)       |
+| Move (4-arrow)                   | Over a selected range (drag-to-move)                   |
+| Move with + badge                | Ctrl+drag over selection (drag-to-copy)                |
+| No-drop (circle with slash)      | Drag over a read-only region                           |
+| Double-arrow horizontal          | Column border, indent marker, margin boundary          |
+| Double-arrow vertical            | Row border, split bar, horizontal scrollbar resize     |
+| Help (arrow + ?)                 | In Shift+F1 help mode, until a target is clicked       |
+| Wait (hourglass / spinner)       | During long operations (save, open, spellcheck of doc) |
+| Progress (arrow + hourglass)     | Background work ongoing but UI responsive              |
 
 ---
 
@@ -1559,18 +1585,18 @@ Status bar spans the full width of the outer frame. Height 20 px. Sections, left
 
 ### 10.3 Double-click targets
 
-| Section     | Double-click action                          |
-|-------------|----------------------------------------------|
-| Page X      | Opens Go To dialog (Page tab)                |
-| Sec Y       | Opens Go To dialog (Section tab)             |
-| x/y         | Opens Go To dialog                           |
-| At / Ln / Col | Opens Go To dialog                         |
-| REC         | Starts/stops macro recording                 |
-| MRK         | Toggles Mark Revisions                       |
-| EXT         | Toggles Extend Selection mode                |
-| OVR         | Toggles Overtype mode                        |
-| Language    | Opens Language dialog                        |
-| Spell icon  | Opens Spelling dialog                        |
+| Section       | Double-click action              |
+| ------------- | -------------------------------- |
+| Page X        | Opens Go To dialog (Page tab)    |
+| Sec Y         | Opens Go To dialog (Section tab) |
+| x/y           | Opens Go To dialog               |
+| At / Ln / Col | Opens Go To dialog               |
+| REC           | Starts/stops macro recording     |
+| MRK           | Toggles Mark Revisions           |
+| EXT           | Toggles Extend Selection mode    |
+| OVR           | Toggles Overtype mode            |
+| Language      | Opens Language dialog            |
+| Spell icon    | Opens Spelling dialog            |
 
 ### 10.4 Tooltips
 
@@ -1649,22 +1675,22 @@ The dialog's Options section (checkboxes and buttons) can be collapsed to shrink
 - **Find whole words only**: matches only if both ends of the match sit at word boundaries (non-alphanumeric or start/end of paragraph).
 - **Use Pattern Matching**: enables Word-style wildcards (NOT regex). Supported patterns:
 
-    | Pattern  | Meaning                                      |
-    |----------|----------------------------------------------|
-    | `?`      | any single character                         |
-    | `*`      | any sequence of characters (minimal match)   |
-    | `[abc]`  | any of a, b, c                               |
-    | `[a-z]`  | any in range                                 |
-    | `[!abc]` | any not in the set                           |
-    | `<`      | word start boundary                          |
-    | `>`      | word end boundary                            |
-    | `{n}`    | exactly n of previous                        |
-    | `{n,}`   | n or more                                    |
-    | `{n,m}`  | between n and m                              |
-    | `@`      | one or more of previous                      |
-    | `()`     | grouping, referenced by `\1`…`\9` in replace |
+  | Pattern  | Meaning                                      |
+  | -------- | -------------------------------------------- |
+  | `?`      | any single character                         |
+  | `*`      | any sequence of characters (minimal match)   |
+  | `[abc]`  | any of a, b, c                               |
+  | `[a-z]`  | any in range                                 |
+  | `[!abc]` | any not in the set                           |
+  | `<`      | word start boundary                          |
+  | `>`      | word end boundary                            |
+  | `{n}`    | exactly n of previous                        |
+  | `{n,}`   | n or more                                    |
+  | `{n,m}`  | between n and m                              |
+  | `@`      | one or more of previous                      |
+  | `()`     | grouping, referenced by `\1`…`\9` in replace |
 
-    Word's pattern matching is **not** POSIX regex. We implement Word's set exactly.
+  Word's pattern matching is **not** POSIX regex. We implement Word's set exactly.
 
 - **Sounds Like**: Soundex-based match (English only for v1; other languages v2).
 - **Find All Word Forms**: morphological match (run/ran/running). Implement via a morphology dictionary; English only for v1.
@@ -1714,6 +1740,7 @@ The `Format >>` button presents a menu: Font..., Paragraph..., Tabs..., Language
 ### 12.6 Go To tab
 
 Navigational tab. Controls:
+
 - Left listbox: "Go to What" (entities).
 - Right text field: label flips based on entity ("Enter page number", "Enter bookmark name", etc.).
 - Previous and Next buttons traverse by the entity type.
@@ -1798,6 +1825,7 @@ Our default matches Word 95: no inline squiggle. We expose two optional preferen
 `Tools → Grammar` (no default keyboard shortcut; we add none — avoid overloading F7-family).
 
 Dialog layout mirrors Spelling but with:
+
 - "Sentence" box showing the problematic sentence with the offending portion highlighted (underlined).
 - Grammar rule description pane ("Passive voice: Consider revising...").
 - Change To field (where applicable).
@@ -1853,6 +1881,7 @@ Zoom
 ### 15.2 Zoom toolbar combo
 
 Standard toolbar has a Zoom combo:
+
 - Dropdown values: 50%, 75%, 100%, 150%, 200%, Whole Page, Page Width, Two Pages.
 - Free numeric entry: 10–500 range; non-integer allowed to one decimal.
 - `Ctrl+scroll` in document zooms by 10% per tick (our modern addition, see §8).
@@ -1877,6 +1906,7 @@ Standard toolbar has a Zoom combo:
 ### 16.2 Panes
 
 Each pane:
+
 - Has its own ruler (when ruler is visible).
 - Has its own vertical scrollbar.
 - Shares the same horizontal scrollbar (single horizontal scroll for both panes).
@@ -1923,6 +1953,7 @@ Each pane:
 ### 17.4 Full Screen
 
 `View → Full Screen`:
+
 - Hides menu bar, toolbars, ruler, status bar, scrollbars.
 - Shows only the document and a tiny **Close Full Screen** floating button (16×16) at the lower-right.
 - Esc exits full screen.
@@ -1986,6 +2017,7 @@ Each pane:
 ### 19.1 Primary theme — Windows 95
 
 **Font stack** (in order):
+
 1. `"MS Sans Serif"`, 8 pt — authentic Win95. Not installed by default on modern systems; we bundle a freeware near-copy (`ms-sans-serif-webfont`) and fall back to Tahoma then system-ui.
 2. Tahoma 8 pt — shipped with IE4/Win98; decent approximation.
 3. System UI default.
@@ -1994,29 +2026,30 @@ We render **MS Sans Serif 8 pt** as the pixel-accurate default in the Win95 them
 
 **Color palette (Win95 system colors)**:
 
-| Alias                    | Value      | Uses                                      |
-|--------------------------|------------|-------------------------------------------|
-| COLOR_3DFACE / COLOR_BTNFACE | #C0C0C0 | Chrome background, toolbar, menu          |
-| COLOR_3DSHADOW           | #808080    | Outer-bottom-right bevels                 |
-| COLOR_3DDKSHADOW         | #000000    | Inner dark bevel                          |
-| COLOR_3DHILIGHT / BTNHILIGHT | #FFFFFF | Outer-top-left bevels                     |
-| COLOR_3DLIGHT            | #DFDFDF    | Inner light bevel                         |
-| COLOR_WINDOW             | #FFFFFF    | Document client area                      |
-| COLOR_WINDOWTEXT         | #000000    | Document text                             |
-| COLOR_APPWORKSPACE       | #808080    | MDI workspace bg                          |
-| COLOR_MENU               | #C0C0C0    | Menu bg                                   |
-| COLOR_MENUTEXT           | #000000    | Menu text                                 |
-| COLOR_HIGHLIGHT          | #000080    | Selection bg                              |
-| COLOR_HIGHLIGHTTEXT      | #FFFFFF    | Selection text                            |
-| COLOR_INACTIVECAPTION    | #808080    | Inactive title bar                        |
-| COLOR_ACTIVECAPTION      | #000080    | Active title bar                          |
-| COLOR_CAPTIONTEXT        | #FFFFFF    | Active caption text                       |
-| COLOR_INACTIVECAPTIONTEXT| #C0C0C0    | Inactive caption text                     |
-| COLOR_INFOBK             | #FFFFE1    | Tooltip bg                                |
-| COLOR_INFOTEXT           | #000000    | Tooltip text                              |
-| COLOR_SCROLLBAR          | #C0C0C0    | Scrollbar track                           |
+| Alias                        | Value   | Uses                             |
+| ---------------------------- | ------- | -------------------------------- |
+| COLOR_3DFACE / COLOR_BTNFACE | #C0C0C0 | Chrome background, toolbar, menu |
+| COLOR_3DSHADOW               | #808080 | Outer-bottom-right bevels        |
+| COLOR_3DDKSHADOW             | #000000 | Inner dark bevel                 |
+| COLOR_3DHILIGHT / BTNHILIGHT | #FFFFFF | Outer-top-left bevels            |
+| COLOR_3DLIGHT                | #DFDFDF | Inner light bevel                |
+| COLOR_WINDOW                 | #FFFFFF | Document client area             |
+| COLOR_WINDOWTEXT             | #000000 | Document text                    |
+| COLOR_APPWORKSPACE           | #808080 | MDI workspace bg                 |
+| COLOR_MENU                   | #C0C0C0 | Menu bg                          |
+| COLOR_MENUTEXT               | #000000 | Menu text                        |
+| COLOR_HIGHLIGHT              | #000080 | Selection bg                     |
+| COLOR_HIGHLIGHTTEXT          | #FFFFFF | Selection text                   |
+| COLOR_INACTIVECAPTION        | #808080 | Inactive title bar               |
+| COLOR_ACTIVECAPTION          | #000080 | Active title bar                 |
+| COLOR_CAPTIONTEXT            | #FFFFFF | Active caption text              |
+| COLOR_INACTIVECAPTIONTEXT    | #C0C0C0 | Inactive caption text            |
+| COLOR_INFOBK                 | #FFFFE1 | Tooltip bg                       |
+| COLOR_INFOTEXT               | #000000 | Tooltip text                     |
+| COLOR_SCROLLBAR              | #C0C0C0 | Scrollbar track                  |
 
 **Bevels**:
+
 - "Raised" 3D button: 1 px light top+left outer, 1 px dark bottom+right outer; then 1 px light inner top+left, 1 px dark inner bottom+right.
 - "Sunken": the inverse.
 - Menu / drop-down panel: 1 px dark outer, 1 px light inner (simple 2-tone bevel).
@@ -2056,23 +2089,23 @@ In the Modern theme, soft fade-in (120 ms) and menu-slide (80 ms) are enabled.
 
 ## 21. Cursor Shapes (Full Catalog)
 
-| Cursor                | Where shown                                           |
-|-----------------------|-------------------------------------------------------|
-| I-beam (`text`)       | Over body text                                        |
-| Arrow (`default`)     | Over menus, toolbars, scrollbars, buttons             |
-| Selection arrow       | Selection gutter                                      |
-| Crosshair             | Drawing tools in drawing mode                         |
-| Move (4-way arrow)    | Over selected text; over draggable frame; over drag gripper |
-| Resize EW (`ew-resize`) | Column border, margin boundary, indent marker       |
-| Resize NS (`ns-resize`) | Row border, split bar                               |
-| Resize NWSE           | Image/object lower-right corner                       |
-| Resize NESW           | Image/object lower-left corner                        |
-| Help (`help`)         | In Shift+F1 "What's this?" mode                       |
-| Hand (`pointer`)      | Over hyperlinks in Ctrl+hover state                   |
-| Not-allowed           | Drag over read-only region or invalid drop target     |
-| Wait (hourglass)      | During synchronous long operations                    |
-| Progress (arrow+hourglass) | Background operation ongoing but UI responsive   |
-| Vertical I-beam       | For vertical text layouts (v2)                        |
+| Cursor                     | Where shown                                                 |
+| -------------------------- | ----------------------------------------------------------- |
+| I-beam (`text`)            | Over body text                                              |
+| Arrow (`default`)          | Over menus, toolbars, scrollbars, buttons                   |
+| Selection arrow            | Selection gutter                                            |
+| Crosshair                  | Drawing tools in drawing mode                               |
+| Move (4-way arrow)         | Over selected text; over draggable frame; over drag gripper |
+| Resize EW (`ew-resize`)    | Column border, margin boundary, indent marker               |
+| Resize NS (`ns-resize`)    | Row border, split bar                                       |
+| Resize NWSE                | Image/object lower-right corner                             |
+| Resize NESW                | Image/object lower-left corner                              |
+| Help (`help`)              | In Shift+F1 "What's this?" mode                             |
+| Hand (`pointer`)           | Over hyperlinks in Ctrl+hover state                         |
+| Not-allowed                | Drag over read-only region or invalid drop target           |
+| Wait (hourglass)           | During synchronous long operations                          |
+| Progress (arrow+hourglass) | Background operation ongoing but UI responsive              |
+| Vertical I-beam            | For vertical text layouts (v2)                              |
 
 Cursor bitmaps use the standard OS system cursors in the Win95 theme (Windows)/matching cursors (macOS, Linux). Custom cursors (selection arrow in gutter, help cursor) are our own 32×32 bitmaps with appropriate hotspots.
 
@@ -2082,28 +2115,29 @@ Cursor bitmaps use the standard OS system cursors in the Win95 theme (Windows)/m
 
 ### 22.1 Sources in our app
 
-| Object               | MIME / type emitted                                  |
-|----------------------|------------------------------------------------------|
-| Text selection       | `text/plain` + `text/html` + `application/vnd.ms-word.docx-fragment` |
-| Selected image       | `image/png` + internal image id                      |
-| Frame / drawing      | Internal frame/drawing id                            |
-| Toolbar button (when Customize dialog open) | Internal command id            |
-| Menu item (when Customize dialog open)      | Internal command id            |
+| Object                                      | MIME / type emitted                                                  |
+| ------------------------------------------- | -------------------------------------------------------------------- |
+| Text selection                              | `text/plain` + `text/html` + `application/vnd.ms-word.docx-fragment` |
+| Selected image                              | `image/png` + internal image id                                      |
+| Frame / drawing                             | Internal frame/drawing id                                            |
+| Toolbar button (when Customize dialog open) | Internal command id                                                  |
+| Menu item (when Customize dialog open)      | Internal command id                                                  |
 
 ### 22.2 Targets we accept
 
-| Source                                | Effect                                               |
-|---------------------------------------|------------------------------------------------------|
-| External file drop (.doc/.docx/.rtf/.txt/.html) | Insert File at drop caret                 |
-| External image drop (.png/.jpg/.gif/.bmp/.tif) | Insert Picture at drop caret                |
-| External image from clipboard (paste) | Insert Picture at caret                              |
-| External tabular data (Excel / CSV)   | Prompt: "Keep Source Formatting" / "Match Destination" / "Keep Text Only" — paste special popup |
-| Plain text from another app           | Insert Text at drop caret                            |
-| HTML from a browser                   | Insert as HTML via conversion pipeline               |
-| URL drag                              | Insert as hyperlink (v2) or as plain text (v1)       |
-| Our own selection                     | Move (or Ctrl+drag = copy) to drop caret             |
+| Source                                          | Effect                                                                                          |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| External file drop (.doc/.docx/.rtf/.txt/.html) | Insert File at drop caret                                                                       |
+| External image drop (.png/.jpg/.gif/.bmp/.tif)  | Insert Picture at drop caret                                                                    |
+| External image from clipboard (paste)           | Insert Picture at caret                                                                         |
+| External tabular data (Excel / CSV)             | Prompt: "Keep Source Formatting" / "Match Destination" / "Keep Text Only" — paste special popup |
+| Plain text from another app                     | Insert Text at drop caret                                                                       |
+| HTML from a browser                             | Insert as HTML via conversion pipeline                                                          |
+| URL drag                                        | Insert as hyperlink (v2) or as plain text (v1)                                                  |
+| Our own selection                               | Move (or Ctrl+drag = copy) to drop caret                                                        |
 
 Visual feedback:
+
 - Drop caret follows pointer within document.
 - Drop-not-allowed cursor when over disallowed target (e.g., read-only region).
 
@@ -2114,12 +2148,14 @@ Visual feedback:
 Clicking a **toolbar button** or a **menu item** must **NOT steal text focus** from the document. This is the defining Word behavior that allows, for example, clicking Bold while the caret is in the middle of selected text.
 
 Implementation note (for the engineer):
+
 - Toolbars and menus, in our React tree, are **not** focusable roots by default.
 - Their mouse-click handlers run the command against the current document selection without calling `.focus()` on any element.
 - When a combo's edit field is clicked, focus **does** move to that edit (because typing is required there); after Enter or Escape, focus returns to the document (via an explicit `documentCanvas.focus()` call).
 - Keyboard access via F10 / Alt moves focus into the menu bar; this is explicit and expected.
 
 Test case: user selects text "hello" in a document. Moves mouse to the Bold toolbar button and single-clicks. After the click:
+
 - Document still has focus (caret still blinks in the same selection).
 - "hello" is now bold.
 - Selection is preserved exactly.
@@ -2492,6 +2528,7 @@ On release, the toolbar either snaps to an edge (if within 16 px) or becomes a f
 Standard Win95-style message boxes with title, icon, message text, and buttons.
 
 Icons:
+
 - **Information** (blue i): "The spelling check is complete."
 - **Warning** (yellow !): "This document contains macros. Do you want to enable them?"
 - **Error** (red X): "Word cannot open this file. The file is damaged."
@@ -2593,18 +2630,22 @@ Use CSS borders, not images, to render 3D bevels — one class each for `.raised
 
 ```css
 .raised-2 {
-  border-top: 1px solid #FFFFFF;
-  border-left: 1px solid #FFFFFF;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
   border-right: 1px solid #808080;
   border-bottom: 1px solid #808080;
-  box-shadow: inset -1px -1px 0 #000, inset 1px 1px 0 #DFDFDF;
+  box-shadow:
+    inset -1px -1px 0 #000,
+    inset 1px 1px 0 #dfdfdf;
 }
 .sunken-2 {
   border-top: 1px solid #808080;
   border-left: 1px solid #808080;
-  border-right: 1px solid #FFFFFF;
-  border-bottom: 1px solid #FFFFFF;
-  box-shadow: inset 1px 1px 0 #000, inset -1px -1px 0 #DFDFDF;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  box-shadow:
+    inset 1px 1px 0 #000,
+    inset -1px -1px 0 #dfdfdf;
 }
 ```
 
@@ -2672,22 +2713,22 @@ Use CSS borders, not images, to render 3D bevels — one class each for `.raised
 
 To keep the v1 scope manageable, the following UX items are **reduced or deferred** with specific guardrails:
 
-| Item                                   | v1 state                         | v2 adds                                     |
-|----------------------------------------|----------------------------------|---------------------------------------------|
-| Native multi-window preference         | Preference exists, stubbed       | Full native support                         |
-| Customize dialog — drag buttons between toolbars | Tabs exist; drag-drop may have cosmetic rough edges | Polished drag-drop across toolbars/menus |
-| Macro recording UI                     | REC indicator works; recording saves to `.bas` | Full VBA editor integration |
-| Help topics viewer                     | Simple HTML viewer               | Win95 Help Topics tabbed UI                 |
-| Hyperlinks                             | HYPERLINK field rendered; Ctrl+click activates | First-class hyperlink object + context menu |
-| Inline grammar squiggle                | Disabled                         | Dialog + optional inline underline          |
-| Inline spelling squiggle               | Off by default; preference on    | On by default                               |
-| Classic Open/Save dialog               | OS native                        | Custom Win95 file picker                    |
-| Floating toolbar resize                | Fixed size                       | Drag to resize (changes row count)          |
-| Outlining toolbar, Drawing toolbar full command set | Visible but reduced toolset | Complete                                |
-| Thesaurus dialog                       | Implemented                      | —                                           |
-| Readability statistics                 | Implemented                      | —                                           |
-| Sounds Like (Soundex)                  | English only                     | Multilingual                                |
-| RTL UI                                 | Not available                    | Full support                                |
+| Item                                                | v1 state                                            | v2 adds                                     |
+| --------------------------------------------------- | --------------------------------------------------- | ------------------------------------------- |
+| Native multi-window preference                      | Preference exists, stubbed                          | Full native support                         |
+| Customize dialog — drag buttons between toolbars    | Tabs exist; drag-drop may have cosmetic rough edges | Polished drag-drop across toolbars/menus    |
+| Macro recording UI                                  | REC indicator works; recording saves to `.bas`      | Full VBA editor integration                 |
+| Help topics viewer                                  | Simple HTML viewer                                  | Win95 Help Topics tabbed UI                 |
+| Hyperlinks                                          | HYPERLINK field rendered; Ctrl+click activates      | First-class hyperlink object + context menu |
+| Inline grammar squiggle                             | Disabled                                            | Dialog + optional inline underline          |
+| Inline spelling squiggle                            | Off by default; preference on                       | On by default                               |
+| Classic Open/Save dialog                            | OS native                                           | Custom Win95 file picker                    |
+| Floating toolbar resize                             | Fixed size                                          | Drag to resize (changes row count)          |
+| Outlining toolbar, Drawing toolbar full command set | Visible but reduced toolset                         | Complete                                    |
+| Thesaurus dialog                                    | Implemented                                         | —                                           |
+| Readability statistics                              | Implemented                                         | —                                           |
+| Sounds Like (Soundex)                               | English only                                        | Multilingual                                |
+| RTL UI                                              | Not available                                       | Full support                                |
 
 ---
 
@@ -2710,42 +2751,42 @@ Where sources conflicted (e.g., icon dimensions 16×15 vs 16×16, Tahoma vs MS S
 
 Quick reference of critical pixel dimensions:
 
-| Element                      | Size              |
-|------------------------------|-------------------|
-| Menu bar height              | 20 px             |
-| Menu item height             | 18 px             |
-| Menu left padding (glyph slot) | 22 px           |
-| Menu separator height        | 2 px              |
-| Toolbar row height           | 22 px             |
-| Toolbar button chrome        | 22×22 px          |
-| Toolbar icon bitmap          | 16×15 (centered)  |
-| Toolbar gripper width        | 4 px              |
-| Toolbar split-button arrow   | 11×22 px          |
-| Tooltip delay                | 500 ms            |
-| Tooltip background           | #FFFFE1           |
-| Status bar height            | 20 px             |
-| Ruler height (horizontal)    | 18 px             |
-| Ruler width (vertical)       | 18 px             |
-| Scrollbar width              | 16 px             |
-| Scrollbar arrow              | 16×16 px          |
-| Child title bar height       | 18 px             |
-| Child title bar button       | 16×14 px          |
-| Child title bar icon         | 16×16 px          |
-| Dialog title bar height      | 18 px             |
-| Dialog button height         | 22 px             |
-| Dialog button min width      | 75 px             |
-| Text edit control height     | 21 px             |
-| Combobox height              | 21 px             |
-| Combobox dropdown arrow      | 17×19 px          |
-| Spinner up/down arrow        | 17×10 px (each)   |
-| Checkbox                     | 13×13 px          |
-| Radio button                 | 13×13 px          |
-| Drag snap threshold          | 16 px             |
-| Drop shadow offset           | 2 px              |
-| Menu submenu-open delay      | 400 ms            |
-| Double-click threshold       | 500 ms (OS-provided) |
-| Drag pointer dead zone       | 4 px              |
-| Tab / indent marker hit tolerance | 3 px         |
+| Element                           | Size                 |
+| --------------------------------- | -------------------- |
+| Menu bar height                   | 20 px                |
+| Menu item height                  | 18 px                |
+| Menu left padding (glyph slot)    | 22 px                |
+| Menu separator height             | 2 px                 |
+| Toolbar row height                | 22 px                |
+| Toolbar button chrome             | 22×22 px             |
+| Toolbar icon bitmap               | 16×15 (centered)     |
+| Toolbar gripper width             | 4 px                 |
+| Toolbar split-button arrow        | 11×22 px             |
+| Tooltip delay                     | 500 ms               |
+| Tooltip background                | #FFFFE1              |
+| Status bar height                 | 20 px                |
+| Ruler height (horizontal)         | 18 px                |
+| Ruler width (vertical)            | 18 px                |
+| Scrollbar width                   | 16 px                |
+| Scrollbar arrow                   | 16×16 px             |
+| Child title bar height            | 18 px                |
+| Child title bar button            | 16×14 px             |
+| Child title bar icon              | 16×16 px             |
+| Dialog title bar height           | 18 px                |
+| Dialog button height              | 22 px                |
+| Dialog button min width           | 75 px                |
+| Text edit control height          | 21 px                |
+| Combobox height                   | 21 px                |
+| Combobox dropdown arrow           | 17×19 px             |
+| Spinner up/down arrow             | 17×10 px (each)      |
+| Checkbox                          | 13×13 px             |
+| Radio button                      | 13×13 px             |
+| Drag snap threshold               | 16 px                |
+| Drop shadow offset                | 2 px                 |
+| Menu submenu-open delay           | 400 ms               |
+| Double-click threshold            | 500 ms (OS-provided) |
+| Drag pointer dead zone            | 4 px                 |
+| Tab / indent marker hit tolerance | 3 px                 |
 
 ---
 

@@ -16,16 +16,19 @@ New feature proposals that claim to belong in the core require an ADR (per `CLAU
 ## Consequences
 
 ### Positive
+
 - Core stays small, well-tested, and stable.
 - Features are independently ownable, testable, and removable.
 - DOCX mappers per feature live with the feature, not scattered in a central reader/writer (supports ADR-0015).
 
 ### Negative
+
 - Plugin contract is load-bearing; breaking it is equivalent to a core break. A Plugin API semver policy is required.
 - Cross-plugin interactions (table-cell → footnote → tracked-change) need explicit sequencing rules, documented per plugin.
 - Plugin init failures must not leave the engine degraded with a logged warning (see review Phase 2 P2-W7); init is all-or-nothing.
 
 ### Follow-up required
+
 - Draft ADR-0018: Plugin API stability and versioning (internal-only in v1).
 
 ## Alternatives considered

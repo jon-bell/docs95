@@ -1,0 +1,38 @@
+{
+  "name": "word",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Desktop word processor with feature parity to Microsoft Word 95; DOCX-only persistence.",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.11.0",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "build": "pnpm -r --filter './packages/*' build",
+    "typecheck": "tsc -b --pretty",
+    "lint": "eslint . && prettier --check .",
+    "fmt": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:int": "vitest run --project integration",
+    "dev": "pnpm --filter @word/app dev",
+    "e2e": "pnpm --filter @word/app e2e",
+    "perf": "pnpm --filter @word/dev-harness perf",
+    "storybook": "pnpm --filter @word/ui storybook",
+    "clean": "pnpm -r exec rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.11",
+    "@typescript-eslint/eslint-plugin": "^8.6.0",
+    "@typescript-eslint/parser": "^8.6.0",
+    "eslint": "^9.11.0",
+    "eslint-plugin-react": "^7.36.1",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
+    "vitest": "^2.1.1",
+    "@vitest/coverage-v8": "^2.1.1"
+  }
+}

@@ -8,13 +8,13 @@ Scope: DOCX read/write, round-trip fidelity, alternative formats (RTF, TXT, HTML
 
 ## 0. Executive summary
 
-The persistence layer is a sealed, dependency-isolated package (`@word/docx` plus sibling codec packages) that is responsible for *all* file I/O. Its three goals are, in order:
+The persistence layer is a sealed, dependency-isolated package (`@word/docx` plus sibling codec packages) that is responsible for _all_ file I/O. Its three goals are, in order:
 
 1. **Bit-preserving round-trip.** A DOCX opened and saved without user edits must be byte-identical, save for the canonical transforms we document in Section 30.
 2. **Faithful domain mapping.** Everything Word 95 could express (frames, fields, section properties, numbering, embedded drawings) is lowered from OOXML into a typed domain model without loss of semantically meaningful detail.
 3. **Format pluggability.** The domain model is agnostic of OOXML; every I/O format conforms to a single `DocumentSerializer<Format>` port. Adding `.odt` or exporting EPUB later is a new codec module, not a refactor.
 
-The implementation is a two-stage pipeline. On read: `ZIP → OPC → XML parts → AST → Domain`. On write: `Domain → AST → XML parts → OPC → ZIP`. The intermediate AST is faithful to ECMA-376 (each OOXML element type has a node shape) and captures *unknown* subtrees verbatim for passthrough. The domain layer is the model actually consumed by the renderer, editor, and layout engine; it is smaller and more uniform than the AST.
+The implementation is a two-stage pipeline. On read: `ZIP → OPC → XML parts → AST → Domain`. On write: `Domain → AST → XML parts → OPC → ZIP`. The intermediate AST is faithful to ECMA-376 (each OOXML element type has a node shape) and captures _unknown_ subtrees verbatim for passthrough. The domain layer is the model actually consumed by the renderer, editor, and layout engine; it is smaller and more uniform than the AST.
 
 All code is TypeScript strict mode. No eval, no DOM in the parse path (document parses in a utility process), no runtime schema introspection. ZIP streaming uses `fflate`; XML streaming uses `saxes`. Neither dependency reaches the renderer process; they are wrapped in our own interface surface so a swap is a single PR.
 
@@ -50,19 +50,19 @@ All code is TypeScript strict mode. No eval, no DOM in the parse path (document 
 
 ## 2. Supported formats
 
-| Format | Mode | Primary | Notes |
-|---|---|---|---|
-| DOCX (ECMA-376 Transitional) | read/write | yes | Word 2007+ default. All 37 feature categories covered. |
-| DOTX | read/write | derived | Template variant of DOCX. Differs in `[Content_Types].xml` override and `app.xml` Template field. |
-| DOCM | read-only + round-trip | derived | Macro-enabled. `vbaProject.bin` and related parts preserved verbatim. We never execute macros. Re-save as `.docm` requires explicit user confirmation. |
-| DOTM | read-only + round-trip | derived | Macro-enabled template. Same rules as DOCM. |
-| RTF 1.9.1 | read/write | secondary | Separate codec. Pragmatic feature subset, documented. |
-| TXT | read/write | secondary | Encoding detection; line-ending normalization on write. |
-| HTML5 | read/write | secondary | Sanitized on import. Clean semantic export. |
-| MHTML | write (v2) | optional | Save as Web Page. |
-| `.doc` binary | read (external) | adapter | External converter: LibreOffice headless or Tika. Never parsed in-process. |
-| ODT (OpenDocument Text) | planned | future | Same `DocumentSerializer` port, separate codec package. |
-| EPUB3 | planned | future | Export-only. |
+| Format                       | Mode                   | Primary   | Notes                                                                                                                                                  |
+| ---------------------------- | ---------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| DOCX (ECMA-376 Transitional) | read/write             | yes       | Word 2007+ default. All 37 feature categories covered.                                                                                                 |
+| DOTX                         | read/write             | derived   | Template variant of DOCX. Differs in `[Content_Types].xml` override and `app.xml` Template field.                                                      |
+| DOCM                         | read-only + round-trip | derived   | Macro-enabled. `vbaProject.bin` and related parts preserved verbatim. We never execute macros. Re-save as `.docm` requires explicit user confirmation. |
+| DOTM                         | read-only + round-trip | derived   | Macro-enabled template. Same rules as DOCM.                                                                                                            |
+| RTF 1.9.1                    | read/write             | secondary | Separate codec. Pragmatic feature subset, documented.                                                                                                  |
+| TXT                          | read/write             | secondary | Encoding detection; line-ending normalization on write.                                                                                                |
+| HTML5                        | read/write             | secondary | Sanitized on import. Clean semantic export.                                                                                                            |
+| MHTML                        | write (v2)             | optional  | Save as Web Page.                                                                                                                                      |
+| `.doc` binary                | read (external)        | adapter   | External converter: LibreOffice headless or Tika. Never parsed in-process.                                                                             |
+| ODT (OpenDocument Text)      | planned                | future    | Same `DocumentSerializer` port, separate codec package.                                                                                                |
+| EPUB3                        | planned                | future    | Export-only.                                                                                                                                           |
 
 Every format adapter implements the same port:
 
@@ -88,7 +88,10 @@ No caller of the persistence layer ever instantiates a concrete serializer direc
 export interface SerializerRegistry {
   forExtension(ext: string): DocumentSerializer<string> | null;
   forMime(mime: string): DocumentSerializer<string> | null;
-  detect(bytes: Uint8Array, hint?: { ext?: string; mime?: string }): DocumentSerializer<string> | null;
+  detect(
+    bytes: Uint8Array,
+    hint?: { ext?: string; mime?: string },
+  ): DocumentSerializer<string> | null;
   register<F extends string>(s: DocumentSerializer<F>): void;
 }
 ```
@@ -316,7 +319,12 @@ The persistence package exposes only:
 export { DocxSerializer } from './docx-serializer';
 export type { Document, DocumentNode, Paragraph, Run /* ... */ } from './ast';
 export { SerializerRegistry } from './registry';
-export type { DocumentSerializer, SerializerCapabilities, ReadOptions, WriteOptions } from './types';
+export type {
+  DocumentSerializer,
+  SerializerCapabilities,
+  ReadOptions,
+  WriteOptions,
+} from './types';
 ```
 
 Nothing else is re-exported. Internal paths are not in the `exports` map of `package.json`.
@@ -361,13 +369,17 @@ export interface ZipEntry {
   readonly compressedSize: number;
   readonly uncompressedSize: number;
   readonly crc32: number;
-  readonly modTime: number;   // DOS time (we clamp on write)
+  readonly modTime: number; // DOS time (we clamp on write)
   readonly compression: 'store' | 'deflate';
 }
 
 export interface ZipWriter {
   /** Add an entry. Bytes are stored as-is (we deflate inside the writer). */
-  add(path: string, bytes: Uint8Array, opts?: { compression?: 'store' | 'deflate'; modTime?: number }): void;
+  add(
+    path: string,
+    bytes: Uint8Array,
+    opts?: { compression?: 'store' | 'deflate'; modTime?: number },
+  ): void;
   /** Finalize and return the ZIP bytes. */
   finish(): Promise<Uint8Array>;
 }
@@ -413,7 +425,7 @@ This matches Word's own output so our output is diff-friendly against Word's.
 
 ### 5.5 Defenses (`src/zip/defenses.ts`)
 
-Every ZIP we open goes through these checks *before* we decompress a byte:
+Every ZIP we open goes through these checks _before_ we decompress a byte:
 
 - **Entry count cap.** Default 10000. Configurable via `ReadOptions.limits.maxEntries`.
 - **Uncompressed total cap.** Default 2 GiB.
@@ -441,9 +453,9 @@ Default `fatal`.
 import { Unzip, UnzipInflate, zip as fflateZip } from 'fflate';
 
 export interface ZipLimits {
-  readonly maxEntries: number;         // default 10000
+  readonly maxEntries: number; // default 10000
   readonly maxUncompressedBytes: number; // default 2 * 1024 * 1024 * 1024
-  readonly maxRatio: number;           // default 200
+  readonly maxRatio: number; // default 200
 }
 
 export const DEFAULT_ZIP_LIMITS: ZipLimits = {
@@ -499,9 +511,9 @@ export interface Part {
 }
 
 export interface Relationship {
-  readonly id: string;                 // rId1, rId2, ...
-  readonly type: string;               // http://schemas.openxmlformats.org/officeDocument/2006/relationships/image
-  readonly target: string;             // relative URI, or absolute URL when External
+  readonly id: string; // rId1, rId2, ...
+  readonly type: string; // http://schemas.openxmlformats.org/officeDocument/2006/relationships/image
+  readonly target: string; // relative URI, or absolute URL when External
   readonly targetMode: 'Internal' | 'External';
 }
 
@@ -527,33 +539,33 @@ Internally the writer batches relationships, writes `_rels` files last, and seri
 
 ### 6.5 Relationship types we care about
 
-| Purpose | Type URI (abbreviated) |
-|---|---|
-| Main document | `.../officeDocument/2006/relationships/officeDocument` |
-| Styles | `.../relationships/styles` |
-| Numbering | `.../relationships/numbering` |
-| Settings | `.../relationships/settings` |
-| Web settings | `.../relationships/webSettings` |
-| Font table | `.../relationships/fontTable` |
-| Theme | `.../relationships/theme` |
-| Header | `.../relationships/header` |
-| Footer | `.../relationships/footer` |
-| Footnotes | `.../relationships/footnotes` |
-| Endnotes | `.../relationships/endnotes` |
-| Comments | `.../relationships/comments` |
+| Purpose                | Type URI (abbreviated)                                           |
+| ---------------------- | ---------------------------------------------------------------- |
+| Main document          | `.../officeDocument/2006/relationships/officeDocument`           |
+| Styles                 | `.../relationships/styles`                                       |
+| Numbering              | `.../relationships/numbering`                                    |
+| Settings               | `.../relationships/settings`                                     |
+| Web settings           | `.../relationships/webSettings`                                  |
+| Font table             | `.../relationships/fontTable`                                    |
+| Theme                  | `.../relationships/theme`                                        |
+| Header                 | `.../relationships/header`                                       |
+| Footer                 | `.../relationships/footer`                                       |
+| Footnotes              | `.../relationships/footnotes`                                    |
+| Endnotes               | `.../relationships/endnotes`                                     |
+| Comments               | `.../relationships/comments`                                     |
 | CommentsExtended (w15) | `.../2012/06/relationships/commentsExtensible` (extensible link) |
-| People (w15) | `.../2011/relationships/people` |
-| Glossary document | `.../relationships/glossaryDocument` |
-| Hyperlink | `.../relationships/hyperlink` |
-| Image | `.../relationships/image` |
-| Chart | `.../relationships/chart` |
-| OLE object | `.../relationships/oleObject` |
-| Embedded package | `.../relationships/package` |
-| Core properties | `.../package/2006/relationships/metadata/core-properties` |
-| Extended properties | `.../officeDocument/2006/relationships/extended-properties` |
-| Custom properties | `.../officeDocument/2006/relationships/custom-properties` |
-| VBA project (DOCM) | `.../officeDocument/2006/relationships/vbaProject` |
-| Custom XML | `.../officeDocument/2006/relationships/customXml` |
+| People (w15)           | `.../2011/relationships/people`                                  |
+| Glossary document      | `.../relationships/glossaryDocument`                             |
+| Hyperlink              | `.../relationships/hyperlink`                                    |
+| Image                  | `.../relationships/image`                                        |
+| Chart                  | `.../relationships/chart`                                        |
+| OLE object             | `.../relationships/oleObject`                                    |
+| Embedded package       | `.../relationships/package`                                      |
+| Core properties        | `.../package/2006/relationships/metadata/core-properties`        |
+| Extended properties    | `.../officeDocument/2006/relationships/extended-properties`      |
+| Custom properties      | `.../officeDocument/2006/relationships/custom-properties`        |
+| VBA project (DOCM)     | `.../officeDocument/2006/relationships/vbaProject`               |
+| Custom XML             | `.../officeDocument/2006/relationships/customXml`                |
 
 We constant-fold these into an enum and use `Rel.kind` internally:
 
@@ -663,7 +675,7 @@ Unknown relationships are retained verbatim in the AST (`Document.unknownRels`) 
 
 Alternatives evaluated:
 
-- `fast-xml-parser`: builds a JS object tree. Fine for small parts. We use it *only* in tests.
+- `fast-xml-parser`: builds a JS object tree. Fine for small parts. We use it _only_ in tests.
 - `ltx`: smaller but less robust.
 - `@xmldom/xmldom`: full DOM, memory-hungry. Only appropriate for our small parts via a custom wrapper.
 
@@ -684,33 +696,33 @@ export type XmlEvent =
   | { kind: 'error'; error: XmlError };
 
 export interface QName {
-  readonly ns: string;      // namespace URI
-  readonly local: string;   // local name
-  readonly prefix: string;  // original prefix (for lenient round-trip of unknown namespaces)
+  readonly ns: string; // namespace URI
+  readonly local: string; // local name
+  readonly prefix: string; // original prefix (for lenient round-trip of unknown namespaces)
 }
 ```
 
 ### 7.3 Canonical namespaces
 
-| Prefix | URI |
-|---|---|
-| `w` | `http://schemas.openxmlformats.org/wordprocessingml/2006/main` |
-| `r` | `http://schemas.openxmlformats.org/officeDocument/2006/relationships` |
-| `m` | `http://schemas.openxmlformats.org/officeDocument/2006/math` |
-| `wp` | `http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing` |
-| `wp14` | `http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing` |
-| `a` | `http://schemas.openxmlformats.org/drawingml/2006/main` |
-| `pic` | `http://schemas.openxmlformats.org/drawingml/2006/picture` |
-| `w14` | `http://schemas.microsoft.com/office/word/2010/wordml` |
-| `w15` | `http://schemas.microsoft.com/office/word/2012/wordml` |
-| `w16se` | `http://schemas.microsoft.com/office/word/2015/wordml/symex` |
-| `wne` | `http://schemas.microsoft.com/office/word/2006/wordml` |
-| `mc` | `http://schemas.openxmlformats.org/markup-compatibility/2006` |
-| `ve` | `http://schemas.openxmlformats.org/markup-compatibility/2006` (legacy prefix for mc) |
-| `v` | `urn:schemas-microsoft-com:vml` |
-| `o` | `urn:schemas-microsoft-com:office:office` |
-| `w10` | `urn:schemas-microsoft-com:office:word` |
-| `xml` | `http://www.w3.org/XML/1998/namespace` |
+| Prefix  | URI                                                                                  |
+| ------- | ------------------------------------------------------------------------------------ |
+| `w`     | `http://schemas.openxmlformats.org/wordprocessingml/2006/main`                       |
+| `r`     | `http://schemas.openxmlformats.org/officeDocument/2006/relationships`                |
+| `m`     | `http://schemas.openxmlformats.org/officeDocument/2006/math`                         |
+| `wp`    | `http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing`             |
+| `wp14`  | `http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing`                |
+| `a`     | `http://schemas.openxmlformats.org/drawingml/2006/main`                              |
+| `pic`   | `http://schemas.openxmlformats.org/drawingml/2006/picture`                           |
+| `w14`   | `http://schemas.microsoft.com/office/word/2010/wordml`                               |
+| `w15`   | `http://schemas.microsoft.com/office/word/2012/wordml`                               |
+| `w16se` | `http://schemas.microsoft.com/office/word/2015/wordml/symex`                         |
+| `wne`   | `http://schemas.microsoft.com/office/word/2006/wordml`                               |
+| `mc`    | `http://schemas.openxmlformats.org/markup-compatibility/2006`                        |
+| `ve`    | `http://schemas.openxmlformats.org/markup-compatibility/2006` (legacy prefix for mc) |
+| `v`     | `urn:schemas-microsoft-com:vml`                                                      |
+| `o`     | `urn:schemas-microsoft-com:office:office`                                            |
+| `w10`   | `urn:schemas-microsoft-com:office:word`                                              |
+| `xml`   | `http://www.w3.org/XML/1998/namespace`                                               |
 
 Canonicalization: on parse we normalize prefixes to the canonical table above; we remember original prefixes (in the original `QName.prefix`) only for elements in namespaces we don't understand so we can emit them back out verbatim if needed.
 
@@ -734,8 +746,7 @@ type DocState =
   | { kind: 'inSectPr'; target: ParagraphBuilder | BodyBuilder }
   | { kind: 'inSdt'; sdt: SdtBuilder }
   | { kind: 'inField'; field: FieldBuilder }
-  | { kind: 'inUnknown'; depth: number; buffer: string[] } // passthrough for unknown elements
-  ;
+  | { kind: 'inUnknown'; depth: number; buffer: string[] }; // passthrough for unknown elements
 ```
 
 When we enter an unknown element (no mapper), we buffer its textual form (including attributes and children) back into a string and attach it as `unknownChildren: Array<OpaqueXml>` to the nearest ancestor AST node. On write, opaque XML is emitted verbatim.
@@ -837,12 +848,45 @@ Word is anal-retentive about attribute order, and our golden tests show that cha
 export const PARAGRAPH_PR_ATTR_ORDER = ['w:val'] as const;
 export const RUN_PR_ATTR_ORDER = ['w:val'] as const; // most run props are child elements
 export const RPR_CHILD_ORDER = [
-  'rStyle', 'rFonts', 'b', 'bCs', 'i', 'iCs', 'caps', 'smallCaps',
-  'strike', 'dstrike', 'outline', 'shadow', 'emboss', 'imprint',
-  'noProof', 'snapToGrid', 'vanish', 'webHidden', 'color',
-  'spacing', 'w', 'kern', 'position', 'sz', 'szCs', 'highlight',
-  'u', 'effect', 'bdr', 'shd', 'fitText', 'vertAlign', 'rtl', 'cs',
-  'em', 'lang', 'eastAsianLayout', 'specVanish', 'oMath',
+  'rStyle',
+  'rFonts',
+  'b',
+  'bCs',
+  'i',
+  'iCs',
+  'caps',
+  'smallCaps',
+  'strike',
+  'dstrike',
+  'outline',
+  'shadow',
+  'emboss',
+  'imprint',
+  'noProof',
+  'snapToGrid',
+  'vanish',
+  'webHidden',
+  'color',
+  'spacing',
+  'w',
+  'kern',
+  'position',
+  'sz',
+  'szCs',
+  'highlight',
+  'u',
+  'effect',
+  'bdr',
+  'shd',
+  'fitText',
+  'vertAlign',
+  'rtl',
+  'cs',
+  'em',
+  'lang',
+  'eastAsianLayout',
+  'specVanish',
+  'oMath',
 ] as const;
 ```
 
@@ -898,17 +942,21 @@ export interface AstNode<Kind extends string = string> {
   readonly __loc?: SourceLocation;
 }
 
-export type AttrValue = string | number | boolean | { kind: 'measure'; value: number; unit: Unit } | { kind: 'enum'; value: string };
+export type AttrValue =
+  | string
+  | number
+  | boolean
+  | { kind: 'measure'; value: number; unit: Unit }
+  | { kind: 'enum'; value: string };
 
 export type Unit =
-  | 'twip'    // 1/1440 inch
-  | 'pt'      // point; usually ×2 for half-points (font size)
-  | 'dxa'     // twip (alias used in OOXML)
-  | 'emu'     // English Metric Unit (DrawingML); 914400 per inch
-  | 'pct'     // percentage ×50 (w:w is ×50 pct in some contexts)
-  | 'ea'      // each (integer count)
-  | 'raw'     // verbatim string
-  ;
+  | 'twip' // 1/1440 inch
+  | 'pt' // point; usually ×2 for half-points (font size)
+  | 'dxa' // twip (alias used in OOXML)
+  | 'emu' // English Metric Unit (DrawingML); 914400 per inch
+  | 'pct' // percentage ×50 (w:w is ×50 pct in some contexts)
+  | 'ea' // each (integer count)
+  | 'raw'; // verbatim string
 
 export interface OpaqueAttr {
   readonly qname: QName;
@@ -938,8 +986,8 @@ export type BodyChild = Paragraph | Table | Sdt | BookmarkStart | BookmarkEnd | 
 export interface Paragraph extends AstNode<'p'> {
   readonly pPr?: ParagraphProperties;
   readonly children: ReadonlyArray<ParagraphChild>;
-  readonly paraId?: string;   // w14:paraId
-  readonly textId?: string;   // w14:textId
+  readonly paraId?: string; // w14:paraId
+  readonly textId?: string; // w14:textId
 }
 
 export type ParagraphChild =
@@ -950,15 +998,20 @@ export type ParagraphChild =
   | CommentRangeStart
   | CommentRangeEnd
   | CommentReference
-  | FieldStart | FieldSeparate | FieldEnd
+  | FieldStart
+  | FieldSeparate
+  | FieldEnd
   | FieldSimple
-  | InsRun | DelRun | MoveFromRun | MoveToRun
+  | InsRun
+  | DelRun
+  | MoveFromRun
+  | MoveToRun
   | Sdt
   | CustomXmlInsert
   | ProofErr
-  | PermissionStart | PermissionEnd
-  | OpaqueNode
-  ;
+  | PermissionStart
+  | PermissionEnd
+  | OpaqueNode;
 
 export interface Run extends AstNode<'r'> {
   readonly rPr?: RunProperties;
@@ -966,14 +1019,32 @@ export interface Run extends AstNode<'r'> {
 }
 
 export type RunChild =
-  | Text | Tab | Break | NoBreakHyphen | SoftHyphen | Symbol
-  | PageNumber | LastRenderedPageBreak | Drawing | OleObject | Picture
-  | FootnoteReference | EndnoteReference
-  | FieldChar | InstrText
-  | DayLong | DayShort | MonthLong | MonthShort | YearLong | YearShort
-  | AnnotationRef | CommentReference
-  | ContentPart | Ruby | OpaqueNode
-  ;
+  | Text
+  | Tab
+  | Break
+  | NoBreakHyphen
+  | SoftHyphen
+  | Symbol
+  | PageNumber
+  | LastRenderedPageBreak
+  | Drawing
+  | OleObject
+  | Picture
+  | FootnoteReference
+  | EndnoteReference
+  | FieldChar
+  | InstrText
+  | DayLong
+  | DayShort
+  | MonthLong
+  | MonthShort
+  | YearLong
+  | YearShort
+  | AnnotationRef
+  | CommentReference
+  | ContentPart
+  | Ruby
+  | OpaqueNode;
 
 export interface Text extends AstNode<'t'> {
   readonly value: string;
@@ -998,9 +1069,9 @@ export interface RunProperties extends AstNode<'rPr'> {
   readonly vanish?: ToggleVal;
   readonly webHidden?: ToggleVal;
   readonly color?: Color;
-  readonly spacing?: TwipValue;  // char spacing
+  readonly spacing?: TwipValue; // char spacing
   readonly characterWidth?: Percent;
-  readonly kerning?: HalfPoint;  // w:kern
+  readonly kerning?: HalfPoint; // w:kern
   readonly position?: HalfPoint;
   readonly fontSize?: HalfPoint;
   readonly fontSizeCs?: HalfPoint;
@@ -1018,15 +1089,262 @@ export interface RunProperties extends AstNode<'rPr'> {
 }
 
 export type ToggleVal = boolean | { kind: 'toggle'; value: boolean };
-export interface Color { readonly val: string; readonly themeColor?: string; readonly themeTint?: string; readonly themeShade?: string; }
-export interface TwipValue { readonly twip: number; }
-export interface Percent { readonly pct: number; }
-export interface HalfPoint { readonly halfPt: number; }
-export type HighlightColor = 'black' | 'blue' | 'cyan' | 'darkBlue' | 'darkCyan' | 'darkGray' | 'darkGreen' | 'darkMagenta' | 'darkRed' | 'darkYellow' | 'green' | 'lightGray' | 'magenta' | 'none' | 'red' | 'white' | 'yellow';
-export interface Underline { readonly val: 'single' | 'double' | 'thick' | 'dotted' | 'dash' | 'dotDash' | 'dotDotDash' | 'wave' | 'wavyHeavy' | 'wavyDouble' | 'words' | 'none'; readonly color?: string; readonly themeColor?: string; }
-export type TextEffect = 'blinkBackground' | 'lights' | 'antsBlack' | 'antsRed' | 'shimmer' | 'sparkle' | 'none';
-export interface Border { readonly val: BorderStyle; readonly color?: string; readonly size?: number; readonly space?: number; }
-export type BorderStyle = 'nil' | 'none' | 'single' | 'thick' | 'double' | 'dotted' | 'dashed' | 'dotDash' | 'dotDotDash' | 'triple' | 'thinThickSmallGap' | 'thickThinSmallGap' | 'thinThickThinSmallGap' | 'thinThickMediumGap' | 'thickThinMediumGap' | 'thinThickThinMediumGap' | 'thinThickLargeGap' | 'thickThinLargeGap' | 'thinThickThinLargeGap' | 'wave' | 'doubleWave' | 'dashSmallGap' | 'dashDotStroked' | 'threeDEmboss' | 'threeDEngrave' | 'outset' | 'inset' | 'apples' | 'archedScallops' | 'babyPacifier' | 'babyRattle' | 'balloons3Colors' | 'balloonsHotAir' | 'basicBlackDashes' | 'basicBlackDots' | 'basicBlackSquares' | 'basicThinLines' | 'basicWhiteDashes' | 'basicWhiteDots' | 'basicWhiteSquares' | 'basicWideInline' | 'basicWideMidline' | 'basicWideOutline' | 'bats' | 'birds' | 'birdsFlight' | 'cabins' | 'cakeSlice' | 'candyCorn' | 'celticKnotwork' | 'certificateBanner' | 'chainLink' | 'champagneBottle' | 'checkedBarBlack' | 'checkedBarColor' | 'checkered' | 'christmasTree' | 'circlesLines' | 'circlesRectangles' | 'classicalWave' | 'clocks' | 'compass' | 'confetti' | 'confettiGrays' | 'confettiOutline' | 'confettiStreamers' | 'confettiWhite' | 'cornerTriangles' | 'couponCutoutDashes' | 'couponCutoutDots' | 'crazyMaze' | 'creaturesButterfly' | 'creaturesFish' | 'creaturesInsects' | 'creaturesLadyBug' | 'crossStitch' | 'cup' | 'decoArch' | 'decoArchColor' | 'decoBlocks' | 'diamondsGray' | 'doubleD' | 'doubleDiamonds' | 'earth1' | 'earth2' | 'eclipsingSquares1' | 'eclipsingSquares2' | 'eggsBlack' | 'fans' | 'film' | 'firecrackers' | 'flowersBlockPrint' | 'flowersDaisies' | 'flowersModern1' | 'flowersModern2' | 'flowersPansy' | 'flowersRedRose' | 'flowersRoses' | 'flowersTeacup' | 'flowersTiny' | 'gems' | 'gingerbreadMan' | 'gradient' | 'handmade1' | 'handmade2' | 'heartBalloon' | 'heartGray' | 'hearts' | 'heebieJeebies' | 'holly' | 'houseFunky' | 'hypnotic' | 'iceCreamCones' | 'lightBulb' | 'lightning1' | 'lightning2' | 'mapPins' | 'mapleLeaf' | 'mapleMuffins' | 'marquee' | 'marqueeToothed' | 'moons' | 'mosaic' | 'musicNotes' | 'northwest' | 'ovals' | 'packages' | 'palmsBlack' | 'palmsColor' | 'paperClips' | 'papyrus' | 'partyFavor' | 'partyGlass' | 'pencils' | 'people' | 'peopleWaving' | 'peopleHats' | 'poinsettias' | 'postageStamp' | 'pumpkin1' | 'pushPinNote1' | 'pushPinNote2' | 'pyramids' | 'pyramidsAbove' | 'quadrants' | 'rings' | 'safari' | 'sawtooth' | 'sawtoothGray' | 'scaredCat' | 'seattle' | 'shadowedSquares' | 'sharksTeeth' | 'shorebirdTracks' | 'skyrocket' | 'snowflakeFancy' | 'snowflakes' | 'sombrero' | 'southwest' | 'stars' | 'starsTop' | 'stars3D' | 'starsBlack' | 'starsShadowed' | 'sun' | 'swirligig' | 'tornPaper' | 'tornPaperBlack' | 'trees' | 'triangleParty' | 'triangles' | 'tribal1' | 'tribal2' | 'tribal3' | 'tribal4' | 'tribal5' | 'tribal6' | 'twistedLines1' | 'twistedLines2' | 'vine' | 'waveline' | 'weavingAngles' | 'weavingBraid' | 'weavingRibbon' | 'weavingStrips' | 'whiteFlowers' | 'woodwork' | 'xIllusions' | 'zanyTriangles' | 'zigZag' | 'zigZagStitch';
+export interface Color {
+  readonly val: string;
+  readonly themeColor?: string;
+  readonly themeTint?: string;
+  readonly themeShade?: string;
+}
+export interface TwipValue {
+  readonly twip: number;
+}
+export interface Percent {
+  readonly pct: number;
+}
+export interface HalfPoint {
+  readonly halfPt: number;
+}
+export type HighlightColor =
+  | 'black'
+  | 'blue'
+  | 'cyan'
+  | 'darkBlue'
+  | 'darkCyan'
+  | 'darkGray'
+  | 'darkGreen'
+  | 'darkMagenta'
+  | 'darkRed'
+  | 'darkYellow'
+  | 'green'
+  | 'lightGray'
+  | 'magenta'
+  | 'none'
+  | 'red'
+  | 'white'
+  | 'yellow';
+export interface Underline {
+  readonly val:
+    | 'single'
+    | 'double'
+    | 'thick'
+    | 'dotted'
+    | 'dash'
+    | 'dotDash'
+    | 'dotDotDash'
+    | 'wave'
+    | 'wavyHeavy'
+    | 'wavyDouble'
+    | 'words'
+    | 'none';
+  readonly color?: string;
+  readonly themeColor?: string;
+}
+export type TextEffect =
+  | 'blinkBackground'
+  | 'lights'
+  | 'antsBlack'
+  | 'antsRed'
+  | 'shimmer'
+  | 'sparkle'
+  | 'none';
+export interface Border {
+  readonly val: BorderStyle;
+  readonly color?: string;
+  readonly size?: number;
+  readonly space?: number;
+}
+export type BorderStyle =
+  | 'nil'
+  | 'none'
+  | 'single'
+  | 'thick'
+  | 'double'
+  | 'dotted'
+  | 'dashed'
+  | 'dotDash'
+  | 'dotDotDash'
+  | 'triple'
+  | 'thinThickSmallGap'
+  | 'thickThinSmallGap'
+  | 'thinThickThinSmallGap'
+  | 'thinThickMediumGap'
+  | 'thickThinMediumGap'
+  | 'thinThickThinMediumGap'
+  | 'thinThickLargeGap'
+  | 'thickThinLargeGap'
+  | 'thinThickThinLargeGap'
+  | 'wave'
+  | 'doubleWave'
+  | 'dashSmallGap'
+  | 'dashDotStroked'
+  | 'threeDEmboss'
+  | 'threeDEngrave'
+  | 'outset'
+  | 'inset'
+  | 'apples'
+  | 'archedScallops'
+  | 'babyPacifier'
+  | 'babyRattle'
+  | 'balloons3Colors'
+  | 'balloonsHotAir'
+  | 'basicBlackDashes'
+  | 'basicBlackDots'
+  | 'basicBlackSquares'
+  | 'basicThinLines'
+  | 'basicWhiteDashes'
+  | 'basicWhiteDots'
+  | 'basicWhiteSquares'
+  | 'basicWideInline'
+  | 'basicWideMidline'
+  | 'basicWideOutline'
+  | 'bats'
+  | 'birds'
+  | 'birdsFlight'
+  | 'cabins'
+  | 'cakeSlice'
+  | 'candyCorn'
+  | 'celticKnotwork'
+  | 'certificateBanner'
+  | 'chainLink'
+  | 'champagneBottle'
+  | 'checkedBarBlack'
+  | 'checkedBarColor'
+  | 'checkered'
+  | 'christmasTree'
+  | 'circlesLines'
+  | 'circlesRectangles'
+  | 'classicalWave'
+  | 'clocks'
+  | 'compass'
+  | 'confetti'
+  | 'confettiGrays'
+  | 'confettiOutline'
+  | 'confettiStreamers'
+  | 'confettiWhite'
+  | 'cornerTriangles'
+  | 'couponCutoutDashes'
+  | 'couponCutoutDots'
+  | 'crazyMaze'
+  | 'creaturesButterfly'
+  | 'creaturesFish'
+  | 'creaturesInsects'
+  | 'creaturesLadyBug'
+  | 'crossStitch'
+  | 'cup'
+  | 'decoArch'
+  | 'decoArchColor'
+  | 'decoBlocks'
+  | 'diamondsGray'
+  | 'doubleD'
+  | 'doubleDiamonds'
+  | 'earth1'
+  | 'earth2'
+  | 'eclipsingSquares1'
+  | 'eclipsingSquares2'
+  | 'eggsBlack'
+  | 'fans'
+  | 'film'
+  | 'firecrackers'
+  | 'flowersBlockPrint'
+  | 'flowersDaisies'
+  | 'flowersModern1'
+  | 'flowersModern2'
+  | 'flowersPansy'
+  | 'flowersRedRose'
+  | 'flowersRoses'
+  | 'flowersTeacup'
+  | 'flowersTiny'
+  | 'gems'
+  | 'gingerbreadMan'
+  | 'gradient'
+  | 'handmade1'
+  | 'handmade2'
+  | 'heartBalloon'
+  | 'heartGray'
+  | 'hearts'
+  | 'heebieJeebies'
+  | 'holly'
+  | 'houseFunky'
+  | 'hypnotic'
+  | 'iceCreamCones'
+  | 'lightBulb'
+  | 'lightning1'
+  | 'lightning2'
+  | 'mapPins'
+  | 'mapleLeaf'
+  | 'mapleMuffins'
+  | 'marquee'
+  | 'marqueeToothed'
+  | 'moons'
+  | 'mosaic'
+  | 'musicNotes'
+  | 'northwest'
+  | 'ovals'
+  | 'packages'
+  | 'palmsBlack'
+  | 'palmsColor'
+  | 'paperClips'
+  | 'papyrus'
+  | 'partyFavor'
+  | 'partyGlass'
+  | 'pencils'
+  | 'people'
+  | 'peopleWaving'
+  | 'peopleHats'
+  | 'poinsettias'
+  | 'postageStamp'
+  | 'pumpkin1'
+  | 'pushPinNote1'
+  | 'pushPinNote2'
+  | 'pyramids'
+  | 'pyramidsAbove'
+  | 'quadrants'
+  | 'rings'
+  | 'safari'
+  | 'sawtooth'
+  | 'sawtoothGray'
+  | 'scaredCat'
+  | 'seattle'
+  | 'shadowedSquares'
+  | 'sharksTeeth'
+  | 'shorebirdTracks'
+  | 'skyrocket'
+  | 'snowflakeFancy'
+  | 'snowflakes'
+  | 'sombrero'
+  | 'southwest'
+  | 'stars'
+  | 'starsTop'
+  | 'stars3D'
+  | 'starsBlack'
+  | 'starsShadowed'
+  | 'sun'
+  | 'swirligig'
+  | 'tornPaper'
+  | 'tornPaperBlack'
+  | 'trees'
+  | 'triangleParty'
+  | 'triangles'
+  | 'tribal1'
+  | 'tribal2'
+  | 'tribal3'
+  | 'tribal4'
+  | 'tribal5'
+  | 'tribal6'
+  | 'twistedLines1'
+  | 'twistedLines2'
+  | 'vine'
+  | 'waveline'
+  | 'weavingAngles'
+  | 'weavingBraid'
+  | 'weavingRibbon'
+  | 'weavingStrips'
+  | 'whiteFlowers'
+  | 'woodwork'
+  | 'xIllusions'
+  | 'zanyTriangles'
+  | 'zigZag'
+  | 'zigZagStitch';
 ```
 
 (The `BorderStyle` enumeration is verbatim the ECMA-376 `ST_Border` simple type. We include the full set so the mapper round-trips every value.)
@@ -1058,7 +1376,19 @@ export interface ParagraphProperties extends AstNode<'pPr'> {
   readonly contextualSpacing?: ToggleVal;
   readonly mirrorIndents?: ToggleVal;
   readonly suppressOverlap?: ToggleVal;
-  readonly jc?: 'start' | 'end' | 'center' | 'both' | 'mediumKashida' | 'distribute' | 'numTab' | 'highKashida' | 'lowKashida' | 'thaiDistribute' | 'left' | 'right';
+  readonly jc?:
+    | 'start'
+    | 'end'
+    | 'center'
+    | 'both'
+    | 'mediumKashida'
+    | 'distribute'
+    | 'numTab'
+    | 'highKashida'
+    | 'lowKashida'
+    | 'thaiDistribute'
+    | 'left'
+    | 'right';
   readonly textDirection?: 'lrTb' | 'tbRl' | 'btLr' | 'lrTbV' | 'tbRlV' | 'tbLrV';
   readonly textAlignment?: 'top' | 'center' | 'baseline' | 'bottom' | 'auto';
   readonly outlineLvl?: number;
@@ -1088,8 +1418,8 @@ export interface Indent {
   readonly end?: TwipValue;
   readonly hanging?: TwipValue;
   readonly firstLine?: TwipValue;
-  readonly left?: TwipValue;   // legacy alias
-  readonly right?: TwipValue;  // legacy alias
+  readonly left?: TwipValue; // legacy alias
+  readonly right?: TwipValue; // legacy alias
 }
 
 export interface NumberingReference {
@@ -1218,7 +1548,70 @@ export interface HeaderFooterReference {
 }
 
 export interface PageNumType {
-  readonly format?: 'decimal' | 'upperRoman' | 'lowerRoman' | 'upperLetter' | 'lowerLetter' | 'ordinal' | 'cardinalText' | 'ordinalText' | 'hex' | 'chicago' | 'ideographDigital' | 'japaneseCounting' | 'aiueo' | 'iroha' | 'decimalFullWidth' | 'decimalHalfWidth' | 'japaneseLegal' | 'japaneseDigitalTenThousand' | 'decimalEnclosedCircle' | 'decimalFullWidth2' | 'aiueoFullWidth' | 'irohaFullWidth' | 'decimalZero' | 'bullet' | 'ganada' | 'chosung' | 'decimalEnclosedFullstop' | 'decimalEnclosedParen' | 'decimalEnclosedCircleChinese' | 'ideographEnclosedCircle' | 'ideographTraditional' | 'ideographZodiac' | 'ideographZodiacTraditional' | 'taiwaneseCounting' | 'ideographLegalTraditional' | 'taiwaneseCountingThousand' | 'taiwaneseDigital' | 'chineseCounting' | 'chineseLegalSimplified' | 'chineseCountingThousand' | 'koreanDigital' | 'koreanCounting' | 'koreanLegal' | 'koreanDigital2' | 'vietnameseCounting' | 'russianLower' | 'russianUpper' | 'none' | 'numberInDash' | 'hebrew1' | 'hebrew2' | 'arabicAlpha' | 'arabicAbjad' | 'hindiVowels' | 'hindiConsonants' | 'hindiNumbers' | 'hindiCounting' | 'thaiLetters' | 'thaiNumbers' | 'thaiCounting' | 'bahtText' | 'dollarText' | 'custom';
+  readonly format?:
+    | 'decimal'
+    | 'upperRoman'
+    | 'lowerRoman'
+    | 'upperLetter'
+    | 'lowerLetter'
+    | 'ordinal'
+    | 'cardinalText'
+    | 'ordinalText'
+    | 'hex'
+    | 'chicago'
+    | 'ideographDigital'
+    | 'japaneseCounting'
+    | 'aiueo'
+    | 'iroha'
+    | 'decimalFullWidth'
+    | 'decimalHalfWidth'
+    | 'japaneseLegal'
+    | 'japaneseDigitalTenThousand'
+    | 'decimalEnclosedCircle'
+    | 'decimalFullWidth2'
+    | 'aiueoFullWidth'
+    | 'irohaFullWidth'
+    | 'decimalZero'
+    | 'bullet'
+    | 'ganada'
+    | 'chosung'
+    | 'decimalEnclosedFullstop'
+    | 'decimalEnclosedParen'
+    | 'decimalEnclosedCircleChinese'
+    | 'ideographEnclosedCircle'
+    | 'ideographTraditional'
+    | 'ideographZodiac'
+    | 'ideographZodiacTraditional'
+    | 'taiwaneseCounting'
+    | 'ideographLegalTraditional'
+    | 'taiwaneseCountingThousand'
+    | 'taiwaneseDigital'
+    | 'chineseCounting'
+    | 'chineseLegalSimplified'
+    | 'chineseCountingThousand'
+    | 'koreanDigital'
+    | 'koreanCounting'
+    | 'koreanLegal'
+    | 'koreanDigital2'
+    | 'vietnameseCounting'
+    | 'russianLower'
+    | 'russianUpper'
+    | 'none'
+    | 'numberInDash'
+    | 'hebrew1'
+    | 'hebrew2'
+    | 'arabicAlpha'
+    | 'arabicAbjad'
+    | 'hindiVowels'
+    | 'hindiConsonants'
+    | 'hindiNumbers'
+    | 'hindiCounting'
+    | 'thaiLetters'
+    | 'thaiNumbers'
+    | 'thaiCounting'
+    | 'bahtText'
+    | 'dollarText'
+    | 'custom';
   readonly start?: number;
   readonly chapStyle?: number;
   readonly chapSep?: 'hyphen' | 'period' | 'colon' | 'emDash' | 'enDash';
@@ -1379,9 +1772,7 @@ export const paragraphMapper: Mapper<DomainParagraph, AstParagraph> = {
       paraId: ast.paraId,
       textId: ast.textId,
       props,
-      sectionBreak: ast.pPr?.sectPr
-        ? sectionMapper.in(ast.pPr.sectPr, ctx)
-        : undefined,
+      sectionBreak: ast.pPr?.sectPr ? sectionMapper.in(ast.pPr.sectPr, ctx) : undefined,
       children,
       preservedExtensions: gatherPreservedExtensions(ast),
     };
@@ -1417,7 +1808,11 @@ export const paragraphMapper: Mapper<DomainParagraph, AstParagraph> = {
           children.push(revisionMapper.out(child, ctx));
           break;
         case 'preservedExtension':
-          children.push({ kind: 'opaque', raw: child.ext.raw, originalQName: { ns: child.ext.uri, local: '', prefix: '' } });
+          children.push({
+            kind: 'opaque',
+            raw: child.ext.raw,
+            originalQName: { ns: child.ext.uri, local: '', prefix: '' },
+          });
           break;
       }
     }
@@ -1428,7 +1823,8 @@ export const paragraphMapper: Mapper<DomainParagraph, AstParagraph> = {
       textId: node.textId,
       pPr,
       children,
-      unknownChildren: node.preservedExtensions?.filter(e => isUnknownChild(e)).map(asOpaque) ?? [],
+      unknownChildren:
+        node.preservedExtensions?.filter((e) => isUnknownChild(e)).map(asOpaque) ?? [],
     };
   },
 };
@@ -1437,25 +1833,31 @@ function paragraphPropsIn(ast: AstParagraphProperties, ctx: MapInContext): Domai
   return {
     styleId: ast.pStyle,
     alignment: ast.jc,
-    numbering: ast.numbering ? { listId: ast.numbering.numId, level: ast.numbering.ilvl } : undefined,
-    spacing: ast.spacing ? {
-      before: ast.spacing.before?.twip,
-      after: ast.spacing.after?.twip,
-      line: ast.spacing.line?.twip,
-      lineRule: ast.spacing.lineRule,
-    } : undefined,
-    indent: ast.indent ? {
-      start: ast.indent.start?.twip ?? ast.indent.left?.twip,
-      end: ast.indent.end?.twip ?? ast.indent.right?.twip,
-      firstLine: ast.indent.firstLine?.twip,
-      hanging: ast.indent.hanging?.twip,
-    } : undefined,
+    numbering: ast.numbering
+      ? { listId: ast.numbering.numId, level: ast.numbering.ilvl }
+      : undefined,
+    spacing: ast.spacing
+      ? {
+          before: ast.spacing.before?.twip,
+          after: ast.spacing.after?.twip,
+          line: ast.spacing.line?.twip,
+          lineRule: ast.spacing.lineRule,
+        }
+      : undefined,
+    indent: ast.indent
+      ? {
+          start: ast.indent.start?.twip ?? ast.indent.left?.twip,
+          end: ast.indent.end?.twip ?? ast.indent.right?.twip,
+          firstLine: ast.indent.firstLine?.twip,
+          hanging: ast.indent.hanging?.twip,
+        }
+      : undefined,
     keepNext: ast.keepNext === true,
     keepLines: ast.keepLines === true,
     pageBreakBefore: ast.pageBreakBefore === true,
     widowControl: ast.widowControl !== false,
     outlineLevel: ast.outlineLvl,
-    tabs: ast.tabs?.map(t => ({ position: t.pos.twip, alignment: t.val, leader: t.leader })),
+    tabs: ast.tabs?.map((t) => ({ position: t.pos.twip, alignment: t.val, leader: t.leader })),
     borders: ast.borders ? mapParagraphBordersIn(ast.borders) : undefined,
     shading: ast.shading ? mapShadingIn(ast.shading) : undefined,
     frame: ast.frame ? mapFrameIn(ast.frame) : undefined,
@@ -1565,7 +1967,7 @@ Domain never materializes resolved styles; we keep style IDs as references and r
 
 ### 11.5 Locale-specific IDs
 
-Some producers (notably Microsoft Word in German locales) write `Überschrift1` instead of `Heading1`. We preserve the ID *verbatim*. We maintain a normalization table that maps common locale-specific IDs to a semantic identity (`heading-1`), used only when the UI needs to show a canonical name or when exporting to HTML (where we pick `h1`).
+Some producers (notably Microsoft Word in German locales) write `Überschrift1` instead of `Heading1`. We preserve the ID _verbatim_. We maintain a normalization table that maps common locale-specific IDs to a semantic identity (`heading-1`), used only when the UI needs to show a canonical name or when exporting to HTML (where we pick `h1`).
 
 ---
 
@@ -1584,7 +1986,7 @@ export interface AbstractNum {
   readonly abstractNumId: number;
   readonly nsid?: string;
   readonly multiLevelType?: 'singleLevel' | 'multilevel' | 'hybridMultilevel';
-  readonly tmpl?: string;   // hash Word uses for template identity
+  readonly tmpl?: string; // hash Word uses for template identity
   readonly name?: string;
   readonly styleLink?: string;
   readonly numStyleLink?: string;
@@ -1595,7 +1997,7 @@ export interface NumLevel {
   readonly ilvl: number;
   readonly start?: number;
   readonly numFmt: NumFmt;
-  readonly lvlText: string;      // e.g., "%1.%2."
+  readonly lvlText: string; // e.g., "%1.%2."
   readonly lvlJc?: 'start' | 'end' | 'center' | 'left' | 'right';
   readonly restart?: number;
   readonly suff?: 'tab' | 'space' | 'nothing';
@@ -1608,24 +2010,66 @@ export interface NumLevel {
 }
 
 export type NumFmt =
-  | 'decimal' | 'upperRoman' | 'lowerRoman' | 'upperLetter' | 'lowerLetter'
-  | 'bullet' | 'ordinal' | 'cardinalText' | 'ordinalText' | 'hex'
-  | 'decimalZero' | 'decimalFullWidth' | 'decimalHalfWidth'
-  | 'japaneseCounting' | 'japaneseDigitalTenThousand' | 'aiueo' | 'iroha'
-  | 'japaneseLegal' | 'chineseCounting' | 'chineseCountingThousand'
-  | 'chineseLegalSimplified' | 'koreanCounting' | 'koreanDigital' | 'koreanLegal'
-  | 'vietnameseCounting' | 'russianLower' | 'russianUpper'
-  | 'hebrew1' | 'hebrew2' | 'arabicAlpha' | 'arabicAbjad'
-  | 'hindiVowels' | 'hindiConsonants' | 'hindiNumbers' | 'hindiCounting'
-  | 'thaiLetters' | 'thaiNumbers' | 'thaiCounting' | 'bahtText' | 'dollarText'
-  | 'ganada' | 'chosung'
-  | 'decimalEnclosedCircle' | 'decimalEnclosedCircleChinese'
-  | 'decimalEnclosedFullstop' | 'decimalEnclosedParen' | 'decimalFullWidth2'
-  | 'aiueoFullWidth' | 'irohaFullWidth' | 'taiwaneseCounting'
-  | 'ideographEnclosedCircle' | 'ideographTraditional' | 'ideographZodiac'
-  | 'ideographZodiacTraditional' | 'ideographLegalTraditional'
-  | 'taiwaneseCountingThousand' | 'taiwaneseDigital'
-  | 'numberInDash' | 'none' | 'custom';
+  | 'decimal'
+  | 'upperRoman'
+  | 'lowerRoman'
+  | 'upperLetter'
+  | 'lowerLetter'
+  | 'bullet'
+  | 'ordinal'
+  | 'cardinalText'
+  | 'ordinalText'
+  | 'hex'
+  | 'decimalZero'
+  | 'decimalFullWidth'
+  | 'decimalHalfWidth'
+  | 'japaneseCounting'
+  | 'japaneseDigitalTenThousand'
+  | 'aiueo'
+  | 'iroha'
+  | 'japaneseLegal'
+  | 'chineseCounting'
+  | 'chineseCountingThousand'
+  | 'chineseLegalSimplified'
+  | 'koreanCounting'
+  | 'koreanDigital'
+  | 'koreanLegal'
+  | 'vietnameseCounting'
+  | 'russianLower'
+  | 'russianUpper'
+  | 'hebrew1'
+  | 'hebrew2'
+  | 'arabicAlpha'
+  | 'arabicAbjad'
+  | 'hindiVowels'
+  | 'hindiConsonants'
+  | 'hindiNumbers'
+  | 'hindiCounting'
+  | 'thaiLetters'
+  | 'thaiNumbers'
+  | 'thaiCounting'
+  | 'bahtText'
+  | 'dollarText'
+  | 'ganada'
+  | 'chosung'
+  | 'decimalEnclosedCircle'
+  | 'decimalEnclosedCircleChinese'
+  | 'decimalEnclosedFullstop'
+  | 'decimalEnclosedParen'
+  | 'decimalFullWidth2'
+  | 'aiueoFullWidth'
+  | 'irohaFullWidth'
+  | 'taiwaneseCounting'
+  | 'ideographEnclosedCircle'
+  | 'ideographTraditional'
+  | 'ideographZodiac'
+  | 'ideographZodiacTraditional'
+  | 'ideographLegalTraditional'
+  | 'taiwaneseCountingThousand'
+  | 'taiwaneseDigital'
+  | 'numberInDash'
+  | 'none'
+  | 'custom';
 
 export interface NumInstance {
   readonly numId: number;
@@ -1756,38 +2200,38 @@ class FieldStateMachine {
 
 Full list with parser and optional recomputer:
 
-| Field | Parse | Recompute | Notes |
-|---|---|---|---|
-| `DATE` | yes | yes | `\@ format` for date format; `\l` last-used locale |
-| `TIME` | yes | yes | same format codes |
-| `CREATEDATE`, `SAVEDATE`, `PRINTDATE`, `EDITTIME` | yes | yes | use docProps timestamps |
-| `PAGE` | yes | yes | page counter at render |
-| `NUMPAGES`, `SECTIONPAGES` | yes | yes | |
-| `SECTION` | yes | yes | |
-| `AUTHOR`, `USERNAME`, `USERINITIALS`, `USERADDRESS` | yes | yes | from settings |
-| `FILENAME` | yes | yes | `\p` with path |
-| `FILESIZE` | yes | yes | |
-| `TITLE`, `SUBJECT`, `KEYWORDS`, `DOCPROPERTY`, `COMMENTS` | yes | yes | from core.xml |
-| `TOC` | yes | yes | builds from headings; switches `\o "1-3" \h \z \u` |
-| `TC` | yes | - | TOC entry marker |
-| `PAGEREF` | yes | yes | resolve bookmark → page |
-| `REF` | yes | yes | resolve bookmark → text |
-| `HYPERLINK` | yes | - | preserved; clickable |
-| `SEQ` | yes | yes | figure/table captions |
-| `LISTNUM` | yes | yes | |
-| `INCLUDEPICTURE`, `INCLUDETEXT` | yes | partial | we fetch with user consent |
-| `SYMBOL` | yes | yes | character code |
-| `EQ` | yes | render-only | Word 95 equation editor; we parse enough to render |
-| `IF` | yes | yes | conditional |
-| `=formula` | yes | yes | table formulas: SUM(ABOVE), AVERAGE, COUNT, PRODUCT, MAX, MIN, IF, AND, OR, NOT, SIGN, ABS, ROUND, INT, MOD, DEFINED |
-| `STYLEREF` | yes | yes | |
-| `NOTEREF` | yes | yes | |
-| `MERGEFIELD` | yes | - | preserved for data-merge v2 |
-| `MACROBUTTON`, `GOTOBUTTON` | yes | - | preserved |
-| `SET`, `ASK`, `FILLIN` | yes | partial | |
-| `QUOTE` | yes | yes | |
-| `FORMCHECKBOX`, `FORMTEXT`, `FORMDROPDOWN` | yes | yes | legacy form fields |
-| others | as opaque | - | preserved instruction + result |
+| Field                                                     | Parse     | Recompute   | Notes                                                                                                                |
+| --------------------------------------------------------- | --------- | ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| `DATE`                                                    | yes       | yes         | `\@ format` for date format; `\l` last-used locale                                                                   |
+| `TIME`                                                    | yes       | yes         | same format codes                                                                                                    |
+| `CREATEDATE`, `SAVEDATE`, `PRINTDATE`, `EDITTIME`         | yes       | yes         | use docProps timestamps                                                                                              |
+| `PAGE`                                                    | yes       | yes         | page counter at render                                                                                               |
+| `NUMPAGES`, `SECTIONPAGES`                                | yes       | yes         |                                                                                                                      |
+| `SECTION`                                                 | yes       | yes         |                                                                                                                      |
+| `AUTHOR`, `USERNAME`, `USERINITIALS`, `USERADDRESS`       | yes       | yes         | from settings                                                                                                        |
+| `FILENAME`                                                | yes       | yes         | `\p` with path                                                                                                       |
+| `FILESIZE`                                                | yes       | yes         |                                                                                                                      |
+| `TITLE`, `SUBJECT`, `KEYWORDS`, `DOCPROPERTY`, `COMMENTS` | yes       | yes         | from core.xml                                                                                                        |
+| `TOC`                                                     | yes       | yes         | builds from headings; switches `\o "1-3" \h \z \u`                                                                   |
+| `TC`                                                      | yes       | -           | TOC entry marker                                                                                                     |
+| `PAGEREF`                                                 | yes       | yes         | resolve bookmark → page                                                                                              |
+| `REF`                                                     | yes       | yes         | resolve bookmark → text                                                                                              |
+| `HYPERLINK`                                               | yes       | -           | preserved; clickable                                                                                                 |
+| `SEQ`                                                     | yes       | yes         | figure/table captions                                                                                                |
+| `LISTNUM`                                                 | yes       | yes         |                                                                                                                      |
+| `INCLUDEPICTURE`, `INCLUDETEXT`                           | yes       | partial     | we fetch with user consent                                                                                           |
+| `SYMBOL`                                                  | yes       | yes         | character code                                                                                                       |
+| `EQ`                                                      | yes       | render-only | Word 95 equation editor; we parse enough to render                                                                   |
+| `IF`                                                      | yes       | yes         | conditional                                                                                                          |
+| `=formula`                                                | yes       | yes         | table formulas: SUM(ABOVE), AVERAGE, COUNT, PRODUCT, MAX, MIN, IF, AND, OR, NOT, SIGN, ABS, ROUND, INT, MOD, DEFINED |
+| `STYLEREF`                                                | yes       | yes         |                                                                                                                      |
+| `NOTEREF`                                                 | yes       | yes         |                                                                                                                      |
+| `MERGEFIELD`                                              | yes       | -           | preserved for data-merge v2                                                                                          |
+| `MACROBUTTON`, `GOTOBUTTON`                               | yes       | -           | preserved                                                                                                            |
+| `SET`, `ASK`, `FILLIN`                                    | yes       | partial     |                                                                                                                      |
+| `QUOTE`                                                   | yes       | yes         |                                                                                                                      |
+| `FORMCHECKBOX`, `FORMTEXT`, `FORMDROPDOWN`                | yes       | yes         | legacy form fields                                                                                                   |
+| others                                                    | as opaque | -           | preserved instruction + result                                                                                       |
 
 Field recompute is controlled by:
 
@@ -1827,28 +2271,28 @@ Images live under `word/media/` and are referenced by relationships of type `ima
 
 ### 14.2 Formats
 
-| Format | Display | Notes |
-|---|---|---|
-| PNG | yes | direct |
-| JPEG | yes | direct |
-| GIF | yes | animated: first frame |
-| BMP | yes | decoded via bmp-js |
-| TIFF | yes | decoded via utif-wasm |
-| WMF | rasterized preview | emf2svg-wasm or our converter |
-| EMF | rasterized preview | emf2svg-wasm |
-| PICT | rasterized preview | pict-wasm |
-| EPS | placeholder with filename | rarely appears |
-| CGM | placeholder with filename | legacy |
-| SVG (via SVG blip) | yes | `<asvg:svgBlip r:embed="rIdN"/>` |
+| Format             | Display                   | Notes                            |
+| ------------------ | ------------------------- | -------------------------------- |
+| PNG                | yes                       | direct                           |
+| JPEG               | yes                       | direct                           |
+| GIF                | yes                       | animated: first frame            |
+| BMP                | yes                       | decoded via bmp-js               |
+| TIFF               | yes                       | decoded via utif-wasm            |
+| WMF                | rasterized preview        | emf2svg-wasm or our converter    |
+| EMF                | rasterized preview        | emf2svg-wasm                     |
+| PICT               | rasterized preview        | pict-wasm                        |
+| EPS                | placeholder with filename | rarely appears                   |
+| CGM                | placeholder with filename | legacy                           |
+| SVG (via SVG blip) | yes                       | `<asvg:svgBlip r:embed="rIdN"/>` |
 
 ### 14.3 Storage
 
 ```ts
 export interface DocumentImage {
   readonly relId: string;
-  readonly partUri: string;       // e.g., /word/media/image1.png
-  readonly contentType: string;   // image/png
-  readonly bytes: Uint8Array;     // original, never re-encoded
+  readonly partUri: string; // e.g., /word/media/image1.png
+  readonly contentType: string; // image/png
+  readonly bytes: Uint8Array; // original, never re-encoded
   readonly altText?: string;
   readonly title?: string;
   readonly cropLeft?: Percent;
@@ -1904,7 +2348,7 @@ In the document:
 ```ts
 export interface OleEmbed {
   readonly kind: 'ole';
-  readonly progId: string;         // e.g., Excel.Sheet.8
+  readonly progId: string; // e.g., Excel.Sheet.8
   readonly drawAspect: 'Content' | 'Icon';
   readonly objectId: string;
   readonly previewImage: DocumentImage;
@@ -1947,9 +2391,9 @@ export interface Comment {
   readonly initials: string;
   readonly date: string; // ISO
   readonly bodyParagraphs: ReadonlyArray<Paragraph>;
-  readonly parentId?: string;       // from commentsExtended
-  readonly done?: boolean;          // from commentsExtended
-  readonly durableId?: string;      // from commentsIds
+  readonly parentId?: string; // from commentsExtended
+  readonly done?: boolean; // from commentsExtended
+  readonly durableId?: string; // from commentsIds
   readonly rangeStart?: RangeAnchor; // resolved to a document position
   readonly rangeEnd?: RangeAnchor;
 }
@@ -2003,9 +2447,19 @@ export interface Revision<T extends RevisionTarget = RevisionTarget> {
   readonly target: T;
 }
 
-export type RevisionOp = 'insert' | 'delete' | 'moveFrom' | 'moveTo'
-  | 'rPrChange' | 'pPrChange' | 'sectPrChange' | 'tblPrChange'
-  | 'tcPrChange' | 'trPrChange' | 'tblGridChange' | 'tblPrExChange';
+export type RevisionOp =
+  | 'insert'
+  | 'delete'
+  | 'moveFrom'
+  | 'moveTo'
+  | 'rPrChange'
+  | 'pPrChange'
+  | 'sectPrChange'
+  | 'tblPrChange'
+  | 'tcPrChange'
+  | 'trPrChange'
+  | 'tblGridChange'
+  | 'tblPrExChange';
 ```
 
 ### 17.4 Accept/reject
@@ -2343,7 +2797,10 @@ Layout engine implements frame positioning following Word's rules (see `packages
 export interface AppSettings {
   readonly zoom?: Zoom;
   readonly defaultTabStopTwip: number;
-  readonly characterSpacingControl: 'doNotCompress' | 'compressPunctuation' | 'compressPunctuationAndJapaneseKana';
+  readonly characterSpacingControl:
+    | 'doNotCompress'
+    | 'compressPunctuation'
+    | 'compressPunctuationAndJapaneseKana';
   readonly autoHyphenation: boolean;
   readonly hyphenationZoneTwip: number;
   readonly consecutiveHyphenLimit: number;
@@ -2501,7 +2958,7 @@ export interface Theme {
   readonly name: string;
   readonly colorScheme: ColorScheme;
   readonly fontScheme: FontScheme;
-  readonly formatScheme?: FormatScheme;  // preserved
+  readonly formatScheme?: FormatScheme; // preserved
   readonly raw: string; // verbatim for round-trip
 }
 ```
@@ -2589,17 +3046,17 @@ Supported `vt:*` types we map in full (lpstr, lpwstr, i4, i8, r8, bool, filetime
 export interface DocPropsUpdatePolicy {
   updateCore: {
     lastModifiedBy: boolean; // from signed-in user
-    modified: boolean;       // now()
-    revision: boolean;       // increment
+    modified: boolean; // now()
+    revision: boolean; // increment
   };
   updateApp: {
-    pages: boolean;          // from renderer's page count
-    words: boolean;          // from word counter
+    pages: boolean; // from renderer's page count
+    words: boolean; // from word counter
     characters: boolean;
     charactersWithSpaces: boolean;
     lines: boolean;
     paragraphs: boolean;
-    totalTime: boolean;      // accumulate editing time
+    totalTime: boolean; // accumulate editing time
     appVersion: boolean;
     application: boolean;
   };
@@ -2684,26 +3141,26 @@ RTF is a different beast: ASCII control words, group braces, hex entities for no
 
 **Import:** DOMParser parses the HTML, DOMPurify sanitizes (strip `<script>`, `javascript:`, inline event handlers, `data:` URIs except images). Element mapping:
 
-| HTML | Domain |
-|---|---|
-| `p` | Paragraph |
-| `h1`..`h6` | Paragraph with styleId=`Heading1`..`Heading6` |
-| `strong`, `b` | Run bold |
-| `em`, `i` | Run italic |
-| `u` | Run underline |
-| `s`, `strike`, `del` | Run strike |
-| `sup`, `sub` | Run vertAlign |
-| `br` | Break |
-| `span[style]` | Run with decoded CSS |
-| `a[href]` | Hyperlink |
-| `ul`, `ol`, `li` | numbered paragraphs |
-| `table`, `thead`, `tbody`, `tfoot`, `tr`, `td`, `th` | Table |
-| `img` | Image (we fetch src or decode data: URI and add as media part on export) |
-| `blockquote` | Paragraph with left indent |
-| `pre`, `code` | Code paragraph (monospace run) |
-| `hr` | Paragraph with bottom border |
-| `figure`, `figcaption` | Paragraph group with caption |
-| `details`, `summary` | Collapsible SDT content control |
+| HTML                                                 | Domain                                                                   |
+| ---------------------------------------------------- | ------------------------------------------------------------------------ |
+| `p`                                                  | Paragraph                                                                |
+| `h1`..`h6`                                           | Paragraph with styleId=`Heading1`..`Heading6`                            |
+| `strong`, `b`                                        | Run bold                                                                 |
+| `em`, `i`                                            | Run italic                                                               |
+| `u`                                                  | Run underline                                                            |
+| `s`, `strike`, `del`                                 | Run strike                                                               |
+| `sup`, `sub`                                         | Run vertAlign                                                            |
+| `br`                                                 | Break                                                                    |
+| `span[style]`                                        | Run with decoded CSS                                                     |
+| `a[href]`                                            | Hyperlink                                                                |
+| `ul`, `ol`, `li`                                     | numbered paragraphs                                                      |
+| `table`, `thead`, `tbody`, `tfoot`, `tr`, `td`, `th` | Table                                                                    |
+| `img`                                                | Image (we fetch src or decode data: URI and add as media part on export) |
+| `blockquote`                                         | Paragraph with left indent                                               |
+| `pre`, `code`                                        | Code paragraph (monospace run)                                           |
+| `hr`                                                 | Paragraph with bottom border                                             |
+| `figure`, `figcaption`                               | Paragraph group with caption                                             |
+| `details`, `summary`                                 | Collapsible SDT content control                                          |
 
 CSS properties decoded: `font-family`, `font-size`, `font-weight`, `font-style`, `text-decoration`, `color`, `background-color`, `text-align`, `margin-*`, `padding-*`, `border`, `line-height`.
 
@@ -2747,7 +3204,7 @@ The persistence package doesn't itself spawn processes; that lives in the Electr
 
 ### 30.1 Fidelity definition
 
-Two DOCX packages are *semantically equivalent* iff, after canonicalization, their AST trees are identical. Canonicalization performs:
+Two DOCX packages are _semantically equivalent_ iff, after canonicalization, their AST trees are identical. Canonicalization performs:
 
 - Attribute ordering per canonical tables (Section 8.3).
 - Removal of default-valued attributes (when the default is unambiguous and listed in our default-attribute table).
@@ -2759,7 +3216,7 @@ Two DOCX packages are *semantically equivalent* iff, after canonicalization, the
 
 - **Relationship IDs** get re-sequenced on save (rId1, rId2 …). We keep a mapping so any `rId` that appeared as content (e.g., in SDT-stored XML, in settings, in VML) is rewritten consistently.
 - **Comment IDs** preserved verbatim; new comments allocate the next integer.
-- **Bookmark IDs** re-sequenced from 0 on save (Word itself does this). Cross-references by *name* (not id) are unaffected.
+- **Bookmark IDs** re-sequenced from 0 on save (Word itself does this). Cross-references by _name_ (not id) are unaffected.
 - **Whitespace** between sibling elements normalized (never inside `w:t`).
 - **Ordering of children of `w:rPr`, `w:pPr`, `w:sectPr`, `w:tblPr`** reordered to canonical per ECMA-376 schema.
 - **Optional default-valued attributes** dropped (e.g., `w:val="true"` on a toggle child where value `true` is default when attribute is absent).
@@ -2797,7 +3254,7 @@ for (const file of corpus) {
 
 ### 30.4 Pixel-level rendering comparisons
 
-Separate from persistence: the layout engine + renderer stack has its own pixel-diff suite. Persistence asserts *tree* equality; rendering asserts *pixel* equality.
+Separate from persistence: the layout engine + renderer stack has its own pixel-diff suite. Persistence asserts _tree_ equality; rendering asserts _pixel_ equality.
 
 ### 30.5 Fuzz
 
@@ -2833,19 +3290,51 @@ export abstract class DocReadError extends Error {
   readonly detail: string;
 }
 
-export class NotAZipError extends DocReadError { code = 'zip.not-a-zip'; severity = 'fatal' as const; }
-export class ZipBombError extends DocReadError { code = 'zip.bomb'; severity = 'fatal' as const; }
-export class PathTraversalError extends DocReadError { code = 'zip.path-traversal'; severity = 'fatal' as const; }
-export class MissingContentTypesError extends DocReadError { code = 'opc.missing-content-types'; severity = 'fatal' as const; }
-export class MissingMainDocumentError extends DocReadError { code = 'opc.missing-main'; severity = 'fatal' as const; }
-export class XmlParseError extends DocReadError { code = 'xml.parse'; severity = 'error' as const; }
-export class UnknownElementWarning extends DocReadError { code = 'ast.unknown-element'; severity = 'warning' as const; }
-export class OrphanRelationshipWarning extends DocReadError { code = 'opc.orphan-rel'; severity = 'warning' as const; }
-export class CyclicStyleError extends DocReadError { code = 'styles.cyclic'; severity = 'error' as const; }
-export class MissingStyleWarning extends DocReadError { code = 'styles.missing'; severity = 'warning' as const; }
+export class NotAZipError extends DocReadError {
+  code = 'zip.not-a-zip';
+  severity = 'fatal' as const;
+}
+export class ZipBombError extends DocReadError {
+  code = 'zip.bomb';
+  severity = 'fatal' as const;
+}
+export class PathTraversalError extends DocReadError {
+  code = 'zip.path-traversal';
+  severity = 'fatal' as const;
+}
+export class MissingContentTypesError extends DocReadError {
+  code = 'opc.missing-content-types';
+  severity = 'fatal' as const;
+}
+export class MissingMainDocumentError extends DocReadError {
+  code = 'opc.missing-main';
+  severity = 'fatal' as const;
+}
+export class XmlParseError extends DocReadError {
+  code = 'xml.parse';
+  severity = 'error' as const;
+}
+export class UnknownElementWarning extends DocReadError {
+  code = 'ast.unknown-element';
+  severity = 'warning' as const;
+}
+export class OrphanRelationshipWarning extends DocReadError {
+  code = 'opc.orphan-rel';
+  severity = 'warning' as const;
+}
+export class CyclicStyleError extends DocReadError {
+  code = 'styles.cyclic';
+  severity = 'error' as const;
+}
+export class MissingStyleWarning extends DocReadError {
+  code = 'styles.missing';
+  severity = 'warning' as const;
+}
 // ... 50+ codes
 
-export abstract class DocWriteError extends Error { /* similar */ }
+export abstract class DocWriteError extends Error {
+  /* similar */
+}
 ```
 
 ### 31.2 Non-fatal parsing
@@ -2893,13 +3382,13 @@ test('paragraph mapper round-trips alignment', () => {
 
 ```ts
 fc.assert(
-  fc.property(arbitraryParagraph(), paragraph => {
+  fc.property(arbitraryParagraph(), (paragraph) => {
     const doc = { body: { children: [paragraph] } };
     const bytes = sync(writer.write(doc));
     const round = sync(reader.read(bytes));
     expect(canonicalize(round.value)).toEqual(canonicalize(doc));
   }),
-  { numRuns: 10000 }
+  { numRuns: 10000 },
 );
 ```
 
@@ -3384,7 +3873,7 @@ Mappers expose an extension point:
 
 ```ts
 export interface MapperExtension<K extends string> {
-  readonly target: K;                 // 'paragraph' | 'run' | 'table' | ...
+  readonly target: K; // 'paragraph' | 'run' | 'table' | ...
   readonly onAstIn?: (ast: AstNode, ctx: MapInContext) => DomainPatch | null;
   readonly onAstOut?: (node: DomainNode, ctx: MapOutContext) => AstPatch | null;
 }
@@ -3466,36 +3955,36 @@ We use `libxmljs-wasm` (WASM build of libxml2) for validation in dev. Release bu
 
 Word 95 features and how we persist them through DOCX:
 
-| Word 95 feature | DOCX representation |
-|---|---|
-| Paragraph formatting | `w:pPr` (alignment, indent, spacing, borders, shading) |
-| Character formatting | `w:rPr` (font, size, bold, italic, underline, color, spacing) |
-| Tab stops | `w:tabs/w:tab` |
-| Tables | `w:tbl` with `w:tblPr`, `w:tblGrid`, `w:tr`, `w:tc` |
-| Frames (floating) | `w:framePr` (preserved) |
-| Section properties | `w:sectPr` |
-| Headers/footers | `word/headerN.xml`, `word/footerN.xml` + `w:headerReference`/`w:footerReference` |
-| Footnotes/endnotes | `word/footnotes.xml`, `word/endnotes.xml` + reference runs |
-| Fields (all Word 95 types) | `w:fldSimple` or `w:fldChar`/`w:instrText` triples |
-| Numbered/bulleted lists | `word/numbering.xml` + `w:numPr` in `w:pPr` |
-| Styles | `word/styles.xml` |
-| Bookmarks | `w:bookmarkStart`/`w:bookmarkEnd` |
-| Cross-references | `PAGEREF`/`REF` fields or `w:hyperlink` with `w:anchor` |
-| Hyperlinks (Word 95 added) | `w:hyperlink` + rel OR `HYPERLINK` field |
-| AutoText | `word/glossary/document.xml` |
-| Comments/Annotations | `word/comments.xml` + range markers |
-| Revisions | `w:ins`/`w:del`/`w:*PrChange` |
-| Embedded OLE objects | `w:object` + `word/embeddings/*` + preview EMF/WMF |
-| WordArt | VML shape (legacy) or DrawingML (modern). Preserved on round-trip. |
-| Drawing layer | VML on legacy, DrawingML on modern. Preserved. |
-| Mail merge | `MERGEFIELD`, `MERGEREC`, `NEXT` fields. Preserved; runtime optional. |
-| Forms | Form fields as `w:formField` legacy OR SDT content controls. |
-| Equations (Word 95 EQ field) | `EQ` field preserved; rendered via our EQ parser. |
-| Page borders | `w:pgBorders` in `w:sectPr` |
-| Drop caps | `w:framePr w:dropCap="drop"` |
-| Indexes, TOC | `TOC` field with switches + `TC` entry fields |
-| Master documents / subdocuments | `w:subDoc` (preserved; rendering v2) |
-| Password protection | `w:documentProtection` (we honor read-only view; full write-protection v2) |
+| Word 95 feature                 | DOCX representation                                                              |
+| ------------------------------- | -------------------------------------------------------------------------------- |
+| Paragraph formatting            | `w:pPr` (alignment, indent, spacing, borders, shading)                           |
+| Character formatting            | `w:rPr` (font, size, bold, italic, underline, color, spacing)                    |
+| Tab stops                       | `w:tabs/w:tab`                                                                   |
+| Tables                          | `w:tbl` with `w:tblPr`, `w:tblGrid`, `w:tr`, `w:tc`                              |
+| Frames (floating)               | `w:framePr` (preserved)                                                          |
+| Section properties              | `w:sectPr`                                                                       |
+| Headers/footers                 | `word/headerN.xml`, `word/footerN.xml` + `w:headerReference`/`w:footerReference` |
+| Footnotes/endnotes              | `word/footnotes.xml`, `word/endnotes.xml` + reference runs                       |
+| Fields (all Word 95 types)      | `w:fldSimple` or `w:fldChar`/`w:instrText` triples                               |
+| Numbered/bulleted lists         | `word/numbering.xml` + `w:numPr` in `w:pPr`                                      |
+| Styles                          | `word/styles.xml`                                                                |
+| Bookmarks                       | `w:bookmarkStart`/`w:bookmarkEnd`                                                |
+| Cross-references                | `PAGEREF`/`REF` fields or `w:hyperlink` with `w:anchor`                          |
+| Hyperlinks (Word 95 added)      | `w:hyperlink` + rel OR `HYPERLINK` field                                         |
+| AutoText                        | `word/glossary/document.xml`                                                     |
+| Comments/Annotations            | `word/comments.xml` + range markers                                              |
+| Revisions                       | `w:ins`/`w:del`/`w:*PrChange`                                                    |
+| Embedded OLE objects            | `w:object` + `word/embeddings/*` + preview EMF/WMF                               |
+| WordArt                         | VML shape (legacy) or DrawingML (modern). Preserved on round-trip.               |
+| Drawing layer                   | VML on legacy, DrawingML on modern. Preserved.                                   |
+| Mail merge                      | `MERGEFIELD`, `MERGEREC`, `NEXT` fields. Preserved; runtime optional.            |
+| Forms                           | Form fields as `w:formField` legacy OR SDT content controls.                     |
+| Equations (Word 95 EQ field)    | `EQ` field preserved; rendered via our EQ parser.                                |
+| Page borders                    | `w:pgBorders` in `w:sectPr`                                                      |
+| Drop caps                       | `w:framePr w:dropCap="drop"`                                                     |
+| Indexes, TOC                    | `TOC` field with switches + `TC` entry fields                                    |
+| Master documents / subdocuments | `w:subDoc` (preserved; rendering v2)                                             |
+| Password protection             | `w:documentProtection` (we honor read-only view; full write-protection v2)       |
 
 All Word 95 features have a DOCX representation. Round-trip from Word 95 → DOCX → our app → DOCX is lossless for everything in the table.
 
@@ -3545,7 +4034,14 @@ export type SdtType =
   | { kind: 'text'; multiLine?: boolean }
   | { kind: 'richText' }
   | { kind: 'checkbox'; checked: boolean; checkedSymbol?: string; uncheckedSymbol?: string }
-  | { kind: 'date'; fullDate?: string; dateFormat?: string; lid?: string; storeMappedDataAs?: string; calendar?: string }
+  | {
+      kind: 'date';
+      fullDate?: string;
+      dateFormat?: string;
+      lid?: string;
+      storeMappedDataAs?: string;
+      calendar?: string;
+    }
   | { kind: 'picture' }
   | { kind: 'comboBox'; listItems: ReadonlyArray<SdtListItem>; value?: string }
   | { kind: 'dropDownList'; listItems: ReadonlyArray<SdtListItem>; value?: string }
@@ -3591,7 +4087,9 @@ if (!serializer) throw new Error('Unrecognized file');
 const result = await serializer.read(bytes, {
   strict: false,
   limits: DEFAULT_ZIP_LIMITS,
-  onWarning(err) { console.warn(err.code, err.detail); },
+  onWarning(err) {
+    console.warn(err.code, err.detail);
+  },
 });
 
 if (!result.ok) {

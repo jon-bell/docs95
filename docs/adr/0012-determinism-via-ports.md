@@ -18,15 +18,18 @@
 ## Consequences
 
 ### Positive
+
 - Snapshot and golden-corpus tests become reproducible; NFR-9-30 achievable.
 - DOCX outputs diff cleanly in VCS, enabling byte-diff-review workflows.
 - Fuzz reproducers are deterministic.
 
 ### Negative
+
 - Users who expect Word's auto-DATE behavior must toggle a preference; release-notes call-out required.
 - Every future contributor must route time/random through ports; enforced by lint rule banning `Date.now` / `Math.random` / `crypto.getRandomValues` outside the port implementations.
 
 ### Follow-up required
+
 - Add lint rule `no-ambient-time-or-random` to `tooling/eslint-config`.
 - Define the doc-local PRNG seed derivation and commit to a test vector.
 

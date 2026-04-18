@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["src/**/*.test.ts", "dist", "e2e"],
+  "references": [
+    { "path": "../domain" },
+    { "path": "../engine" },
+    { "path": "../ipc-schema" },
+    { "path": "../docx" },
+    { "path": "../layout" },
+    { "path": "../render" },
+    { "path": "../ui" },
+    { "path": "../shell" }
+  ]
+}

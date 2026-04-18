@@ -14,16 +14,19 @@ MDI is implemented **inside the renderer process** on all OSes. The user prefere
 ## Consequences
 
 ### Positive
+
 - Single implementation of child-window semantics across Windows, macOS, Linux.
 - Word-95-accurate keyboard and focus behavior (Ctrl+F6, Alt+-, cascade/tile).
 - One Customize scope and one Window menu.
 
 ### Negative
+
 - macOS HIG default violation; needs clear release-notes messaging.
 - Accessibility tree for MDI is nonstandard; screen-reader behavior must be explicitly choreographed (see ADR-0011).
 - macOS Dock "all windows" list shows one app window instead of per-document.
 
 ### Follow-up required
+
 - Document the MDI accessibility-tree shape in `docs/architecture/ui-components.md` (parent-frame → child-window → document → content hierarchy).
 
 ## Alternatives considered

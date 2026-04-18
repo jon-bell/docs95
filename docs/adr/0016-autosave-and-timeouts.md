@@ -22,17 +22,20 @@ Three safety-adjacent gaps were surfaced in review Phase 4:
 ## Consequences
 
 ### Positive
+
 - NFR-4-64 achievable (≤ 10 s work lost) without heroics.
 - No silent hangs on a dropped IPC response.
 - No silent correctness failures from stale worker results.
 - Uniform supervisor pattern across the four utility processes and the layout workers.
 
 ### Negative
+
 - Slightly higher telemetry volume; within `NFR-1-143` 32 KB / 5 min budget.
 - Autosave triples daily write count vs. the 10-min default; SSD-only hardware baseline (`NFR-2-1`) makes this acceptable.
 - Workers must be re-entrancy-safe on restart + re-dispatch; existing shape/break code must be audited.
 
 ### Follow-up required
+
 - Add test: kill a layout worker mid-request; assert client receives `WorkerCrashed` within heartbeat deadline.
 - Add test: drop an IPC reply from the main process; assert renderer observes timeout within 30 s.
 - Amend `non-functional.md:310` in the same PR that lands this ADR.

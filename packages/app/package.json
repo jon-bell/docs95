@@ -1,0 +1,38 @@
+{
+  "name": "@word/app",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/main/index.cjs",
+  "scripts": {
+    "build": "tsc -b && vite build && node scripts/build-preload.mjs",
+    "dev": "cross-env NODE_ENV=development electron-forge start || vite",
+    "dev:renderer": "vite",
+    "dev:main": "tsc -b -w",
+    "dev:electron": "electron .",
+    "e2e": "playwright test",
+    "clean": "rm -rf dist out tsconfig.tsbuildinfo release"
+  },
+  "dependencies": {
+    "@word/docx": "workspace:*",
+    "@word/domain": "workspace:*",
+    "@word/engine": "workspace:*",
+    "@word/ipc-schema": "workspace:*",
+    "@word/layout": "workspace:*",
+    "@word/render": "workspace:*",
+    "@word/shell": "workspace:*",
+    "@word/ui": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.1",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "cross-env": "^7.0.3",
+    "electron": "^31.4.0",
+    "playwright": "^1.47.1",
+    "vite": "^5.4.6"
+  }
+}

@@ -33,38 +33,38 @@ Throughout this document:
 
 These features are commonly confused as Word 95 capabilities. They arrived later:
 
-| Feature | First version | Notes |
-| --- | --- | --- |
-| Ribbon / contextual tabs | 2007 | Menus and toolbars only in 95. |
-| VBA for macros | 97 | Word 95 uses WordBasic. |
-| Office Assistant (Clippit) | 97 | 95 has TipWizard (above the document) + Answer Wizard (in Help). |
-| Character styles | 97 | Word 95 supports paragraph styles only. |
-| Draw Table tool | 97 | Tables in Word 95 are created with Insert Table, Table Wizard, or Convert Text to Table. |
-| Online Layout view | 97 | 95 has Normal, Outline, Page Layout, Master Document, Full Screen, Print Preview. |
-| Document Map | 97 | 95 relies on Outline view for navigation. |
-| Browse Object selector (below vertical scrollbar) | 97 | 95's vertical scrollbar has only up/down arrows, thumb, and three view buttons at the bottom. |
-| Horizontal scrollbar browse controls | 97 | 95 horizontal scrollbar is plain. |
-| Picture Toolbar | 97 | 95 formats pictures via Format → Picture and Frame commands. |
-| Text Box shape (generic) | 97 | 95's floating text uses a Frame. |
-| Real-time "as you type" grammar squiggles (green) | 2000 | 95 ships with background *spell* check; grammar is modal, via Tools → Grammar. |
-| Comments-in-balloons (margin) | 2002 | 95 uses a split pane at the bottom of the window. |
-| Track Changes (name) | 2002 | 95 calls it "Revisions". |
-| Reading Layout / Full Screen Reading | 2003 | — |
-| Reviewing pane (sidebar) | 2003 | 95's annotation pane is a bottom split. |
-| Research task pane | 2003 | — |
-| Translation/Thesaurus pane | 2003 | 95 uses the modal Thesaurus dialog (Shift+F7). |
-| Quick Access Toolbar | 2007 | — |
-| Mini Toolbar on selection | 2007 | — |
-| Live Preview of formatting | 2007 | — |
-| SmartArt | 2007 | 95 has WordArt 2.0 and Organization Chart 2.0 as OLE objects. |
-| Content Controls | 2007 | 95 form fields are Text/Checkbox/Dropdown only. |
-| Theme Colors / Theme Fonts | 2007 | — |
-| Save as PDF natively | 2007 | 95 prints to file as `.prn`; PDF requires third-party printer. |
-| Ink annotations | — | No pen input support in 95. |
-| Reflection / Glow / 3-D rotation text effects | 2010 | — |
-| Real-time co-authoring | 2013 | — |
-| Tell Me / Search | 2016 | 95 Help has its own "Answer Wizard" modal. |
-| Dictation / Editor / Immersive Reader | 365 era | — |
+| Feature                                           | First version | Notes                                                                                         |
+| ------------------------------------------------- | ------------- | --------------------------------------------------------------------------------------------- |
+| Ribbon / contextual tabs                          | 2007          | Menus and toolbars only in 95.                                                                |
+| VBA for macros                                    | 97            | Word 95 uses WordBasic.                                                                       |
+| Office Assistant (Clippit)                        | 97            | 95 has TipWizard (above the document) + Answer Wizard (in Help).                              |
+| Character styles                                  | 97            | Word 95 supports paragraph styles only.                                                       |
+| Draw Table tool                                   | 97            | Tables in Word 95 are created with Insert Table, Table Wizard, or Convert Text to Table.      |
+| Online Layout view                                | 97            | 95 has Normal, Outline, Page Layout, Master Document, Full Screen, Print Preview.             |
+| Document Map                                      | 97            | 95 relies on Outline view for navigation.                                                     |
+| Browse Object selector (below vertical scrollbar) | 97            | 95's vertical scrollbar has only up/down arrows, thumb, and three view buttons at the bottom. |
+| Horizontal scrollbar browse controls              | 97            | 95 horizontal scrollbar is plain.                                                             |
+| Picture Toolbar                                   | 97            | 95 formats pictures via Format → Picture and Frame commands.                                  |
+| Text Box shape (generic)                          | 97            | 95's floating text uses a Frame.                                                              |
+| Real-time "as you type" grammar squiggles (green) | 2000          | 95 ships with background _spell_ check; grammar is modal, via Tools → Grammar.                |
+| Comments-in-balloons (margin)                     | 2002          | 95 uses a split pane at the bottom of the window.                                             |
+| Track Changes (name)                              | 2002          | 95 calls it "Revisions".                                                                      |
+| Reading Layout / Full Screen Reading              | 2003          | —                                                                                             |
+| Reviewing pane (sidebar)                          | 2003          | 95's annotation pane is a bottom split.                                                       |
+| Research task pane                                | 2003          | —                                                                                             |
+| Translation/Thesaurus pane                        | 2003          | 95 uses the modal Thesaurus dialog (Shift+F7).                                                |
+| Quick Access Toolbar                              | 2007          | —                                                                                             |
+| Mini Toolbar on selection                         | 2007          | —                                                                                             |
+| Live Preview of formatting                        | 2007          | —                                                                                             |
+| SmartArt                                          | 2007          | 95 has WordArt 2.0 and Organization Chart 2.0 as OLE objects.                                 |
+| Content Controls                                  | 2007          | 95 form fields are Text/Checkbox/Dropdown only.                                               |
+| Theme Colors / Theme Fonts                        | 2007          | —                                                                                             |
+| Save as PDF natively                              | 2007          | 95 prints to file as `.prn`; PDF requires third-party printer.                                |
+| Ink annotations                                   | —             | No pen input support in 95.                                                                   |
+| Reflection / Glow / 3-D rotation text effects     | 2010          | —                                                                                             |
+| Real-time co-authoring                            | 2013          | —                                                                                             |
+| Tell Me / Search                                  | 2016          | 95 Help has its own "Answer Wizard" modal.                                                    |
+| Dictation / Editor / Immersive Reader             | 365 era       | —                                                                                             |
 
 ## Startup, Windows, and the Workspace
 
@@ -100,26 +100,26 @@ All nine menus are listed below with complete item enumeration. `…` indicates 
 
 ### File Menu (`&File`, Alt+F)
 
-| Item | Mnemonic | Accelerator | Action |
-| --- | --- | --- | --- |
-| &New… | N | Ctrl+N | Opens **New** dialog listing templates organized by tab (General, Letters & Faxes, Memos, Reports, Publications, Other Documents). The Ctrl+N shortcut bypasses the dialog and creates a new document from `Normal.dot`. |
-| &Open… | O | Ctrl+O | Opens **Open** dialog. |
-| &Close | C | (none; or Ctrl+F4 for the child) | Closes active document. If dirty, prompts to save. |
-| &Save | S | Ctrl+S (also Shift+F12) | Saves active document. First-time save behaves like Save As. |
-| Save &As… | A | F12 | Opens **Save As** dialog. |
-| Save A&ll | L | (none) | Saves all open documents; also all open templates if their "Prompt to save Normal.dot" is not set. |
-| Find Fil&e… | F | (none) | Opens **Find File** dialog (see §Find File Dialog). |
-| &Templates… | T | (none) | Opens **Templates and Add-ins** dialog (attach template, load global templates, Organizer). |
-| Page Set&up… | U | (none) | Opens **Page Setup** dialog (Margins / Paper Size / Paper Source / Layout tabs). |
-| Print Pre&view | V | Ctrl+F2 | Enters Print Preview (see §Print Preview). |
-| &Print… | P | Ctrl+P (also Ctrl+Shift+F12) | Opens **Print** dialog (§Print Dialog). |
-| --- separator --- | | | |
-| 1 {last file} | 1 | Alt+F,1 | Opens most-recently-used file. |
-| 2 {second MRU} | 2 | Alt+F,2 | |
-| 3 {third MRU} | 3 | Alt+F,3 | |
-| 4 {fourth MRU} | 4 | Alt+F,4 | The default MRU length is 4, adjustable 0–9 in Options → General. |
-| --- separator --- | | | |
-| E&xit | X | Alt+F4 | Quits Word. Prompts to save each dirty doc; prompts to save `Normal.dot` if it was modified (depends on "Prompt to save Normal.dot" option). |
+| Item              | Mnemonic | Accelerator                      | Action                                                                                                                                                                                                                   |
+| ----------------- | -------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| &New…             | N        | Ctrl+N                           | Opens **New** dialog listing templates organized by tab (General, Letters & Faxes, Memos, Reports, Publications, Other Documents). The Ctrl+N shortcut bypasses the dialog and creates a new document from `Normal.dot`. |
+| &Open…            | O        | Ctrl+O                           | Opens **Open** dialog.                                                                                                                                                                                                   |
+| &Close            | C        | (none; or Ctrl+F4 for the child) | Closes active document. If dirty, prompts to save.                                                                                                                                                                       |
+| &Save             | S        | Ctrl+S (also Shift+F12)          | Saves active document. First-time save behaves like Save As.                                                                                                                                                             |
+| Save &As…         | A        | F12                              | Opens **Save As** dialog.                                                                                                                                                                                                |
+| Save A&ll         | L        | (none)                           | Saves all open documents; also all open templates if their "Prompt to save Normal.dot" is not set.                                                                                                                       |
+| Find Fil&e…       | F        | (none)                           | Opens **Find File** dialog (see §Find File Dialog).                                                                                                                                                                      |
+| &Templates…       | T        | (none)                           | Opens **Templates and Add-ins** dialog (attach template, load global templates, Organizer).                                                                                                                              |
+| Page Set&up…      | U        | (none)                           | Opens **Page Setup** dialog (Margins / Paper Size / Paper Source / Layout tabs).                                                                                                                                         |
+| Print Pre&view    | V        | Ctrl+F2                          | Enters Print Preview (see §Print Preview).                                                                                                                                                                               |
+| &Print…           | P        | Ctrl+P (also Ctrl+Shift+F12)     | Opens **Print** dialog (§Print Dialog).                                                                                                                                                                                  |
+| --- separator --- |          |                                  |                                                                                                                                                                                                                          |
+| 1 {last file}     | 1        | Alt+F,1                          | Opens most-recently-used file.                                                                                                                                                                                           |
+| 2 {second MRU}    | 2        | Alt+F,2                          |                                                                                                                                                                                                                          |
+| 3 {third MRU}     | 3        | Alt+F,3                          |                                                                                                                                                                                                                          |
+| 4 {fourth MRU}    | 4        | Alt+F,4                          | The default MRU length is 4, adjustable 0–9 in Options → General.                                                                                                                                                        |
+| --- separator --- |          |                                  |                                                                                                                                                                                                                          |
+| E&xit             | X        | Alt+F4                           | Quits Word. Prompts to save each dirty doc; prompts to save `Normal.dot` if it was modified (depends on "Prompt to save Normal.dot" option).                                                                             |
 
 #### File → New Dialog
 
@@ -138,12 +138,12 @@ A Windows 95 Common Dialog–styled file chooser with Word extensions. Fields an
 - **Look in** folder chooser, drive combo.
 - **Read Only** checkbox.
 - **Commands and Settings** button (menu):
-    - Search… (opens Search dialog — property-based search identical to Find File).
-    - Save Search As…
-    - Delete Search / Rename Search.
-    - Print (prints selected files without opening).
-    - Properties (shows Summary Info of selected file).
-    - Sorting… (dialog; sort by name/size/type/last-modified, asc/desc).
+  - Search… (opens Search dialog — property-based search identical to Find File).
+  - Save Search As…
+  - Delete Search / Rename Search.
+  - Print (prints selected files without opening).
+  - Properties (shows Summary Info of selected file).
+  - Sorting… (dialog; sort by name/size/type/last-modified, asc/desc).
 - **Advanced Search** button (in Commands menu and in Find File) opens full property search form.
 - Preview pane shows the first page of the selected document when "Preview Picture" is set.
 - Buttons: Open, Cancel, Find Now (triggers search), New Search, Help.
@@ -158,27 +158,27 @@ Same look as Open plus:
 
 ### Edit Menu (`&Edit`, Alt+E)
 
-| Item | Mnemonic | Accelerator | Action |
-| --- | --- | --- | --- |
-| &Undo {command name} | U | Ctrl+Z (also Alt+Backspace) | Undoes the last undoable action. Adjacent split-button dropdown (on the Standard toolbar) reveals the full undo stack. |
-| &Repeat {command name} / Can't Repeat | R | Ctrl+Y (also F4, Alt+Enter in some contexts) | Repeats last action. After an Undo, the menu label becomes "Redo {action}" and the dropdown on the toolbar shows the redo stack. |
-| --- separator --- | | | |
-| Cu&t | T | Ctrl+X (also Shift+Delete) | Cuts selection. |
-| &Copy | C | Ctrl+C (also Ctrl+Insert) | Copies selection. |
-| &Paste | P | Ctrl+V (also Shift+Insert) | Pastes clipboard. |
-| Paste &Special… | S | (none) | Opens **Paste Special** dialog listing formats available on the clipboard (Formatted Text RTF, Unformatted Text, Picture, Bitmap, Word Document Object, Microsoft Excel Worksheet, Microsoft Word Document, etc.) with ○ Paste and ○ Paste Link radio choices. |
-| --- separator --- | | | |
-| Cl&ear | A | Delete | Deletes selection without clipboard. |
-| Select A&ll | L | Ctrl+A (also Ctrl+5 on numeric pad, Ctrl+Num5) | Selects the entire main story. |
-| --- separator --- | | | |
-| &Find… | F | Ctrl+F | Opens **Find** dialog (with Replace and Go To as tabs; see §Find dialog). |
-| R&eplace… | E | Ctrl+H | Opens Find dialog on the Replace tab. |
-| &Go To… | G | Ctrl+G (also F5) | Opens Find dialog on the Go To tab. |
-| --- separator --- | | | |
-| &AutoText… | X | (none) | Opens **AutoText** dialog (add/delete/insert AutoText entries, with preview). |
-| Boo&kmark… | K | Ctrl+Shift+F5 | Opens **Bookmark** dialog. |
-| Lin&ks… | I | (none) | Opens **Links** dialog for OLE-linked objects. Grayed if no links. |
-| &Object | O | (none; Alt+E,O) | Submenu for the selected OLE object: "Edit {Object Class} Object" / "Open {Object Class} Object" / "Convert…" — only present when an OLE object is selected. |
+| Item                                  | Mnemonic | Accelerator                                    | Action                                                                                                                                                                                                                                                         |
+| ------------------------------------- | -------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| &Undo {command name}                  | U        | Ctrl+Z (also Alt+Backspace)                    | Undoes the last undoable action. Adjacent split-button dropdown (on the Standard toolbar) reveals the full undo stack.                                                                                                                                         |
+| &Repeat {command name} / Can't Repeat | R        | Ctrl+Y (also F4, Alt+Enter in some contexts)   | Repeats last action. After an Undo, the menu label becomes "Redo {action}" and the dropdown on the toolbar shows the redo stack.                                                                                                                               |
+| --- separator ---                     |          |                                                |                                                                                                                                                                                                                                                                |
+| Cu&t                                  | T        | Ctrl+X (also Shift+Delete)                     | Cuts selection.                                                                                                                                                                                                                                                |
+| &Copy                                 | C        | Ctrl+C (also Ctrl+Insert)                      | Copies selection.                                                                                                                                                                                                                                              |
+| &Paste                                | P        | Ctrl+V (also Shift+Insert)                     | Pastes clipboard.                                                                                                                                                                                                                                              |
+| Paste &Special…                       | S        | (none)                                         | Opens **Paste Special** dialog listing formats available on the clipboard (Formatted Text RTF, Unformatted Text, Picture, Bitmap, Word Document Object, Microsoft Excel Worksheet, Microsoft Word Document, etc.) with ○ Paste and ○ Paste Link radio choices. |
+| --- separator ---                     |          |                                                |                                                                                                                                                                                                                                                                |
+| Cl&ear                                | A        | Delete                                         | Deletes selection without clipboard.                                                                                                                                                                                                                           |
+| Select A&ll                           | L        | Ctrl+A (also Ctrl+5 on numeric pad, Ctrl+Num5) | Selects the entire main story.                                                                                                                                                                                                                                 |
+| --- separator ---                     |          |                                                |                                                                                                                                                                                                                                                                |
+| &Find…                                | F        | Ctrl+F                                         | Opens **Find** dialog (with Replace and Go To as tabs; see §Find dialog).                                                                                                                                                                                      |
+| R&eplace…                             | E        | Ctrl+H                                         | Opens Find dialog on the Replace tab.                                                                                                                                                                                                                          |
+| &Go To…                               | G        | Ctrl+G (also F5)                               | Opens Find dialog on the Go To tab.                                                                                                                                                                                                                            |
+| --- separator ---                     |          |                                                |                                                                                                                                                                                                                                                                |
+| &AutoText…                            | X        | (none)                                         | Opens **AutoText** dialog (add/delete/insert AutoText entries, with preview).                                                                                                                                                                                  |
+| Boo&kmark…                            | K        | Ctrl+Shift+F5                                  | Opens **Bookmark** dialog.                                                                                                                                                                                                                                     |
+| Lin&ks…                               | I        | (none)                                         | Opens **Links** dialog for OLE-linked objects. Grayed if no links.                                                                                                                                                                                             |
+| &Object                               | O        | (none; Alt+E,O)                                | Submenu for the selected OLE object: "Edit {Object Class} Object" / "Open {Object Class} Object" / "Convert…" — only present when an OLE object is selected.                                                                                                   |
 
 #### Edit → Find / Replace / Go To Dialog
 
@@ -202,47 +202,47 @@ Single dialog with three tabs: **Find**, **Replace**, **Go To**.
 
 ### View Menu (`&View`, Alt+V)
 
-| Item | Mnemonic | Accelerator | Action |
-| --- | --- | --- | --- |
-| &Normal | N | Ctrl+Alt+N | Switch to Normal view. |
-| &Outline | O | Ctrl+Alt+O | Switch to Outline view. |
-| &Page Layout | P | Ctrl+Alt+P | Switch to Page Layout view. |
-| &Master Document | M | Ctrl+Alt+M [verify] | Switch to Master Document view. |
-| --- separator --- | | | |
-| &Full Screen | U | (none) | Hide all chrome (title, menu, toolbars, status, scrollbars). A single floating "Full Screen" toolbar with a single button (close full screen) appears. Escape also exits. |
-| &Toolbars… | T | (none) | Opens **Toolbars** dialog. |
-| &Ruler | R | (none) | Toggle ruler(s) visibility. |
-| --- separator --- | | | |
-| &Header and Footer | H | (none) | Move focus into the header (Page Layout view is auto-entered; in Normal view, switches to Page Layout to edit). Opens "Header and Footer" floating toolbar. |
-| Foot&notes | F | (none) | Open footnote pane (Normal view; in Page Layout goes to the footnote area). Grayed if no footnotes. |
-| &Annotations | A | (none) | Open annotation pane. Grayed if no annotations. |
-| --- separator --- | | | |
-| &Field Codes | C | Alt+F9 | Toggle between display of field codes and field results for all fields in the document. |
-| --- separator --- | | | |
-| &Zoom… | Z | (none) | Opens **Zoom** dialog (200%, 100%, 75%, Page Width, Whole Page, Two Pages, Many Pages, Percent). |
+| Item               | Mnemonic | Accelerator         | Action                                                                                                                                                                    |
+| ------------------ | -------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| &Normal            | N        | Ctrl+Alt+N          | Switch to Normal view.                                                                                                                                                    |
+| &Outline           | O        | Ctrl+Alt+O          | Switch to Outline view.                                                                                                                                                   |
+| &Page Layout       | P        | Ctrl+Alt+P          | Switch to Page Layout view.                                                                                                                                               |
+| &Master Document   | M        | Ctrl+Alt+M [verify] | Switch to Master Document view.                                                                                                                                           |
+| --- separator ---  |          |                     |                                                                                                                                                                           |
+| &Full Screen       | U        | (none)              | Hide all chrome (title, menu, toolbars, status, scrollbars). A single floating "Full Screen" toolbar with a single button (close full screen) appears. Escape also exits. |
+| &Toolbars…         | T        | (none)              | Opens **Toolbars** dialog.                                                                                                                                                |
+| &Ruler             | R        | (none)              | Toggle ruler(s) visibility.                                                                                                                                               |
+| --- separator ---  |          |                     |                                                                                                                                                                           |
+| &Header and Footer | H        | (none)              | Move focus into the header (Page Layout view is auto-entered; in Normal view, switches to Page Layout to edit). Opens "Header and Footer" floating toolbar.               |
+| Foot&notes         | F        | (none)              | Open footnote pane (Normal view; in Page Layout goes to the footnote area). Grayed if no footnotes.                                                                       |
+| &Annotations       | A        | (none)              | Open annotation pane. Grayed if no annotations.                                                                                                                           |
+| --- separator ---  |          |                     |                                                                                                                                                                           |
+| &Field Codes       | C        | Alt+F9              | Toggle between display of field codes and field results for all fields in the document.                                                                                   |
+| --- separator ---  |          |                     |                                                                                                                                                                           |
+| &Zoom…             | Z        | (none)              | Opens **Zoom** dialog (200%, 100%, 75%, Page Width, Whole Page, Two Pages, Many Pages, Percent).                                                                          |
 
 ### Insert Menu (`&Insert`, Alt+I)
 
-| Item | Mnemonic | Accelerator | Action |
-| --- | --- | --- | --- |
-| &Break… | B | (none) | Opens **Break** dialog: ○ Page Break (Ctrl+Enter), ○ Column Break (Ctrl+Shift+Enter), ○ Section Breaks: ○ Next Page, ○ Continuous, ○ Even Page, ○ Odd Page. |
-| Page N&umbers… | U | (none) | Opens **Page Numbers** dialog (Position: Top/Bottom of page, Alignment: Left/Center/Right/Inside/Outside, "Show Number on First Page" checkbox, Format… button opens Page Number Format dialog). |
-| &Date and Time… | T | (none) | Opens **Date and Time** dialog: list of date/time formats; "Insert as field" checkbox; Language dropdown. |
-| &Field… | F | Ctrl+F9 inserts empty field braces; the dialog item has no accelerator | Opens **Field** dialog (§Field Dialog). |
-| &Symbol… | S | (none) | Opens **Symbol** dialog (§Symbol Dialog). |
-| Form &Field… | O | (none) | Opens **Form Field** dialog: Type (○ Text, ○ Check Box, ○ Drop-Down), with properties button. |
-| --- separator --- | | | |
-| Foot&note… | N | (none) | Opens **Footnote and Endnote** dialog (Insert: ○ Footnote, ○ Endnote; Numbering: ○ AutoNumber, ○ Custom Mark, Symbol picker; Options…). |
-| &Annotation | A | Ctrl+Alt+A [verify] | Inserts an annotation reference at the selection and opens the annotation pane. |
-| &Caption… | C | (none) | Opens **Caption** dialog (Caption text, Label, Position: Above/Below selected item, Numbering…, AutoCaption…). |
-| Cross-&reference… | R | (none) | Opens **Cross-reference** dialog (Reference type, Insert reference to, For which…, Insert as hyperlink [may be absent in 95 — the "Insert as hyperlink" checkbox is Word 97+; verify], Include above/below). |
-| Inde&x and Tables… | X | (none) | Opens **Index and Tables** dialog with tabs: Index, Table of Contents, Table of Figures, Table of Authorities. |
-| --- separator --- | | | |
-| File… | L | (none) | Opens **File** dialog (identical to File → Open) to insert another file's contents at cursor; checkbox "Range" for bookmark; Link option embeds as `INCLUDETEXT` field. |
-| Frame | M | (none) | Inserts an empty frame anchored to the current paragraph. If text is selected, wraps it in a frame. |
-| &Picture… | P | (none) | Opens **Insert Picture** dialog (§Insert Picture Dialog). |
-| &Object… | J | (none) | Opens **Object** dialog with tabs Create New / Create from File (§Object Dialog). |
-| Data&base… | D | (none) | Opens **Database** dialog — browse ODBC/Access/Excel/dBase sources, query options, insert data as a Word table; "Insert Data as Field" creates an auto-updating `DATABASE` field. |
+| Item               | Mnemonic | Accelerator                                                            | Action                                                                                                                                                                                                       |
+| ------------------ | -------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| &Break…            | B        | (none)                                                                 | Opens **Break** dialog: ○ Page Break (Ctrl+Enter), ○ Column Break (Ctrl+Shift+Enter), ○ Section Breaks: ○ Next Page, ○ Continuous, ○ Even Page, ○ Odd Page.                                                  |
+| Page N&umbers…     | U        | (none)                                                                 | Opens **Page Numbers** dialog (Position: Top/Bottom of page, Alignment: Left/Center/Right/Inside/Outside, "Show Number on First Page" checkbox, Format… button opens Page Number Format dialog).             |
+| &Date and Time…    | T        | (none)                                                                 | Opens **Date and Time** dialog: list of date/time formats; "Insert as field" checkbox; Language dropdown.                                                                                                    |
+| &Field…            | F        | Ctrl+F9 inserts empty field braces; the dialog item has no accelerator | Opens **Field** dialog (§Field Dialog).                                                                                                                                                                      |
+| &Symbol…           | S        | (none)                                                                 | Opens **Symbol** dialog (§Symbol Dialog).                                                                                                                                                                    |
+| Form &Field…       | O        | (none)                                                                 | Opens **Form Field** dialog: Type (○ Text, ○ Check Box, ○ Drop-Down), with properties button.                                                                                                                |
+| --- separator ---  |          |                                                                        |                                                                                                                                                                                                              |
+| Foot&note…         | N        | (none)                                                                 | Opens **Footnote and Endnote** dialog (Insert: ○ Footnote, ○ Endnote; Numbering: ○ AutoNumber, ○ Custom Mark, Symbol picker; Options…).                                                                      |
+| &Annotation        | A        | Ctrl+Alt+A [verify]                                                    | Inserts an annotation reference at the selection and opens the annotation pane.                                                                                                                              |
+| &Caption…          | C        | (none)                                                                 | Opens **Caption** dialog (Caption text, Label, Position: Above/Below selected item, Numbering…, AutoCaption…).                                                                                               |
+| Cross-&reference…  | R        | (none)                                                                 | Opens **Cross-reference** dialog (Reference type, Insert reference to, For which…, Insert as hyperlink [may be absent in 95 — the "Insert as hyperlink" checkbox is Word 97+; verify], Include above/below). |
+| Inde&x and Tables… | X        | (none)                                                                 | Opens **Index and Tables** dialog with tabs: Index, Table of Contents, Table of Figures, Table of Authorities.                                                                                               |
+| --- separator ---  |          |                                                                        |                                                                                                                                                                                                              |
+| File…              | L        | (none)                                                                 | Opens **File** dialog (identical to File → Open) to insert another file's contents at cursor; checkbox "Range" for bookmark; Link option embeds as `INCLUDETEXT` field.                                      |
+| Frame              | M        | (none)                                                                 | Inserts an empty frame anchored to the current paragraph. If text is selected, wraps it in a frame.                                                                                                          |
+| &Picture…          | P        | (none)                                                                 | Opens **Insert Picture** dialog (§Insert Picture Dialog).                                                                                                                                                    |
+| &Object…           | J        | (none)                                                                 | Opens **Object** dialog with tabs Create New / Create from File (§Object Dialog).                                                                                                                            |
+| Data&base…         | D        | (none)                                                                 | Opens **Database** dialog — browse ODBC/Access/Excel/dBase sources, query options, insert data as a Word table; "Insert Data as Field" creates an auto-updating `DATABASE` field.                            |
 
 #### Insert → Field Dialog
 
@@ -258,7 +258,7 @@ Single dialog with three tabs: **Find**, **Replace**, **Go To**.
 
 - Tabs: **Symbols**, **Special Characters**.
 - Symbols tab: Font combo (lists all installed fonts including Symbol, Wingdings), subset combo, character grid, large preview cell, Shortcut Key button (assign), AutoCorrect… button (add to AutoCorrect replace list).
-- Special Characters tab: static list — Em Dash (Ctrl+Alt+Num-), En Dash (Ctrl+Num-), Nonbreaking Hyphen (Ctrl+Shift+_), Optional Hyphen (Ctrl+-), Em Space, En Space, Nonbreaking Space (Ctrl+Shift+Space), Copyright (Ctrl+Alt+C), Registered (Ctrl+Alt+R), Trademark (Ctrl+Alt+T), Section (none), Paragraph (none), Ellipsis (Ctrl+Alt+.), Single Opening Quote (Ctrl+`,`), Single Closing Quote (Ctrl+`','`), Double Opening Quote (Ctrl+`,"`), Double Closing Quote (Ctrl+`',"`).
+- Special Characters tab: static list — Em Dash (Ctrl+Alt+Num-), En Dash (Ctrl+Num-), Nonbreaking Hyphen (Ctrl+Shift+\_), Optional Hyphen (Ctrl+-), Em Space, En Space, Nonbreaking Space (Ctrl+Shift+Space), Copyright (Ctrl+Alt+C), Registered (Ctrl+Alt+R), Trademark (Ctrl+Alt+T), Section (none), Paragraph (none), Ellipsis (Ctrl+Alt+.), Single Opening Quote (Ctrl+`,`), Single Closing Quote (Ctrl+`','`), Double Opening Quote (Ctrl+`,"`), Double Closing Quote (Ctrl+`',"`).
 - Buttons: Insert, Close.
 
 #### Insert → Picture Dialog
@@ -290,53 +290,53 @@ Controls:
 #### Insert → Object Dialog
 
 - Tab **Create New**: list of registered OLE server types (populated from registry `\HKEY_CLASSES_ROOT\{ClassID}\InsertableObject`). Typical entries shipped with Office 95:
-    - Microsoft Excel Chart
-    - Microsoft Excel Worksheet
-    - Microsoft Equation 2.0
-    - Microsoft Graph 5.0
-    - Microsoft Organization Chart 2.0
-    - Microsoft WordArt 2.0
-    - Microsoft Word Document
-    - Microsoft Word Picture
-    - Microsoft Note-It 2.0
-    - MS Info
-    - Package
-    - Paintbrush Picture
-    - Sound
-    - Media Clip
-    - Video Clip
-    - Equation
-    - WordPad Document (if Windows 95 installed)
-    - Microsoft Schedule+ 7.0
-    - Microsoft PowerPoint Slide / Presentation
-    - Microsoft Access Form / Report (if Access 95 installed)
-    - Microsoft Project ProjectView (if Project installed)
+  - Microsoft Excel Chart
+  - Microsoft Excel Worksheet
+  - Microsoft Equation 2.0
+  - Microsoft Graph 5.0
+  - Microsoft Organization Chart 2.0
+  - Microsoft WordArt 2.0
+  - Microsoft Word Document
+  - Microsoft Word Picture
+  - Microsoft Note-It 2.0
+  - MS Info
+  - Package
+  - Paintbrush Picture
+  - Sound
+  - Media Clip
+  - Video Clip
+  - Equation
+  - WordPad Document (if Windows 95 installed)
+  - Microsoft Schedule+ 7.0
+  - Microsoft PowerPoint Slide / Presentation
+  - Microsoft Access Form / Report (if Access 95 installed)
+  - Microsoft Project ProjectView (if Project installed)
 - **Display as Icon** checkbox; Change Icon… button.
 - Tab **Create from File**: File text box, Browse… button, **Link to File** checkbox, Display as Icon checkbox.
 - Buttons: OK, Cancel, Help.
 
 ### Format Menu (`&Format`, Alt+O)
 
-| Item | Mnemonic | Accelerator | Action |
-| --- | --- | --- | --- |
-| &Font… | F | Ctrl+D | Opens **Font** dialog. |
-| &Paragraph… | P | (none) | Opens **Paragraph** dialog. |
-| &Tabs… | T | (none) | Opens **Tabs** dialog. |
-| &Borders and Shading… | B | (none) | Opens **Borders and Shading** dialog. |
-| &Columns… | C | (none) | Opens **Columns** dialog. |
-| &Change Case… | E | (none; Shift+F3 toggles through cases without a dialog) | Opens **Change Case** dialog. |
-| Drop Cap… | D | (none) | Opens **Drop Cap** dialog. |
-| --- separator --- | | | |
-| Bu&llets and Numbering… | N | (none) | Opens **Bullets and Numbering** dialog. |
-| &Heading Numbering… | H | (none) | Opens **Heading Numbering** dialog (applies numbering schemes to built-in Heading 1–9 styles). |
-| --- separator --- | | | |
-| Auto&Format… | A | Ctrl+K [verify — Word 95 binds Ctrl+K to "AutoFormat selection", Word 97+ binds it to Insert Hyperlink] | Opens **AutoFormat** dialog (Apply to entire document / current selection, Options…). |
-| Style &Gallery… | G | (none) | Opens **Style Gallery** dialog (preview document in each available template). |
-| &Style… | S | (none) | Opens **Style** dialog (list of styles, modify, new, organizer). |
-| --- separator --- | | | |
-| F&rame… | R | (none) | Opens **Frame** dialog; grayed unless current paragraph is framed. |
-| Pict&ure… | I | (none) | Opens **Picture** dialog (crop, size, reset, black-and-white toggle, fill color). Grayed unless picture selected. |
-| Dra&wing Object… | O | (none) | Opens **Drawing Object** dialog (Fill, Line, Size and Position, Wrapping tabs). Grayed unless drawing object selected. |
+| Item                    | Mnemonic | Accelerator                                                                                             | Action                                                                                                                 |
+| ----------------------- | -------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| &Font…                  | F        | Ctrl+D                                                                                                  | Opens **Font** dialog.                                                                                                 |
+| &Paragraph…             | P        | (none)                                                                                                  | Opens **Paragraph** dialog.                                                                                            |
+| &Tabs…                  | T        | (none)                                                                                                  | Opens **Tabs** dialog.                                                                                                 |
+| &Borders and Shading…   | B        | (none)                                                                                                  | Opens **Borders and Shading** dialog.                                                                                  |
+| &Columns…               | C        | (none)                                                                                                  | Opens **Columns** dialog.                                                                                              |
+| &Change Case…           | E        | (none; Shift+F3 toggles through cases without a dialog)                                                 | Opens **Change Case** dialog.                                                                                          |
+| Drop Cap…               | D        | (none)                                                                                                  | Opens **Drop Cap** dialog.                                                                                             |
+| --- separator ---       |          |                                                                                                         |                                                                                                                        |
+| Bu&llets and Numbering… | N        | (none)                                                                                                  | Opens **Bullets and Numbering** dialog.                                                                                |
+| &Heading Numbering…     | H        | (none)                                                                                                  | Opens **Heading Numbering** dialog (applies numbering schemes to built-in Heading 1–9 styles).                         |
+| --- separator ---       |          |                                                                                                         |                                                                                                                        |
+| Auto&Format…            | A        | Ctrl+K [verify — Word 95 binds Ctrl+K to "AutoFormat selection", Word 97+ binds it to Insert Hyperlink] | Opens **AutoFormat** dialog (Apply to entire document / current selection, Options…).                                  |
+| Style &Gallery…         | G        | (none)                                                                                                  | Opens **Style Gallery** dialog (preview document in each available template).                                          |
+| &Style…                 | S        | (none)                                                                                                  | Opens **Style** dialog (list of styles, modify, new, organizer).                                                       |
+| --- separator ---       |          |                                                                                                         |                                                                                                                        |
+| F&rame…                 | R        | (none)                                                                                                  | Opens **Frame** dialog; grayed unless current paragraph is framed.                                                     |
+| Pict&ure…               | I        | (none)                                                                                                  | Opens **Picture** dialog (crop, size, reset, black-and-white toggle, fill color). Grayed unless picture selected.      |
+| Dra&wing Object…        | O        | (none)                                                                                                  | Opens **Drawing Object** dialog (Fill, Line, Size and Position, Wrapping tabs). Grayed unless drawing object selected. |
 
 #### Format → Font Dialog
 
@@ -387,7 +387,7 @@ Two tabs: **Indents and Spacing**, **Text Flow**.
 - Tab Stop Position: list of tab positions (inches).
 - Default Tab Stops: (inches) — global default.
 - Alignment radio: Left, Center, Right, Decimal, Bar.
-- Leader radio: 1 None, 2 .... (dots), 3 ---- (dashes), 4 ____ (underline).
+- Leader radio: 1 None, 2 .... (dots), 3 ---- (dashes), 4 \_\_\_\_ (underline).
 - Buttons: Set, Clear, Clear All.
 
 #### Format → Borders and Shading Dialog
@@ -491,45 +491,45 @@ Three tabs: **Bulleted**, **Numbered**, **Multilevel**.
 
 ### Tools Menu (`&Tools`, Alt+T)
 
-| Item | Mnemonic | Accelerator | Action |
-| --- | --- | --- | --- |
-| &Spelling… | S | F7 | Runs spelling check (§Spelling). |
-| &Grammar… | G | (none) | Runs grammar check (§Grammar). |
-| &Thesaurus… | T | Shift+F7 | Opens Thesaurus dialog. |
-| &Hyphenation… | H | (none) | Opens Hyphenation dialog. |
-| &Language… | L | (none) | Opens Language dialog (mark selected text with a language for spell/grammar). |
-| &Word Count… | W | (none) | Opens Word Count dialog. |
-| --- separator --- | | | |
-| &AutoCorrect… | A | (none) | Opens AutoCorrect dialog. |
-| Mail Mer&ge… | M | (none) | Opens Mail Merge Helper. |
-| En&velopes and Labels… | E | (none) | Opens Envelopes and Labels dialog. |
-| Pro&tect Document… | P | (none) | Opens Protect Document dialog. |
-| R&evisions… | R | (none) | Opens Revisions dialog. |
-| --- separator --- | | | |
-| Macr&o… | C | Alt+F8 | Opens Macro dialog (list of macros, run/edit/create/delete/organizer). |
-| Cu&stomize… | Z | (none) | Opens Customize dialog (Toolbars / Menus / Keyboard tabs). |
-| &Options… | O | (none) | Opens Options dialog (12 tabs — §Options Dialog). |
+| Item                   | Mnemonic | Accelerator | Action                                                                        |
+| ---------------------- | -------- | ----------- | ----------------------------------------------------------------------------- |
+| &Spelling…             | S        | F7          | Runs spelling check (§Spelling).                                              |
+| &Grammar…              | G        | (none)      | Runs grammar check (§Grammar).                                                |
+| &Thesaurus…            | T        | Shift+F7    | Opens Thesaurus dialog.                                                       |
+| &Hyphenation…          | H        | (none)      | Opens Hyphenation dialog.                                                     |
+| &Language…             | L        | (none)      | Opens Language dialog (mark selected text with a language for spell/grammar). |
+| &Word Count…           | W        | (none)      | Opens Word Count dialog.                                                      |
+| --- separator ---      |          |             |                                                                               |
+| &AutoCorrect…          | A        | (none)      | Opens AutoCorrect dialog.                                                     |
+| Mail Mer&ge…           | M        | (none)      | Opens Mail Merge Helper.                                                      |
+| En&velopes and Labels… | E        | (none)      | Opens Envelopes and Labels dialog.                                            |
+| Pro&tect Document…     | P        | (none)      | Opens Protect Document dialog.                                                |
+| R&evisions…            | R        | (none)      | Opens Revisions dialog.                                                       |
+| --- separator ---      |          |             |                                                                               |
+| Macr&o…                | C        | Alt+F8      | Opens Macro dialog (list of macros, run/edit/create/delete/organizer).        |
+| Cu&stomize…            | Z        | (none)      | Opens Customize dialog (Toolbars / Menus / Keyboard tabs).                    |
+| &Options…              | O        | (none)      | Opens Options dialog (12 tabs — §Options Dialog).                             |
 
 ### Table Menu (`&Table`, Alt+A)
 
-| Item | Mnemonic | Accelerator | Action |
-| --- | --- | --- | --- |
-| &Insert Table… | I | (none) | Opens Insert Table dialog (rows, cols, column width, AutoFormat…). |
-| &Delete Cells… / Delete Rows / Delete Columns | D | (none) | Opens Delete Cells dialog (Shift cells left, Shift cells up, Delete entire row, Delete entire column). Menu item label changes based on selection. |
-| &Merge Cells | M | (none) | Merges the selected adjacent cells into one. |
-| Sp&lit Cells… | P | (none) | Opens Split Cells dialog (columns, rows; "Merge cells before split" checkbox). |
-| Select &Row | R | (none) | Selects the row(s) containing the insertion point/selection. |
-| Select &Column | C | (none) | Selects column(s). |
-| Select &Table | A | Alt+Num5 [verify — with Num Lock off] | Selects the entire table. |
-| Table &AutoFormat… | F | (none) | Opens Table AutoFormat dialog. |
-| --- separator --- | | | |
-| Cell &Height and Width… | W | (none) | Opens Cell Height and Width dialog (tabs Row, Column — cell width, space between columns, row height At Least/Exactly/Auto, row span across pages). |
-| &Headings | H | (none) | Toggles designation of selected rows as table heading (repeated at top of every page). |
-| Con&vert Text to Table… / Convert Table to Text… | V | (none) | Opens the appropriate conversion dialog. For Text-to-Table: Separator at (○ Paragraphs, ○ Commas, ○ Tabs, ○ Other). |
-| &Sort… | S | (none) | Opens Sort dialog (up to 3 keys, Field number, Type: Text/Number/Date, Ascending/Descending; "Header row" detection). |
-| F&ormula… | O | (none) | Opens Formula dialog (=SUM(ABOVE), =AVERAGE(LEFT), etc.). |
-| Split Ta&ble | B | Ctrl+Shift+Enter | Splits the table at the current row (inserts a paragraph between the two halves). |
-| Gridlines | G | (none) | Toggles display of non-printing table gridlines. |
+| Item                                             | Mnemonic | Accelerator                           | Action                                                                                                                                              |
+| ------------------------------------------------ | -------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| &Insert Table…                                   | I        | (none)                                | Opens Insert Table dialog (rows, cols, column width, AutoFormat…).                                                                                  |
+| &Delete Cells… / Delete Rows / Delete Columns    | D        | (none)                                | Opens Delete Cells dialog (Shift cells left, Shift cells up, Delete entire row, Delete entire column). Menu item label changes based on selection.  |
+| &Merge Cells                                     | M        | (none)                                | Merges the selected adjacent cells into one.                                                                                                        |
+| Sp&lit Cells…                                    | P        | (none)                                | Opens Split Cells dialog (columns, rows; "Merge cells before split" checkbox).                                                                      |
+| Select &Row                                      | R        | (none)                                | Selects the row(s) containing the insertion point/selection.                                                                                        |
+| Select &Column                                   | C        | (none)                                | Selects column(s).                                                                                                                                  |
+| Select &Table                                    | A        | Alt+Num5 [verify — with Num Lock off] | Selects the entire table.                                                                                                                           |
+| Table &AutoFormat…                               | F        | (none)                                | Opens Table AutoFormat dialog.                                                                                                                      |
+| --- separator ---                                |          |                                       |                                                                                                                                                     |
+| Cell &Height and Width…                          | W        | (none)                                | Opens Cell Height and Width dialog (tabs Row, Column — cell width, space between columns, row height At Least/Exactly/Auto, row span across pages). |
+| &Headings                                        | H        | (none)                                | Toggles designation of selected rows as table heading (repeated at top of every page).                                                              |
+| Con&vert Text to Table… / Convert Table to Text… | V        | (none)                                | Opens the appropriate conversion dialog. For Text-to-Table: Separator at (○ Paragraphs, ○ Commas, ○ Tabs, ○ Other).                                 |
+| &Sort…                                           | S        | (none)                                | Opens Sort dialog (up to 3 keys, Field number, Type: Text/Number/Date, Ascending/Descending; "Header row" detection).                               |
+| F&ormula…                                        | O        | (none)                                | Opens Formula dialog (=SUM(ABOVE), =AVERAGE(LEFT), etc.).                                                                                           |
+| Split Ta&ble                                     | B        | Ctrl+Shift+Enter                      | Splits the table at the current row (inserts a paragraph between the two halves).                                                                   |
+| Gridlines                                        | G        | (none)                                | Toggles display of non-printing table gridlines.                                                                                                    |
 
 **NOT IN WORD 95 (Table menu):** "Draw Table" (pencil tool) and "Eraser" were added in Word 97. Word 95 tables are created exclusively via Insert Table, the Table Wizard, or Convert Text to Table.
 
@@ -554,29 +554,29 @@ A 6-step wizard for complex tables (financial tables, calendar layouts, etc.). S
 
 ### Window Menu (`&Window`, Alt+W)
 
-| Item | Mnemonic | Accelerator | Action |
-| --- | --- | --- | --- |
-| &New Window | N | (none) | Creates a second view onto the same document. Titles become `{doc}:1` and `{doc}:2`. Edits in either view appear in both; saving either writes the same file. |
-| &Arrange All | A | (none) | Tiles all non-minimized MDI child windows. |
-| &Split / Remove Split | S | (none) | Activates a horizontal split drag mode (or toggles off an existing split). Splits one document window into two panes that can be scrolled independently, showing different parts of the same document. |
-| --- separator --- | | | |
-| &1 {doc 1} | 1 | | Activate that child window. |
-| &2 {doc 2} | 2 | | Active window shown with `✓` before its name. |
-| … | | | |
+| Item                  | Mnemonic | Accelerator | Action                                                                                                                                                                                                 |
+| --------------------- | -------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| &New Window           | N        | (none)      | Creates a second view onto the same document. Titles become `{doc}:1` and `{doc}:2`. Edits in either view appear in both; saving either writes the same file.                                          |
+| &Arrange All          | A        | (none)      | Tiles all non-minimized MDI child windows.                                                                                                                                                             |
+| &Split / Remove Split | S        | (none)      | Activates a horizontal split drag mode (or toggles off an existing split). Splits one document window into two panes that can be scrolled independently, showing different parts of the same document. |
+| --- separator ---     |          |             |                                                                                                                                                                                                        |
+| &1 {doc 1}            | 1        |             | Activate that child window.                                                                                                                                                                            |
+| &2 {doc 2}            | 2        |             | Active window shown with `✓` before its name.                                                                                                                                                          |
+| …                     |          |             |                                                                                                                                                                                                        |
 
 Up to 9 windows can be listed by number; beyond that, "More Windows…" opens an Activate dialog.
 
 ### Help Menu (`&Help`, Alt+H)
 
-| Item | Mnemonic | Accelerator | Action |
-| --- | --- | --- | --- |
-| Microsoft Word &Help Topics | H | F1 (context-sensitive; else opens the main help topics) | Opens the Windows 95 HTML-help-predecessor help viewer (`*.hlp` WinHelp 4.0 format) with tabs Contents, Index, Find. |
-| &Answer Wizard… | A | (none) | Opens the Answer Wizard pane — natural-language question box. Typing "How do I add a picture?" returns ranked list of help topics (Bayesian model). |
-| &The Microsoft Network… | N | (none) | Launches MSN client (if installed); else dial-up sign-up. Present only if Windows 95 MSN components are installed. |
-| --- separator --- | | | |
-| &WordPerfect Help… | W | (none) | Opens WordPerfect Help dialog (for WP 5.1/6.0 users): type a WP command and see the Word equivalent, optionally with navigation demo. |
-| --- separator --- | | | |
-| &About Microsoft Word | A | (none) | Opens About dialog (version 7.0a, license name/org, System Info… button, Tech Support… button, Tip of the Day icon with Tips). |
+| Item                        | Mnemonic | Accelerator                                             | Action                                                                                                                                              |
+| --------------------------- | -------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Microsoft Word &Help Topics | H        | F1 (context-sensitive; else opens the main help topics) | Opens the Windows 95 HTML-help-predecessor help viewer (`*.hlp` WinHelp 4.0 format) with tabs Contents, Index, Find.                                |
+| &Answer Wizard…             | A        | (none)                                                  | Opens the Answer Wizard pane — natural-language question box. Typing "How do I add a picture?" returns ranked list of help topics (Bayesian model). |
+| &The Microsoft Network…     | N        | (none)                                                  | Launches MSN client (if installed); else dial-up sign-up. Present only if Windows 95 MSN components are installed.                                  |
+| --- separator ---           |          |                                                         |                                                                                                                                                     |
+| &WordPerfect Help…          | W        | (none)                                                  | Opens WordPerfect Help dialog (for WP 5.1/6.0 users): type a WP command and see the Word equivalent, optionally with navigation demo.               |
+| --- separator ---           |          |                                                         |                                                                                                                                                     |
+| &About Microsoft Word       | A        | (none)                                                  | Opens About dialog (version 7.0a, license name/org, System Info… button, Tech Support… button, Tip of the Day icon with Tips).                      |
 
 ## Toolbars
 
@@ -1175,13 +1175,13 @@ When "Use smart cut and paste" is on (Options → Edit; default on):
 ### Numbered Lists
 
 - 7 preset numbering tiles on the Numbered tab:
-    1. `1.` `2.` `3.` (Arabic with period)
-    2. `1)` `2)` `3)` (Arabic with right paren)
-    3. `I.` `II.` `III.` (Roman upper)
-    4. `A.` `B.` `C.` (Letter upper)
-    5. `a)` `b)` `c)` (Letter lower with right paren)
-    6. `i.` `ii.` `iii.` (Roman lower)
-    7. `(1)` `(2)` `(3)` (Arabic in parens)
+  1. `1.` `2.` `3.` (Arabic with period)
+  2. `1)` `2)` `3)` (Arabic with right paren)
+  3. `I.` `II.` `III.` (Roman upper)
+  4. `A.` `B.` `C.` (Letter upper)
+  5. `a)` `b)` `c)` (Letter lower with right paren)
+  6. `i.` `ii.` `iii.` (Roman lower)
+  7. `(1)` `(2)` `(3)` (Arabic in parens)
 - Customize options: Bullet/Number format string (template with `%1` placeholder for the current-level number), font, position of number (indent from text), distance number-to-text, Start At (renumbering).
 - Hanging Indent checkbox: creates a hanging indent matching the number width.
 
@@ -1189,13 +1189,13 @@ When "Use smart cut and paste" is on (Options → Edit; default on):
 
 - Tab called "Multilevel" in Word 95 (renamed "Outline Numbered" in Word 97).
 - 7 preset multilevel schemes (9 levels each):
-    1. `1.` / `1.1.` / `1.1.1.` / ... (all Arabic, dot-separated)
-    2. `1)` / `a)` / `i)` / ...
-    3. `I.` / `A.` / `1.` / `a)` / `(1)` / `(a)` / `(i)` / ...
-    4. `Article I.` / `Section 1.01` / `(a)` / `(i)` / ...
-    5. `Chapter 1` / heading style 1 / 2 / 3 / ...
-    6. `1.` / `1.1.` / `1.1.1.` through nine levels.
-    7. Legal: `1.` / `1.1` / `1.1.1` (no trailing dot).
+  1. `1.` / `1.1.` / `1.1.1.` / ... (all Arabic, dot-separated)
+  2. `1)` / `a)` / `i)` / ...
+  3. `I.` / `A.` / `1.` / `a)` / `(1)` / `(a)` / `(i)` / ...
+  4. `Article I.` / `Section 1.01` / `(a)` / `(i)` / ...
+  5. `Chapter 1` / heading style 1 / 2 / 3 / ...
+  6. `1.` / `1.1.` / `1.1.1.` through nine levels.
+  7. Legal: `1.` / `1.1` / `1.1.1` (no trailing dot).
 - Customize Multilevel List dialog: 9 levels, per-level settings — Number format, Previous Level Number (insert preceding level's number into this level's format), Font…, Start At, Tab space after, Indent at.
 - Restart numbering: per-level option to restart when a higher level advances.
 
@@ -1210,7 +1210,7 @@ When "Use smart cut and paste" is on (Options → Edit; default on):
 ### AutoFormat Now (full)
 
 - Invoked via Format → AutoFormat or the AutoFormat button on the Standard toolbar.
-- Options dialog (AutoFormat tab): Apply — Headings, Lists, Other Paragraphs, Borders, Automatic Numbered Lists; Replace — "Straight Quotes" with "Smart Quotes", Ordinals (1st) with Superscript, Fractions (1/2) with Fraction character (½), Symbol characters (-->, (c), etc.) with proper symbols, *bold* and _underline_ with Real Formatting, Internet and Network Paths with Hyperlinks [verify — hyperlink autoformat exists in 95 only if Internet Assistant is installed], Preserve Styles, Plain Text Wordmail Documents.
+- Options dialog (AutoFormat tab): Apply — Headings, Lists, Other Paragraphs, Borders, Automatic Numbered Lists; Replace — "Straight Quotes" with "Smart Quotes", Ordinals (1st) with Superscript, Fractions (1/2) with Fraction character (½), Symbol characters (-->, (c), etc.) with proper symbols, _bold_ and _underline_ with Real Formatting, Internet and Network Paths with Hyperlinks [verify — hyperlink autoformat exists in 95 only if Internet Assistant is installed], Preserve Styles, Plain Text Wordmail Documents.
 - Always AutoFormat ▸ WordMail: in WordMail contexts, applies different rules.
 - After running, opens Review Changes dialog: lists each change with accept/reject; Style Gallery button; Accept All / Reject All / Cancel.
 - AutoFormat analyzes paragraph length and position (short → heading; list-start → list; quoted blockquote → indent) and assigns styles.
@@ -1218,15 +1218,15 @@ When "Use smart cut and paste" is on (Options → Edit; default on):
 ### AutoFormat As You Type
 
 - Subset of the same rules, applied in real time:
-    - Auto bulleted lists (typing `*` + Tab, or `-` + Tab).
-    - Auto numbered lists (typing `1.` + Tab).
-    - Borders (typing three or more `-` + Enter creates a single thin border; three `=` = double; three `~` = wavy; three `#` = thick; three `*` = thick with shadow).
-    - Smart quotes replacement.
-    - Ordinal superscripts.
-    - Fractions.
-    - Hyperlinks from typed URLs [verify — depends on Internet Assistant].
-    - Headings (two blank lines before a short line → Heading 1; one blank line → Heading 2, heuristic) [verify — some Word 95 docs say this is full-AutoFormat only, not as-you-type].
-    - Indent on Tab at start of line (first Tab converts to left indent; second Tab to second-tab indent).
+  - Auto bulleted lists (typing `*` + Tab, or `-` + Tab).
+  - Auto numbered lists (typing `1.` + Tab).
+  - Borders (typing three or more `-` + Enter creates a single thin border; three `=` = double; three `~` = wavy; three `#` = thick; three `*` = thick with shadow).
+  - Smart quotes replacement.
+  - Ordinal superscripts.
+  - Fractions.
+  - Hyperlinks from typed URLs [verify — depends on Internet Assistant].
+  - Headings (two blank lines before a short line → Heading 1; one blank line → Heading 2, heuristic) [verify — some Word 95 docs say this is full-AutoFormat only, not as-you-type].
+  - Indent on Tab at start of line (first Tab converts to left indent; second Tab to second-tab indent).
 
 ## Styles
 
@@ -1300,12 +1300,12 @@ Partial list (the Style dialog's "All Styles" filter shows many more):
 - Description pane shows the composition chain ("Normal + Font: Arial 12 pt, Bold, Centered, Space After 6 pt, Keep With Next").
 - Preview panes (paragraph + character) — the paragraph preview shows a three-paragraph stack with the selected style's paragraph highlighted.
 - Buttons:
-    - Apply: apply selected style to current selection and close.
-    - Cancel: discard changes.
-    - New…: New Style dialog (below).
-    - Modify…: Modify Style dialog (same layout as New).
-    - Delete: remove style (user-defined only; prompts).
-    - Organizer…: open Organizer dialog.
+  - Apply: apply selected style to current selection and close.
+  - Cancel: discard changes.
+  - New…: New Style dialog (below).
+  - Modify…: Modify Style dialog (same layout as New).
+  - Delete: remove style (user-defined only; prompts).
+  - Organizer…: open Organizer dialog.
 
 ### New/Modify Style Dialog
 
@@ -1314,13 +1314,13 @@ Partial list (the Style dialog's "All Styles" filter shows many more):
 - Based On: combo listing existing paragraph styles; selecting "(no style)" breaks inheritance.
 - Next Style: combo listing paragraph styles (default: self).
 - Format menu (button with ▼):
-    - Font… opens Font dialog.
-    - Paragraph… opens Paragraph dialog.
-    - Tabs… opens Tabs dialog.
-    - Border… opens Borders and Shading dialog.
-    - Language… opens Language dialog.
-    - Frame… opens Frame dialog.
-    - Numbering… opens Bullets and Numbering dialog.
+  - Font… opens Font dialog.
+  - Paragraph… opens Paragraph dialog.
+  - Tabs… opens Tabs dialog.
+  - Border… opens Borders and Shading dialog.
+  - Language… opens Language dialog.
+  - Frame… opens Frame dialog.
+  - Numbering… opens Bullets and Numbering dialog.
 - Shortcut Key… opens Customize Keyboard dialog pre-filtered to style.
 - Description: read-only full composition string.
 - Add to Template: checkbox.
@@ -1329,9 +1329,9 @@ Partial list (the Style dialog's "All Styles" filter shows many more):
 ### Style Gallery
 
 - Format → Style Gallery… opens a modal dialog with:
-    - Template list (left): all `.dot` files from the user template folder plus workgroup template folder.
-    - Preview radio: Document (apply styles to current doc, show result), Example (show template's sample document with its styles), Style Samples (show one-line sample of each of the template's styles).
-    - Preview pane (right): large WYSIWYG.
+  - Template list (left): all `.dot` files from the user template folder plus workgroup template folder.
+  - Preview radio: Document (apply styles to current doc, show result), Example (show template's sample document with its styles), Style Samples (show one-line sample of each of the template's styles).
+  - Preview pane (right): large WYSIWYG.
 - OK applies the template's styles (overlaying the document's existing paragraph style names with the template's definitions).
 - Cancel reverts.
 
@@ -1356,16 +1356,16 @@ Frames are the pre-textbox mechanism for floating a block of content (text, tabl
 
 - Text Wrapping: None (text above and below the frame, frame takes full column width) or Around (text wraps around the frame).
 - Size:
-    - Width: Exactly (inches) or Auto (as-wide-as-content).
-    - Height: Exactly, At Least, or Auto.
+  - Width: Exactly (inches) or Auto (as-wide-as-content).
+  - Height: Exactly, At Least, or Auto.
 - Horizontal:
-    - Position combo: Left, Center, Right, Inside (odd-page gutter-side), Outside (odd-page away-from-gutter), or absolute inches.
-    - Relative To: Column, Margin, Page.
-    - Distance from Text: inches.
+  - Position combo: Left, Center, Right, Inside (odd-page gutter-side), Outside (odd-page away-from-gutter), or absolute inches.
+  - Relative To: Column, Margin, Page.
+  - Distance from Text: inches.
 - Vertical:
-    - Position combo: Top, Center, Bottom, or absolute inches.
-    - Relative To: Margin, Page, Paragraph.
-    - Distance from Text: inches.
+  - Position combo: Top, Center, Bottom, or absolute inches.
+  - Relative To: Margin, Page, Paragraph.
+  - Distance from Text: inches.
 - Move with Text checkbox: frame repositions when its anchor paragraph moves.
 - Lock Anchor checkbox: prevents the anchor from being dragged to another paragraph.
 - Remove Frame button: unwrap the frame; content returns to inline in the anchor paragraph.
@@ -1392,10 +1392,10 @@ Frames are the pre-textbox mechanism for floating a block of content (text, tabl
 - A Word document is divided into one or more sections. Each section has its own page setup, headers/footers, page numbering, columns, line numbering, endnote positioning, and footnote options.
 - A single document with no explicit section break has exactly one section (spanning the whole document).
 - Section breaks are inserted via Insert → Break with one of four radio options:
-    - **Next Page**: the next section starts on the next page.
-    - **Continuous**: the next section starts on the same page; useful for changing columns mid-page.
-    - **Even Page**: next section on the next even-numbered page (may leave a blank odd page).
-    - **Odd Page**: next section on the next odd-numbered page.
+  - **Next Page**: the next section starts on the next page.
+  - **Continuous**: the next section starts on the same page; useful for changing columns mid-page.
+  - **Even Page**: next section on the next even-numbered page (may leave a blank odd page).
+  - **Odd Page**: next section on the next odd-numbered page.
 - Section breaks are represented as a paragraph-end mark at the end of the section; viewing non-printing characters shows `=============== End of Section ===============` or `:::::::::::::::: End of Section (Continuous) ::::::::::::::::`.
 
 ### Page Setup Dialog (File → Page Setup)
@@ -1430,8 +1430,8 @@ Four tabs: **Margins**, **Paper Size**, **Paper Source**, **Layout**.
 
 - Section Start combo: Continuous, New Column, New Page, Even Page, Odd Page. Determines how the section begins.
 - Headers and Footers group:
-    - Different Odd and Even checkbox: enables separate headers/footers for odd and even pages.
-    - Different First Page checkbox: enables a distinct first-page header/footer per section.
+  - Different Odd and Even checkbox: enables separate headers/footers for odd and even pages.
+  - Different First Page checkbox: enables a distinct first-page header/footer per section.
 - Vertical Alignment combo: Top, Center, Justified, Bottom. Affects how text fits vertically on a page with short content.
 - Line Numbers… button: opens Line Numbers dialog (Add Line Numbering checkbox; Start At; From Text: inches; Count By; Numbering: Restart Each Page / Restart Each Section / Continuous).
 - Suppress Endnotes checkbox: in the Footnote and Endnote dialog, endnotes for this section can be suppressed so they appear at the end of the document rather than at the end of this section.
@@ -1457,16 +1457,16 @@ Four tabs: **Margins**, **Paper Size**, **Paper Source**, **Layout**.
 ### AutoText Gallery for Headers/Footers
 
 - Predefined AutoText entries available from the Header/Footer toolbar's Insert AutoText menu:
-    - PAGE
-    - Page X of Y
-    - Created by
-    - Created on
-    - Filename
-    - Filename and path
-    - Last printed
-    - Last saved by
-    - Author, Page #, Date
-    - Confidential, Page #, Date
+  - PAGE
+  - Page X of Y
+  - Created by
+  - Created on
+  - Filename
+  - Filename and path
+  - Last printed
+  - Last saved by
+  - Author, Page #, Date
+  - Confidential, Page #, Date
 
 ## Footnotes and Endnotes
 
@@ -1475,10 +1475,10 @@ Four tabs: **Margins**, **Paper Size**, **Paper Source**, **Layout**.
 - Insert: ○ Footnote (with Placement: Bottom of Page, Beneath Text), ○ Endnote (with Placement: End of Section, End of Document).
 - Numbering: ○ AutoNumber (1, 2, 3…), ○ Custom Mark (free-form symbol or type character).
 - Options… button opens Note Options dialog (two tabs: All Footnotes, All Endnotes):
-    - Place At: Bottom of Page / Beneath Text (footnotes) or End of Section / End of Document (endnotes).
-    - Number Format: 1, 2, 3 / A, B, C / a, b, c / I, II, III / i, ii, iii / *, †, ‡, § (symbol cycle).
-    - Start At: starting number.
-    - Numbering: Continuous / Restart Each Section / Restart Each Page.
+  - Place At: Bottom of Page / Beneath Text (footnotes) or End of Section / End of Document (endnotes).
+  - Number Format: 1, 2, 3 / A, B, C / a, b, c / I, II, III / i, ii, iii / \*, †, ‡, § (symbol cycle).
+  - Start At: starting number.
+  - Numbering: Continuous / Restart Each Section / Restart Each Page.
 
 ### Footnote/Endnote Pane
 
@@ -1570,29 +1570,29 @@ Each filter is a 16-bit or 32-bit DLL conforming to the Office 95 Graphics Impor
 ### Insert Object Dialog
 
 - Tab **Create New**: list of insertable OLE server ClassIDs. Office 95 built-in registrations (with names as shown in the list):
-    - Microsoft Equation 2.0 (Equation Editor)
-    - Microsoft Graph 5.0
-    - Microsoft Organization Chart 2.0
-    - Microsoft WordArt 2.0
-    - Microsoft Excel Chart
-    - Microsoft Excel Worksheet
-    - Microsoft Word Document
-    - Microsoft Word Picture
-    - Microsoft Note-It
-    - Package
-    - Paintbrush Picture (from Windows 95 accessories)
-    - Sound (Windows Sound Recorder)
-    - Media Clip (Windows Media Player)
-    - Video Clip
-    - Bitmap Image
-    - Wordpad Document
-    - Microsoft Access Form / Table / Query / Report (if Access 95 installed)
-    - Microsoft Powerpoint Slide / Presentation (if PowerPoint 95 installed)
-    - Microsoft Schedule+ 7.0 Contact / Task / Appointment (if Schedule+ installed)
-    - Microsoft Project 4.0 ProjectView (if Project installed)
-    - Microsoft FoxPro (if FoxPro installed)
-    - ACDSee Image (if ACDSee installed)
-    - Adobe Photoshop Image (if Photoshop installed)
+  - Microsoft Equation 2.0 (Equation Editor)
+  - Microsoft Graph 5.0
+  - Microsoft Organization Chart 2.0
+  - Microsoft WordArt 2.0
+  - Microsoft Excel Chart
+  - Microsoft Excel Worksheet
+  - Microsoft Word Document
+  - Microsoft Word Picture
+  - Microsoft Note-It
+  - Package
+  - Paintbrush Picture (from Windows 95 accessories)
+  - Sound (Windows Sound Recorder)
+  - Media Clip (Windows Media Player)
+  - Video Clip
+  - Bitmap Image
+  - Wordpad Document
+  - Microsoft Access Form / Table / Query / Report (if Access 95 installed)
+  - Microsoft Powerpoint Slide / Presentation (if PowerPoint 95 installed)
+  - Microsoft Schedule+ 7.0 Contact / Task / Appointment (if Schedule+ installed)
+  - Microsoft Project 4.0 ProjectView (if Project installed)
+  - Microsoft FoxPro (if FoxPro installed)
+  - ACDSee Image (if ACDSee installed)
+  - Adobe Photoshop Image (if Photoshop installed)
 - Display as Icon checkbox: show the object as a registered icon instead of rendered content.
 - Change Icon… button: pick from the OLE server's registered icons or specify an icon file.
 - Tab **Create from File**: File text box, Browse… button, Link to File checkbox, Display as Icon checkbox.
@@ -1653,23 +1653,23 @@ Each filter is a 16-bit or 32-bit DLL conforming to the Office 95 Graphics Impor
 ### Special Characters Tab
 
 - List of 16 special characters with their keyboard shortcuts:
-    - Em Dash (—) — Ctrl+Alt+NumMinus
-    - En Dash (–) — Ctrl+NumMinus
-    - Nonbreaking Hyphen — Ctrl+Shift+_
-    - Optional Hyphen — Ctrl+-
-    - Em Space — (no default)
-    - En Space — (no default)
-    - Nonbreaking Space — Ctrl+Shift+Space
-    - Copyright © — Ctrl+Alt+C
-    - Registered ® — Ctrl+Alt+R
-    - Trademark ™ — Ctrl+Alt+T
-    - Section § — (no default)
-    - Paragraph ¶ — (no default)
-    - Ellipsis … — Ctrl+Alt+.
-    - Single Opening Quote ' — Ctrl+`
-    - Single Closing Quote ' — Ctrl+'
-    - Double Opening Quote " — Ctrl+`,"
-    - Double Closing Quote " — Ctrl+',"
+  - Em Dash (—) — Ctrl+Alt+NumMinus
+  - En Dash (–) — Ctrl+NumMinus
+  - Nonbreaking Hyphen — Ctrl+Shift+\_
+  - Optional Hyphen — Ctrl+-
+  - Em Space — (no default)
+  - En Space — (no default)
+  - Nonbreaking Space — Ctrl+Shift+Space
+  - Copyright © — Ctrl+Alt+C
+  - Registered ® — Ctrl+Alt+R
+  - Trademark ™ — Ctrl+Alt+T
+  - Section § — (no default)
+  - Paragraph ¶ — (no default)
+  - Ellipsis … — Ctrl+Alt+.
+  - Single Opening Quote ' — Ctrl+`
+  - Single Closing Quote ' — Ctrl+'
+  - Double Opening Quote " — Ctrl+`,"
+  - Double Closing Quote " — Ctrl+',"
 
 ### Insertion
 
@@ -1694,10 +1694,10 @@ Each filter is a 16-bit or 32-bit DLL conforming to the Office 95 Graphics Impor
 Tabs vary per field; general tabs:
 
 - **General Switches**:
-    - Format (`\*`): Upper, Lower, FirstCap, Caps, Roman, Arabic, CardText, DollarText, Hex, Ordinal, OrdText, Alphabetic, AlphaLower, ChrOnly [verify — some codes may differ], MERGEFORMAT.
-    - Numeric Picture (`\#`): format string for numeric result (`0.00`, `$#,##0.00;($#,##0.00)`, etc.).
-    - Date-Time Picture (`\@`): format string for date result (`MMMM d, yyyy`, `dddd`, `HH:mm:ss`, etc.).
-    - Lock Result (`\!`): prevents field from updating.
+  - Format (`\*`): Upper, Lower, FirstCap, Caps, Roman, Arabic, CardText, DollarText, Hex, Ordinal, OrdText, Alphabetic, AlphaLower, ChrOnly [verify — some codes may differ], MERGEFORMAT.
+  - Numeric Picture (`\#`): format string for numeric result (`0.00`, `$#,##0.00;($#,##0.00)`, etc.).
+  - Date-Time Picture (`\@`): format string for date result (`MMMM d, yyyy`, `dddd`, `HH:mm:ss`, etc.).
+  - Lock Result (`\!`): prevents field from updating.
 - **Field Specific Switches**: per-field switches (e.g., INCLUDEPICTURE `\d` don't save, `\c` converter name; SEQ `\c` count, `\h` hide, `\r` reset, `\n` next).
 
 ### Field Behavior
@@ -1841,13 +1841,13 @@ Date-time picture codes:
 ## Insert → Break Dialog
 
 - Break Type radios:
-    - ○ Page Break (Ctrl+Enter): forces content below to start on a new page.
-    - ○ Column Break (Ctrl+Shift+Enter): forces content below to start in the next column (or page if last column).
-    - Section Breaks group:
-        - ○ Next Page
-        - ○ Continuous
-        - ○ Even Page
-        - ○ Odd Page
+  - ○ Page Break (Ctrl+Enter): forces content below to start on a new page.
+  - ○ Column Break (Ctrl+Shift+Enter): forces content below to start in the next column (or page if last column).
+  - Section Breaks group:
+    - ○ Next Page
+    - ○ Continuous
+    - ○ Even Page
+    - ○ Odd Page
 - OK inserts the break.
 
 ## Insert → Form Field Dialog and Form Field Options
@@ -2064,11 +2064,11 @@ Two tabs: **Row**, **Column**.
 
 - Runs through document sequentially, stopping on each unrecognized word.
 - Spelling dialog:
-    - Not in Dictionary text box (the misspelled word, highlighted in context).
-    - Change To text box (suggested correction).
-    - Suggestions list (ranked).
-    - Buttons: Ignore, Ignore All, Change, Change All, Add (to custom dictionary), Suggest (re-generate suggestions), AutoCorrect (add pair to AutoCorrect list), Undo Last, Options…, Cancel.
-    - Custom dictionaries… combobox for the current add-target.
+  - Not in Dictionary text box (the misspelled word, highlighted in context).
+  - Change To text box (suggested correction).
+  - Suggestions list (ranked).
+  - Buttons: Ignore, Ignore All, Change, Change All, Add (to custom dictionary), Suggest (re-generate suggestions), AutoCorrect (add pair to AutoCorrect list), Undo Last, Options…, Cancel.
+  - Custom dictionaries… combobox for the current add-target.
 - **Background spelling** (Tools → Options → Spelling → "Automatic Spell Checking"): squiggly red underline under misspelled words as you type. Right-click to get suggestions menu. (Grammar squiggles are NOT in Word 95 — grammar is modal only.)
 - Custom dictionaries: stored as `.dic` text files in `MSOffice\ProofFold`; each line one word. Default: `CUSTOM.DIC`. User can add multiple via Options → Spelling → Custom Dictionaries… (Add, Remove, Edit; Language per dictionary).
 - Exclude dictionaries (suffixed `.exc`): words to flag even if in the main dictionary.
@@ -2077,17 +2077,17 @@ Two tabs: **Row**, **Column**.
 
 - Modal dialog. Iterates through grammar and style issues.
 - Grammar dialog:
-    - Sentence text box with highlighted issue.
-    - Suggestions list.
-    - Buttons: Ignore, Ignore Rule, Next Sentence, Change, Explain… (opens explanation window), Options…, Cancel.
+  - Sentence text box with highlighted issue.
+  - Suggestions list.
+  - Buttons: Ignore, Ignore Rule, Next Sentence, Change, Explain… (opens explanation window), Options…, Cancel.
 - Grammar rules organized into sets (Writing Style combo): Casual, Standard, Formal, Technical, Custom 1, Custom 2, Custom 3.
 - Each rule set enables/disables specific rules. Rules include:
-    - Grammar: Capitalization, Commonly Confused Words, Fragments and Run-ons, Misused Words, Negation, Noun Phrase, Possessives and Plurals, Pronouns, Punctuation, Questions, Relative Clauses, Subject-Verb Agreement, Verb Phrase.
-    - Style: Clichés, Colloquialisms, Contractions, Gender-Specific Words, Jargon Words, Passive Voice, Sentence Length, Sentences Beginning With "And", "But", or "Hopefully", Successive Nouns, Successive Prepositional Phrases, Unclear Phrasing, Use of First Person, Wordiness, Split Infinitive, Sentences Structure.
+  - Grammar: Capitalization, Commonly Confused Words, Fragments and Run-ons, Misused Words, Negation, Noun Phrase, Possessives and Plurals, Pronouns, Punctuation, Questions, Relative Clauses, Subject-Verb Agreement, Verb Phrase.
+  - Style: Clichés, Colloquialisms, Contractions, Gender-Specific Words, Jargon Words, Passive Voice, Sentence Length, Sentences Beginning With "And", "But", or "Hopefully", Successive Nouns, Successive Prepositional Phrases, Unclear Phrasing, Use of First Person, Wordiness, Split Infinitive, Sentences Structure.
 - **Show Readability Statistics** checkbox: after grammar check, shows:
-    - Counts: Words, Characters, Paragraphs, Sentences.
-    - Averages: Sentences per Paragraph, Words per Sentence, Characters per Word.
-    - Readability: Passive Sentences (%), Flesch Reading Ease (0–100, higher = easier), Flesch-Kincaid Grade Level (US school grade), Coleman-Liau Grade Level, Bormuth Grade Level, Gunning Fog Index [verify — Word 95 shows Flesch and Flesch-Kincaid at minimum; other indices vary].
+  - Counts: Words, Characters, Paragraphs, Sentences.
+  - Averages: Sentences per Paragraph, Words per Sentence, Characters per Word.
+  - Readability: Passive Sentences (%), Flesch Reading Ease (0–100, higher = easier), Flesch-Kincaid Grade Level (US school grade), Coleman-Liau Grade Level, Bormuth Grade Level, Gunning Fog Index [verify — Word 95 shows Flesch and Flesch-Kincaid at minimum; other indices vary].
 - Grammar checker uses the CIRRUS engine (Inso Corporation / Houghton Mifflin grammar library).
 
 ### Thesaurus (Tools → Thesaurus, Shift+F7)
@@ -2102,11 +2102,11 @@ Two tabs: **Row**, **Column**.
 ### Hyphenation (Tools → Hyphenation)
 
 - Hyphenation dialog:
-    - Automatically Hyphenate Document checkbox.
-    - Hyphenate Words in CAPS checkbox.
-    - Hyphenation Zone (inches) — maximum distance from the right margin the last character of a line may be (default 0.25").
-    - Limit Consecutive Hyphens To: integer or Unlimited (default Unlimited).
-    - Manual… button: runs Manual Hyphenation walking through each proposed break with Yes / No / Cancel.
+  - Automatically Hyphenate Document checkbox.
+  - Hyphenate Words in CAPS checkbox.
+  - Hyphenation Zone (inches) — maximum distance from the right margin the last character of a line may be (default 0.25").
+  - Limit Consecutive Hyphens To: integer or Unlimited (default Unlimited).
+  - Manual… button: runs Manual Hyphenation walking through each proposed break with Yes / No / Cancel.
 - Auto hyphenation: computed during layout; suggestions respect Don't Hyphenate paragraph flag.
 
 ### Language (Tools → Language)
@@ -2124,27 +2124,27 @@ Two tabs: **Row**, **Column**.
 ### AutoCorrect (Tools → AutoCorrect)
 
 - Checkboxes at top:
-    - Correct TWo INitial CApitals.
-    - Capitalize First Letter of Sentences.
-    - Capitalize Names of Days.
-    - Replace Text as You Type (enables the replace list).
+  - Correct TWo INitial CApitals.
+  - Capitalize First Letter of Sentences.
+  - Capitalize Names of Days.
+  - Replace Text as You Type (enables the replace list).
 - Replace and With text boxes.
 - Two format radios: Plain Text / Formatted Text (preserves the With text's formatting).
 - Replacement list: scrollable table of (Replace, With) pairs.
 - Buttons: Add, Delete.
 - Default replacements (partial list):
-    - `(c)` → ©
-    - `(r)` → ®
-    - `(tm)` → ™
-    - `--` → —
-    - `...` → …
-    - `:)` → ☺
-    - `:(` → ☹
-    - `teh` → the
-    - `adn` → and
-    - `acheive` → achieve
-    - `accomodate` → accommodate
-    - many hundreds more (dictionary typos).
+  - `(c)` → ©
+  - `(r)` → ®
+  - `(tm)` → ™
+  - `--` → —
+  - `...` → …
+  - `:)` → ☺
+  - `:(` → ☹
+  - `teh` → the
+  - `adn` → and
+  - `acheive` → achieve
+  - `accomodate` → accommodate
+  - many hundreds more (dictionary typos).
 
 ### Mail Merge
 
@@ -2185,9 +2185,9 @@ Two tabs: **Envelopes**, **Labels**.
 ### Protect Document (Tools → Protect Document)
 
 - Protect Document For radios:
-    - ○ Revisions: document is editable but every change is tracked as a revision, cannot be accepted without removing protection.
-    - ○ Annotations: document is read-only except for inserting annotations.
-    - ○ Forms: document is read-only except for form field input. Additional Section button: choose which sections are protected.
+  - ○ Revisions: document is editable but every change is tracked as a revision, cannot be accepted without removing protection.
+  - ○ Annotations: document is read-only except for inserting annotations.
+  - ○ Forms: document is read-only except for form field input. Additional Section button: choose which sections are protected.
 - Password text box.
 - OK prompts for password confirmation.
 
@@ -2196,15 +2196,15 @@ Two tabs: **Envelopes**, **Labels**.
 Word 95 calls this feature **Revisions**, not Track Changes.
 
 - Revisions dialog:
-    - Document Revisions group:
-        - Mark Revisions While Editing checkbox (turn tracking on/off; status bar shows `MRK` when on).
-        - Show Revisions on Screen checkbox.
-        - Show Revisions in Printed Document checkbox.
-    - Options… button: Revisions tab of Options dialog (§Options Dialog).
-    - Review… button: opens Accept or Reject Revisions dialog (see below).
-    - Accept All, Reject All buttons.
-    - Compare Versions… button: opens Compare Versions dialog (pick another file to compare).
-    - Merge Revisions… button: opens Merge Revisions dialog (merge another file's revisions into current).
+  - Document Revisions group:
+    - Mark Revisions While Editing checkbox (turn tracking on/off; status bar shows `MRK` when on).
+    - Show Revisions on Screen checkbox.
+    - Show Revisions in Printed Document checkbox.
+  - Options… button: Revisions tab of Options dialog (§Options Dialog).
+  - Review… button: opens Accept or Reject Revisions dialog (see below).
+  - Accept All, Reject All buttons.
+  - Compare Versions… button: opens Compare Versions dialog (pick another file to compare).
+  - Merge Revisions… button: opens Merge Revisions dialog (merge another file's revisions into current).
 
 ### Accept or Reject Revisions Dialog
 
@@ -2225,10 +2225,10 @@ Word 95 calls this feature **Revisions**, not Track Changes.
 ### Macro (Tools → Macro, Alt+F8)
 
 - Macro dialog:
-    - Macro Name list (macros from the current doc, global templates, Normal.dot).
-    - Macros Available In combo: All Active Templates and Document / {Template name} / {Doc name}.
-    - Description pane: the macro's comment (`;` line at top of the WordBasic macro).
-    - Buttons: Run, Record… / Stop (opens Record Macro), Edit, Delete, Organizer…, Create (new macro), Cancel.
+  - Macro Name list (macros from the current doc, global templates, Normal.dot).
+  - Macros Available In combo: All Active Templates and Document / {Template name} / {Doc name}.
+  - Description pane: the macro's comment (`;` line at top of the WordBasic macro).
+  - Buttons: Run, Record… / Stop (opens Record Macro), Edit, Delete, Organizer…, Create (new macro), Cancel.
 
 ### Record New Macro Dialog
 
@@ -2299,71 +2299,71 @@ Three tabs: **Toolbars**, **Menus**, **Keyboard**.
 #### Options → View Tab
 
 - **Show** group:
-    - Draft Font checkbox: render all text as plain monospaced font for speed.
-    - Picture Placeholders checkbox: draw pictures as empty rectangles with an X.
-    - Animated Text checkbox [verify — 97+].
-    - ScreenTips checkbox.
-    - Highlight checkbox: honor highlight color.
-    - Bookmarks checkbox: show [bookmark] brackets around bookmarked ranges.
-    - Field Codes checkbox: globally show codes instead of results (same as Alt+F9).
-    - Field Shading combo: Never / Always / When Selected.
+  - Draft Font checkbox: render all text as plain monospaced font for speed.
+  - Picture Placeholders checkbox: draw pictures as empty rectangles with an X.
+  - Animated Text checkbox [verify — 97+].
+  - ScreenTips checkbox.
+  - Highlight checkbox: honor highlight color.
+  - Bookmarks checkbox: show [bookmark] brackets around bookmarked ranges.
+  - Field Codes checkbox: globally show codes instead of results (same as Alt+F9).
+  - Field Shading combo: Never / Always / When Selected.
 - **Window** group:
-    - Status Bar checkbox.
-    - Horizontal Scrollbar checkbox.
-    - Vertical Scrollbar checkbox.
-    - Style Area Width: inches (0 = hidden).
-    - Wrap to Window checkbox (Normal view only; wrap at window edge rather than margin).
+  - Status Bar checkbox.
+  - Horizontal Scrollbar checkbox.
+  - Vertical Scrollbar checkbox.
+  - Style Area Width: inches (0 = hidden).
+  - Wrap to Window checkbox (Normal view only; wrap at window edge rather than margin).
 - **Nonprinting Characters** group:
-    - Tab Characters checkbox.
-    - Spaces checkbox.
-    - Paragraph Marks checkbox.
-    - Optional Hyphens checkbox.
-    - Hidden Text checkbox.
-    - All checkbox (convenience).
+  - Tab Characters checkbox.
+  - Spaces checkbox.
+  - Paragraph Marks checkbox.
+  - Optional Hyphens checkbox.
+  - Hidden Text checkbox.
+  - All checkbox (convenience).
 
 #### Options → General Tab
 
 - **General Options** group:
-    - Background Repagination checkbox (for Normal view).
-    - Help for WordPerfect Users checkbox.
-    - Navigation Keys for WordPerfect Users checkbox (remaps PageUp/PageDown to WP behavior).
-    - Blue Background, White Text checkbox (reverse-video for long writing sessions).
-    - Beep on Error Actions checkbox.
-    - Confirm Conversion at Open checkbox.
-    - Update Automatic Links at Open checkbox.
-    - Mail as Attachment checkbox (for File → Send).
-    - Recently Used File List checkbox and Entries spin (0–9).
-    - TipWizard Active checkbox.
-    - Measurement Units combo: Inches / Centimeters / Points / Picas.
+  - Background Repagination checkbox (for Normal view).
+  - Help for WordPerfect Users checkbox.
+  - Navigation Keys for WordPerfect Users checkbox (remaps PageUp/PageDown to WP behavior).
+  - Blue Background, White Text checkbox (reverse-video for long writing sessions).
+  - Beep on Error Actions checkbox.
+  - Confirm Conversion at Open checkbox.
+  - Update Automatic Links at Open checkbox.
+  - Mail as Attachment checkbox (for File → Send).
+  - Recently Used File List checkbox and Entries spin (0–9).
+  - TipWizard Active checkbox.
+  - Measurement Units combo: Inches / Centimeters / Points / Picas.
 
 #### Options → Edit Tab
 
 - **Editing Options** group:
-    - Typing Replaces Selection checkbox.
-    - Drag-and-Drop Text Editing checkbox.
-    - Automatic Word Selection checkbox (when dragging, snaps to word boundaries).
-    - Use the INS Key for Paste checkbox.
-    - Overtype Mode checkbox.
-    - Use Smart Cut and Paste checkbox.
-    - Allow Accented Uppercase in French checkbox.
-    - Picture Editor combo: Microsoft Word / Microsoft Draw 2.0 / Windows Paint / (registered picture editor).
+  - Typing Replaces Selection checkbox.
+  - Drag-and-Drop Text Editing checkbox.
+  - Automatic Word Selection checkbox (when dragging, snaps to word boundaries).
+  - Use the INS Key for Paste checkbox.
+  - Overtype Mode checkbox.
+  - Use Smart Cut and Paste checkbox.
+  - Allow Accented Uppercase in French checkbox.
+  - Picture Editor combo: Microsoft Word / Microsoft Draw 2.0 / Windows Paint / (registered picture editor).
 
 #### Options → Print Tab
 
 - **Printing Options** group:
-    - Draft Output checkbox (fastest; skips images).
-    - Reverse Print Order checkbox.
-    - Update Fields checkbox (update all fields before printing).
-    - Update Links checkbox.
-    - Background Printing checkbox.
+  - Draft Output checkbox (fastest; skips images).
+  - Reverse Print Order checkbox.
+  - Update Fields checkbox (update all fields before printing).
+  - Update Links checkbox.
+  - Background Printing checkbox.
 - **Include with Document** group:
-    - Summary Info checkbox.
-    - Field Codes checkbox.
-    - Annotations checkbox.
-    - Hidden Text checkbox.
-    - Drawing Objects checkbox.
+  - Summary Info checkbox.
+  - Field Codes checkbox.
+  - Annotations checkbox.
+  - Hidden Text checkbox.
+  - Drawing Objects checkbox.
 - **Options for Current Document Only** group:
-    - Print Data Only for Forms checkbox.
+  - Print Data Only for Forms checkbox.
 - Default Tray combo.
 
 #### Options → Revisions Tab
@@ -2397,27 +2397,27 @@ Three tabs: **Toolbars**, **Menus**, **Keyboard**.
 #### Options → Save Tab
 
 - **Save Options** group:
-    - Always Create Backup Copy checkbox (saves the previous version as `.bak`).
-    - Allow Fast Saves checkbox (saves only changes, not whole doc; faster but grows file).
-    - Prompt for Document Properties checkbox.
-    - Prompt to Save Normal Template checkbox.
-    - Save Native Picture Formats Only checkbox.
-    - Embed TrueType Fonts checkbox.
-    - Save Data Only for Forms checkbox.
-    - Automatic Save Every: N minutes (0 = off).
+  - Always Create Backup Copy checkbox (saves the previous version as `.bak`).
+  - Allow Fast Saves checkbox (saves only changes, not whole doc; faster but grows file).
+  - Prompt for Document Properties checkbox.
+  - Prompt to Save Normal Template checkbox.
+  - Save Native Picture Formats Only checkbox.
+  - Embed TrueType Fonts checkbox.
+  - Save Data Only for Forms checkbox.
+  - Automatic Save Every: N minutes (0 = off).
 - **File-Sharing Options for {doc}** group:
-    - Protection Password text box.
-    - Write Reservation Password text box.
-    - Read-Only Recommended checkbox.
+  - Protection Password text box.
+  - Write Reservation Password text box.
+  - Read-Only Recommended checkbox.
 
 #### Options → Spelling Tab
 
 - **Options** group:
-    - Automatic Spell Checking checkbox.
-    - Always Suggest checkbox (show suggestions as you type).
-    - From Main Dictionary Only checkbox.
-    - Words in UPPERCASE checkbox (ignore uppercase words).
-    - Words with Numbers checkbox (ignore).
+  - Automatic Spell Checking checkbox.
+  - Always Suggest checkbox (show suggestions as you type).
+  - From Main Dictionary Only checkbox.
+  - Words in UPPERCASE checkbox (ignore uppercase words).
+  - Words with Numbers checkbox (ignore).
 - **Custom Dictionaries…** button opens Custom Dictionaries dialog (Add, Remove, Edit, Language per dictionary).
 - Reset Ignore All button.
 
@@ -2431,20 +2431,20 @@ Three tabs: **Toolbars**, **Menus**, **Keyboard**.
 #### Options → AutoFormat Tab
 
 - **Apply** group:
-    - Headings checkbox.
-    - Lists checkbox.
-    - Other Paragraphs checkbox.
-    - Borders checkbox.
-    - Automatic Numbered Lists checkbox.
+  - Headings checkbox.
+  - Lists checkbox.
+  - Other Paragraphs checkbox.
+  - Borders checkbox.
+  - Automatic Numbered Lists checkbox.
 - **Replace** group:
-    - "Straight Quotes" with "Smart Quotes" checkbox.
-    - Ordinals (1st) with Superscript checkbox.
-    - Fractions (1/2) with Fraction Character checkbox.
-    - Symbol Characters (-->) with Symbols checkbox.
-    - *Bold* and _Italic_ with Real Formatting checkbox.
-    - Internet and Network Paths with Hyperlinks checkbox [verify — depends on IA add-on].
+  - "Straight Quotes" with "Smart Quotes" checkbox.
+  - Ordinals (1st) with Superscript checkbox.
+  - Fractions (1/2) with Fraction Character checkbox.
+  - Symbol Characters (-->) with Symbols checkbox.
+  - _Bold_ and _Italic_ with Real Formatting checkbox.
+  - Internet and Network Paths with Hyperlinks checkbox [verify — depends on IA add-on].
 - **Preserve** group:
-    - Styles checkbox.
+  - Styles checkbox.
 - **Plain Text Wordmail Documents** checkbox.
 - Show Options For radios: AutoFormat / AutoFormat As You Type.
 - Same fields shown twice, once per mode.
@@ -2466,49 +2466,49 @@ Each step is enabled only when the previous is complete; a status line shows the
 ### Step 1: Main Document
 
 - **Create** button drops a menu:
-    - Form Letters
-    - Mailing Labels
-    - Envelopes
-    - Catalog (a.k.a. Directory — prints all records consecutively on a single page rather than one per page).
-    - Restore to Normal Word Document (removes merge info).
+  - Form Letters
+  - Mailing Labels
+  - Envelopes
+  - Catalog (a.k.a. Directory — prints all records consecutively on a single page rather than one per page).
+  - Restore to Normal Word Document (removes merge info).
 - After selecting, a prompt: Active Window / New Main Document.
 - **Edit** button: open the main document for editing (closes the Helper, adds the Mail Merge toolbar).
 
 ### Step 2: Data Source
 
 - **Get Data** menu:
-    - Create Data Source… — opens Create Data Source dialog (pre-populated field list; Add Field Name, Remove Field Name, Move Up, Move Down). Default fields: Title, FirstName, LastName, JobTitle, Company, Address1, Address2, City, State, PostalCode, Country, HomePhone, WorkPhone. Save… creates a new Word table document as the data source.
-    - Open Data Source… — pick an existing data source: Word document (table or text with delimiters), Access database, Excel workbook, dBase, FoxPro, ODBC source, Schedule+ Contact List, Paradox, SQL Server [via ODBC], Rich Text, Text Only.
-    - Use Address Book… — Schedule+ / Exchange / Personal Address Book.
-    - Header Options… — specifies which file provides header row (when the data source lacks one or has a different header than the merge fields).
+  - Create Data Source… — opens Create Data Source dialog (pre-populated field list; Add Field Name, Remove Field Name, Move Up, Move Down). Default fields: Title, FirstName, LastName, JobTitle, Company, Address1, Address2, City, State, PostalCode, Country, HomePhone, WorkPhone. Save… creates a new Word table document as the data source.
+  - Open Data Source… — pick an existing data source: Word document (table or text with delimiters), Access database, Excel workbook, dBase, FoxPro, ODBC source, Schedule+ Contact List, Paradox, SQL Server [via ODBC], Rich Text, Text Only.
+  - Use Address Book… — Schedule+ / Exchange / Personal Address Book.
+  - Header Options… — specifies which file provides header row (when the data source lacks one or has a different header than the merge fields).
 - **Edit** button: if the data source is a Word doc, opens it; if Access, launches Access; etc.
 
 ### Step 3: Merge
 
 - **Query Options…** opens Query Options dialog:
-    - Filter Records tab: up to 6 rule rows, each with Field, Comparison (Equal To, Not Equal To, Less Than, Greater Than, Less Than Or Equal, Greater Than Or Equal, Is Blank, Is Not Blank), Compare To. Joined by And/Or.
-    - Sort Records tab: up to 3 keys (Sort By, Then By, Then By) each with Ascending/Descending.
+  - Filter Records tab: up to 6 rule rows, each with Field, Comparison (Equal To, Not Equal To, Less Than, Greater Than, Less Than Or Equal, Greater Than Or Equal, Is Blank, Is Not Blank), Compare To. Joined by And/Or.
+  - Sort Records tab: up to 3 keys (Sort By, Then By, Then By) each with Ascending/Descending.
 - **Merge…** opens the Merge dialog:
-    - Merge To combo: New Document, Printer, Electronic Mail, Electronic Fax.
-    - Records to be Merged: All / From-To range.
-    - When Merging Records: Don't Print Blank Lines When Data Fields Are Empty / Print Blank Lines.
-    - Check Errors… button opens Checking and Reporting Errors dialog (Simulate merge and report errors in a new document / Complete the merge, pausing on errors / Complete the merge without pausing).
-    - Buttons: Merge, Check Errors, Query Options…, Cancel.
+  - Merge To combo: New Document, Printer, Electronic Mail, Electronic Fax.
+  - Records to be Merged: All / From-To range.
+  - When Merging Records: Don't Print Blank Lines When Data Fields Are Empty / Print Blank Lines.
+  - Check Errors… button opens Checking and Reporting Errors dialog (Simulate merge and report errors in a new document / Complete the merge, pausing on errors / Complete the merge without pausing).
+  - Buttons: Merge, Check Errors, Query Options…, Cancel.
 - **Check for Errors** button on Helper: equivalent.
 
 ### Mail Merge Main Document Features
 
 - **Merge fields** inserted via Insert Merge Field button on the Mail Merge toolbar — inserts `{ MERGEFIELD FieldName }` at cursor.
 - **Insert Word Field** button: inserts a Word field that conditionally alters the merge output:
-    - Ask: prompts user once per merge; sets a bookmark.
-    - Fill-in: prompts user once per record; inserts the input.
-    - If…Then…Else: conditional inclusion.
-    - Merge Record #: the current record's number.
-    - Merge Sequence #: the current merged record's position in the output sequence (honors Skip).
-    - Next Record: advance to the next record without finishing this output (for labels/catalogs).
-    - Next Record If: advance if condition true.
-    - Set Bookmark: set a bookmark to a value for use later.
-    - Skip Record If: skip this record if condition true.
+  - Ask: prompts user once per merge; sets a bookmark.
+  - Fill-in: prompts user once per record; inserts the input.
+  - If…Then…Else: conditional inclusion.
+  - Merge Record #: the current record's number.
+  - Merge Sequence #: the current merged record's position in the output sequence (honors Skip).
+  - Next Record: advance to the next record without finishing this output (for labels/catalogs).
+  - Next Record If: advance if condition true.
+  - Set Bookmark: set a bookmark to a value for use later.
+  - Skip Record If: skip this record if condition true.
 - **View Merged Data** toggle: replaces merge fields with sample data from the first record.
 
 ### Data Source Formats
@@ -2566,9 +2566,9 @@ Each step is enabled only when the previous is complete; a status line shows the
 ### Merge Error Checking
 
 - "Check Errors…" runs a simulation:
-    - Reports any merge field that references a missing data field.
-    - Reports unresolvable IF conditions.
-    - Reports unmatched `{ NEXT }` fields.
+  - Reports any merge field that references a missing data field.
+  - Reports unresolvable IF conditions.
+  - Reports unmatched `{ NEXT }` fields.
 - Errors go into a new document or a log.
 
 ## WordBasic and Macros
@@ -2593,11 +2593,11 @@ Each step is enabled only when the previous is complete; a status line shows the
 - Each template has a macro module section (a list of named macros).
 - A macro is a procedure: `Sub MacroName` through `End Sub`.
 - Automatic macros with reserved names fire on events:
-    - **AutoExec**: runs when Word starts (must be in Normal.dot or a Startup global template).
-    - **AutoExit**: runs when Word exits.
-    - **AutoOpen**: runs when a document (containing this macro) opens.
-    - **AutoClose**: runs when the document closes.
-    - **AutoNew**: runs when a new document is created from the template containing this macro.
+  - **AutoExec**: runs when Word starts (must be in Normal.dot or a Startup global template).
+  - **AutoExit**: runs when Word exits.
+  - **AutoOpen**: runs when a document (containing this macro) opens.
+  - **AutoClose**: runs when the document closes.
+  - **AutoNew**: runs when a new document is created from the template containing this macro.
 
 ### Common WordBasic Commands (~120 frequently used)
 
@@ -2774,8 +2774,8 @@ Each step is enabled only when the previous is complete; a status line shows the
 - Document Template text box: the path of the attached template for this document.
 - Attach… button: browse for a new template.
 - Global Templates and Add-ins list:
-    - Each entry: filename (e.g., `MACRO60.DOT`) with a checkbox (load at startup).
-    - Buttons: Add…, Remove.
+  - Each entry: filename (e.g., `MACRO60.DOT`) with a checkbox (load at startup).
+  - Buttons: Add…, Remove.
 - Organizer… button: opens Organizer dialog.
 - Automatically Update Document Styles checkbox: on next open, styles in the document are refreshed from the attached template.
 
@@ -2882,52 +2882,52 @@ Office 95 ships these wizards (each a `.wiz` template with a full-screen interac
 - AutoText is the successor to Word 6.0's "Glossary"; the underlying storage name in the binary format is still `glossary`.
 - An AutoText entry is a named snippet of formatted content (text, fields, images, tables) stored in a template.
 - Insert via:
-    - Type the name + F3.
-    - Type the name + Ctrl+Enter [verify — F3 only is canonical Word 95].
-    - Edit → AutoText… dialog.
+  - Type the name + F3.
+  - Type the name + Ctrl+Enter [verify — F3 only is canonical Word 95].
+  - Edit → AutoText… dialog.
 - Dialog layout:
-    - Name text box (auto-filled from selection when pre-Add).
-    - Preview pane showing the selected entry.
-    - Make AutoText Entry Available To combo: All Documents (Normal.dot) / {current template}.
-    - Buttons: Add, Delete, Insert, Show All.
+  - Name text box (auto-filled from selection when pre-Add).
+  - Preview pane showing the selected entry.
+  - Make AutoText Entry Available To combo: All Documents (Normal.dot) / {current template}.
+  - Buttons: Add, Delete, Insert, Show All.
 - **Built-in AutoText entries** (in Normal.dot):
-    - Attention:
-    - Attention Line:
-    - Best regards,
-    - Best wishes,
-    - BY HAND
-    - Cc:
-    - CERTIFIED MAIL
-    - CONFIDENTIAL
-    - Dear Mom and Dad,
-    - Dear Sir or Madam:
-    - Encl:
-    - PERSONAL
-    - Reference:
-    - REGISTERED MAIL
-    - Regards,
-    - Respectfully yours,
-    - Salutation
-    - Signature (block of UserName + UserAddress)
-    - Signature Company
-    - Subject:
-    - Thank you,
-    - To Whom It May Concern:
-    - Yours sincerely,
-    - Yours truly,
-    - VIA AIRMAIL
-    - VIA FACSIMILE
-    - VIA OVERNIGHT MAIL
-    - PAGE
-    - Page X of Y
-    - Created by (field block)
-    - Created on
-    - Filename
-    - Filename and path
-    - Last printed
-    - Last saved by
-    - Author, Page #, Date
-    - Confidential, Page #, Date
+  - Attention:
+  - Attention Line:
+  - Best regards,
+  - Best wishes,
+  - BY HAND
+  - Cc:
+  - CERTIFIED MAIL
+  - CONFIDENTIAL
+  - Dear Mom and Dad,
+  - Dear Sir or Madam:
+  - Encl:
+  - PERSONAL
+  - Reference:
+  - REGISTERED MAIL
+  - Regards,
+  - Respectfully yours,
+  - Salutation
+  - Signature (block of UserName + UserAddress)
+  - Signature Company
+  - Subject:
+  - Thank you,
+  - To Whom It May Concern:
+  - Yours sincerely,
+  - Yours truly,
+  - VIA AIRMAIL
+  - VIA FACSIMILE
+  - VIA OVERNIGHT MAIL
+  - PAGE
+  - Page X of Y
+  - Created by (field block)
+  - Created on
+  - Filename
+  - Filename and path
+  - Last printed
+  - Last saved by
+  - Author, Page #, Date
+  - Confidential, Page #, Date
 
 ### AutoCorrect vs AutoText
 
@@ -2946,8 +2946,8 @@ Office 95 ships these wizards (each a `.wiz` template with a full-screen interac
 - What Word 2002+ calls "Comments", Word 95 calls "Annotations".
 - Insert: Insert → Annotation or Ctrl+Alt+A [verify].
 - Each annotation has:
-    - A reference mark in the body (initials + sequence number, e.g., "[JB1]" for user Jon Bell's first annotation).
-    - Text stored in an annotation pane (split window at bottom).
+  - A reference mark in the body (initials + sequence number, e.g., "[JB1]" for user Jon Bell's first annotation).
+  - Text stored in an annotation pane (split window at bottom).
 - View → Annotations shows/hides the annotation pane.
 - Each annotation's author is the current user's Name from Options → User Info.
 - In the annotation pane, each annotation is prefaced by the user's initials and a bookmark `_an1`, `_an2`, etc.
@@ -2980,17 +2980,17 @@ Office 95 ships these wizards (each a `.wiz` template with a full-screen interac
 
 - Free downloadable add-on from Microsoft (circa 1995–96).
 - Installs:
-    - HTML file converter (Open/Save HTML Document format).
-    - Insert Hyperlink dialog (Insert → Hyperlink menu item added).
-    - "Web Authoring" toolbar.
-    - Custom styles for HTML: H1, H2, H3, H4, H5, H6 (mapped to Heading 1–6), Address, Blockquote, Definition Term / Data, List Bullet / Number, Keyboard, Sample, Typewriter, Variable, Code, Definition List, Definition Term, Strong, Emphasis, Cite, HTML Markup.
-    - HYPERLINK field activation (Ctrl+click to follow).
-    - Browse Web document capability (viewing HTML in Word).
+  - HTML file converter (Open/Save HTML Document format).
+  - Insert Hyperlink dialog (Insert → Hyperlink menu item added).
+  - "Web Authoring" toolbar.
+  - Custom styles for HTML: H1, H2, H3, H4, H5, H6 (mapped to Heading 1–6), Address, Blockquote, Definition Term / Data, List Bullet / Number, Keyboard, Sample, Typewriter, Variable, Code, Definition List, Definition Term, Strong, Emphasis, Cite, HTML Markup.
+  - HYPERLINK field activation (Ctrl+click to follow).
+  - Browse Web document capability (viewing HTML in Word).
 - When Internet Assistant is installed:
-    - Insert → Hyperlink opens Hyperlink dialog (file path or URL, bookmark within, display text).
-    - AutoFormat rule "Internet and Network Paths with Hyperlinks" is available.
-    - Typed URLs (http://, ftp://, mailto:, file://) auto-convert to hyperlink fields.
-    - Ctrl+K inserts a hyperlink (conflicts with the pre-IA AutoFormat Selection shortcut) [verify].
+  - Insert → Hyperlink opens Hyperlink dialog (file path or URL, bookmark within, display text).
+  - AutoFormat rule "Internet and Network Paths with Hyperlinks" is available.
+  - Typed URLs (http://, ftp://, mailto:, file://) auto-convert to hyperlink fields.
+  - Ctrl+K inserts a hyperlink (conflicts with the pre-IA AutoFormat Selection shortcut) [verify].
 
 ## Drawing Layer
 
@@ -3019,10 +3019,10 @@ Note: Word 95 has individual shape tools (not the grouped AutoShapes categories 
 
 - Select the object (single click) or multiple (Shift+click).
 - Format → Drawing Object… opens Format Drawing Object dialog with tabs:
-    - **Fill** tab: Fill Color (16 colors + None + More Colors… for custom), Semi-Transparent checkbox, Pattern… button (opens Pattern dialog: 48 patterns with choice of foreground and background color), Gradient… [verify — gradients may be Word 97+; Word 95 has only solid and pattern fills].
-    - **Line** tab: Color, Weight (hairline, 0.5, 0.75, 1.0, 1.5, 2.25, 3.0, 4.5, 6.0 pt, or custom), Style (solid, round-dot, square-dot, dash, dash-dot, dash-dot-dot, long-dash, long-dash-dot), Arrow Begin Style, Arrow Begin Size, Arrow End Style, Arrow End Size.
-    - **Size and Position** tab: Width, Height, Horizontal From (Margin, Page, Column), Vertical From (Margin, Page, Paragraph), Position, Lock Aspect Ratio checkbox, Move with Text checkbox, Lock Anchor checkbox.
-    - **Wrapping** tab: None (text overlaps), Square (text wraps around bounding box), Tight (text wraps to shape outline — for polygons), Through (text flows through transparent regions), No Wrap (object is inline).
+  - **Fill** tab: Fill Color (16 colors + None + More Colors… for custom), Semi-Transparent checkbox, Pattern… button (opens Pattern dialog: 48 patterns with choice of foreground and background color), Gradient… [verify — gradients may be Word 97+; Word 95 has only solid and pattern fills].
+  - **Line** tab: Color, Weight (hairline, 0.5, 0.75, 1.0, 1.5, 2.25, 3.0, 4.5, 6.0 pt, or custom), Style (solid, round-dot, square-dot, dash, dash-dot, dash-dot-dot, long-dash, long-dash-dot), Arrow Begin Style, Arrow Begin Size, Arrow End Style, Arrow End Size.
+  - **Size and Position** tab: Width, Height, Horizontal From (Margin, Page, Column), Vertical From (Margin, Page, Paragraph), Position, Lock Aspect Ratio checkbox, Move with Text checkbox, Lock Anchor checkbox.
+  - **Wrapping** tab: None (text overlaps), Square (text wraps around bounding box), Tight (text wraps to shape outline — for polygons), Through (text flows through transparent regions), No Wrap (object is inline).
 - Shadow: toggle drop shadow (fixed 5 pt offset, gray color).
 - Fill Color split button: last-used color.
 - Line Color split button.
@@ -3065,10 +3065,10 @@ Note: Word 95 has individual shape tools (not the grouped AutoShapes categories 
 ### Snap to Grid
 
 - Snap to Grid dialog (from Drawing toolbar):
-    - Snap to Grid checkbox.
-    - Snap to Shapes checkbox [verify — 97+].
-    - Horizontal Spacing, Vertical Spacing (inches, default 0.1").
-    - Horizontal Origin, Vertical Origin (inches from top-left of page).
+  - Snap to Grid checkbox.
+  - Snap to Shapes checkbox [verify — 97+].
+  - Horizontal Spacing, Vertical Spacing (inches, default 0.1").
+  - Horizontal Origin, Vertical Origin (inches from top-left of page).
 
 ### Reshape
 
@@ -3106,10 +3106,10 @@ Each is an abbreviation in a text panel; clicking it toggles the mode (except RE
 ### Rightmost Section
 
 - **Book icon**: Background spell check. Icon shows a book with:
-    - Red X: errors present and background check is on.
-    - Pencil: currently checking.
-    - Plain book: no errors, background check on.
-    - No icon: background check off.
+  - Red X: errors present and background check is on.
+  - Pencil: currently checking.
+  - Plain book: no errors, background check on.
+  - No icon: background check off.
 - **Diskette icon**: saving (briefly visible during save operations).
 - **Clock icon** [verify — in 97+ is where AutoSave lives; 95 may have this also].
 - **Language indicator** [verify — may be 97+].
@@ -3123,9 +3123,9 @@ Each is an abbreviation in a text panel; clicking it toggles the mode (except RE
 - Thumb and track.
 - At the bottom: ↓ arrow.
 - Below ↓: **three view buttons** (left to right):
-    - Normal View.
-    - Page Layout View.
-    - Outline View.
+  - Normal View.
+  - Page Layout View.
+  - Outline View.
 - No Browse Object selector (that is Word 97+).
 
 ### Horizontal Scrollbar
@@ -3231,243 +3231,243 @@ Below is the complete Word 95 default keyboard map. Shortcuts are grouped by fun
 
 ### File Operations
 
-| Shortcut | Command |
-|---|---|
-| Ctrl+N | FileNewDefault (new blank doc from Normal.dot) |
-| Ctrl+O | FileOpen |
-| Ctrl+F4 | Close active document (DocClose) |
-| Ctrl+S | FileSave |
-| Shift+F12 | FileSave (alternate) |
-| F12 | FileSaveAs |
-| Ctrl+P | FilePrint |
-| Ctrl+Shift+F12 | FilePrint (alternate) |
-| Ctrl+F2 | FilePrintPreview |
-| Alt+F4 | FileExit |
+| Shortcut       | Command                                        |
+| -------------- | ---------------------------------------------- |
+| Ctrl+N         | FileNewDefault (new blank doc from Normal.dot) |
+| Ctrl+O         | FileOpen                                       |
+| Ctrl+F4        | Close active document (DocClose)               |
+| Ctrl+S         | FileSave                                       |
+| Shift+F12      | FileSave (alternate)                           |
+| F12            | FileSaveAs                                     |
+| Ctrl+P         | FilePrint                                      |
+| Ctrl+Shift+F12 | FilePrint (alternate)                          |
+| Ctrl+F2        | FilePrintPreview                               |
+| Alt+F4         | FileExit                                       |
 
 ### Editing
 
-| Shortcut | Command |
-|---|---|
-| Ctrl+Z | EditUndo |
-| Ctrl+Y | EditRedo (also EditRepeat before an undo) |
-| F4 | EditRepeat |
-| Alt+Backspace | EditUndo (alt) |
-| Ctrl+X | EditCut |
-| Shift+Delete | EditCut (alt) |
-| Ctrl+C | EditCopy |
-| Ctrl+Insert | EditCopy (alt) |
-| Ctrl+V | EditPaste |
-| Shift+Insert | EditPaste (alt) |
-| Delete | EditClear (also delete character to right) |
-| Backspace | EditClear (delete character to left) |
-| Ctrl+Delete | Delete next word |
-| Ctrl+Backspace | Delete previous word |
-| Ctrl+A | EditSelectAll |
-| Ctrl+Num5 | EditSelectAll (alt — numeric pad 5 with Num Lock off) |
-| Ctrl+F | EditFind |
-| Ctrl+H | EditReplace |
-| Ctrl+G | EditGoTo |
-| F5 | EditGoTo (alt) |
-| Shift+F5 | GoBack (cycle through last 3 edit positions) |
-| Ctrl+Shift+F5 | EditBookmark |
+| Shortcut       | Command                                               |
+| -------------- | ----------------------------------------------------- |
+| Ctrl+Z         | EditUndo                                              |
+| Ctrl+Y         | EditRedo (also EditRepeat before an undo)             |
+| F4             | EditRepeat                                            |
+| Alt+Backspace  | EditUndo (alt)                                        |
+| Ctrl+X         | EditCut                                               |
+| Shift+Delete   | EditCut (alt)                                         |
+| Ctrl+C         | EditCopy                                              |
+| Ctrl+Insert    | EditCopy (alt)                                        |
+| Ctrl+V         | EditPaste                                             |
+| Shift+Insert   | EditPaste (alt)                                       |
+| Delete         | EditClear (also delete character to right)            |
+| Backspace      | EditClear (delete character to left)                  |
+| Ctrl+Delete    | Delete next word                                      |
+| Ctrl+Backspace | Delete previous word                                  |
+| Ctrl+A         | EditSelectAll                                         |
+| Ctrl+Num5      | EditSelectAll (alt — numeric pad 5 with Num Lock off) |
+| Ctrl+F         | EditFind                                              |
+| Ctrl+H         | EditReplace                                           |
+| Ctrl+G         | EditGoTo                                              |
+| F5             | EditGoTo (alt)                                        |
+| Shift+F5       | GoBack (cycle through last 3 edit positions)          |
+| Ctrl+Shift+F5  | EditBookmark                                          |
 
 ### Selection Extension
 
-| Shortcut | Action |
-|---|---|
-| Shift+← / → | Extend by one character |
-| Ctrl+Shift+← / → | Extend by one word |
-| Shift+↑ / ↓ | Extend by one line |
-| Ctrl+Shift+↑ / ↓ | Extend by one paragraph |
-| Shift+Home / End | Extend to line start/end |
-| Ctrl+Shift+Home / End | Extend to document start/end |
-| Shift+PageUp / PageDown | Extend by one screen |
-| Alt+Ctrl+PageUp / PageDown | Top/bottom of window |
-| F8 | Turn on Extend mode (then F8 to progressively widen) |
-| Shift+F8 | Shrink selection (reverse progressive) |
-| Esc | Exit Extend mode |
-| Ctrl+Shift+F8 | Enter column selection mode |
-| Alt+drag | Column selection |
+| Shortcut                   | Action                                               |
+| -------------------------- | ---------------------------------------------------- |
+| Shift+← / →                | Extend by one character                              |
+| Ctrl+Shift+← / →           | Extend by one word                                   |
+| Shift+↑ / ↓                | Extend by one line                                   |
+| Ctrl+Shift+↑ / ↓           | Extend by one paragraph                              |
+| Shift+Home / End           | Extend to line start/end                             |
+| Ctrl+Shift+Home / End      | Extend to document start/end                         |
+| Shift+PageUp / PageDown    | Extend by one screen                                 |
+| Alt+Ctrl+PageUp / PageDown | Top/bottom of window                                 |
+| F8                         | Turn on Extend mode (then F8 to progressively widen) |
+| Shift+F8                   | Shrink selection (reverse progressive)               |
+| Esc                        | Exit Extend mode                                     |
+| Ctrl+Shift+F8              | Enter column selection mode                          |
+| Alt+drag                   | Column selection                                     |
 
 ### Navigation (no selection)
 
-| Shortcut | Action |
-|---|---|
-| ← / → | One character |
-| Ctrl+← / → | One word |
-| ↑ / ↓ | One line |
-| Ctrl+↑ / ↓ | One paragraph |
-| Home | Beginning of line |
-| End | End of line |
-| Ctrl+Home | Beginning of document |
-| Ctrl+End | End of document |
-| PageUp / PageDown | One screen |
-| Ctrl+PageUp / PageDown | Top of previous/next page |
+| Shortcut                   | Action                       |
+| -------------------------- | ---------------------------- |
+| ← / →                      | One character                |
+| Ctrl+← / →                 | One word                     |
+| ↑ / ↓                      | One line                     |
+| Ctrl+↑ / ↓                 | One paragraph                |
+| Home                       | Beginning of line            |
+| End                        | End of line                  |
+| Ctrl+Home                  | Beginning of document        |
+| Ctrl+End                   | End of document              |
+| PageUp / PageDown          | One screen                   |
+| Ctrl+PageUp / PageDown     | Top of previous/next page    |
 | Alt+Ctrl+PageUp / PageDown | Top/bottom of visible window |
-| F6 | Next pane (if split) |
-| Shift+F6 | Previous pane |
-| Ctrl+F6 | Next document window |
-| Ctrl+Shift+F6 | Previous document window |
+| F6                         | Next pane (if split)         |
+| Shift+F6                   | Previous pane                |
+| Ctrl+F6                    | Next document window         |
+| Ctrl+Shift+F6              | Previous document window     |
 
 ### Character Formatting
 
-| Shortcut | Effect |
-|---|---|
-| Ctrl+B | Bold toggle |
-| Ctrl+I | Italic toggle |
-| Ctrl+U | Single underline toggle |
-| Ctrl+Shift+W | Words-only underline toggle |
-| Ctrl+Shift+D | Double underline toggle |
-| Ctrl+Shift+H | Hidden text toggle |
-| Ctrl+Shift+K | Small caps toggle |
-| Ctrl+Shift+A | All caps toggle |
-| Ctrl+= | Subscript toggle |
-| Ctrl+Shift+= | Superscript toggle |
-| Ctrl+Space | Clear character formatting |
+| Shortcut     | Effect                                      |
+| ------------ | ------------------------------------------- |
+| Ctrl+B       | Bold toggle                                 |
+| Ctrl+I       | Italic toggle                               |
+| Ctrl+U       | Single underline toggle                     |
+| Ctrl+Shift+W | Words-only underline toggle                 |
+| Ctrl+Shift+D | Double underline toggle                     |
+| Ctrl+Shift+H | Hidden text toggle                          |
+| Ctrl+Shift+K | Small caps toggle                           |
+| Ctrl+Shift+A | All caps toggle                             |
+| Ctrl+=       | Subscript toggle                            |
+| Ctrl+Shift+= | Superscript toggle                          |
+| Ctrl+Space   | Clear character formatting                  |
 | Ctrl+Shift+F | Activate Font combo (on Formatting toolbar) |
-| Ctrl+Shift+P | Activate Font Size combo |
-| Ctrl+Shift+> | Grow font to next preset size |
-| Ctrl+Shift+< | Shrink font to previous preset size |
-| Ctrl+] | Grow font by 1 pt |
-| Ctrl+[ | Shrink font by 1 pt |
-| Ctrl+Shift+Q | Apply Symbol font |
-| Shift+F3 | Cycle case (lowercase / Title / UPPERCASE) |
-| Ctrl+D | Open Font dialog |
+| Ctrl+Shift+P | Activate Font Size combo                    |
+| Ctrl+Shift+> | Grow font to next preset size               |
+| Ctrl+Shift+< | Shrink font to previous preset size         |
+| Ctrl+]       | Grow font by 1 pt                           |
+| Ctrl+[       | Shrink font by 1 pt                         |
+| Ctrl+Shift+Q | Apply Symbol font                           |
+| Shift+F3     | Cycle case (lowercase / Title / UPPERCASE)  |
+| Ctrl+D       | Open Font dialog                            |
 
 ### Paragraph Formatting
 
-| Shortcut | Effect |
-|---|---|
-| Ctrl+L | Left align |
-| Ctrl+E | Center |
-| Ctrl+R | Right align |
-| Ctrl+J | Justify |
-| Ctrl+M | Increase left indent one tab |
-| Ctrl+Shift+M | Decrease left indent one tab |
-| Ctrl+T | Hanging indent (increase) |
-| Ctrl+Shift+T | Hanging indent (decrease) |
-| Ctrl+1 | Single line spacing |
-| Ctrl+2 | Double line spacing |
-| Ctrl+5 | 1.5 line spacing |
-| Ctrl+0 | Toggle 12 pt Space Before |
-| Ctrl+Q | Clear direct paragraph formatting |
+| Shortcut     | Effect                            |
+| ------------ | --------------------------------- |
+| Ctrl+L       | Left align                        |
+| Ctrl+E       | Center                            |
+| Ctrl+R       | Right align                       |
+| Ctrl+J       | Justify                           |
+| Ctrl+M       | Increase left indent one tab      |
+| Ctrl+Shift+M | Decrease left indent one tab      |
+| Ctrl+T       | Hanging indent (increase)         |
+| Ctrl+Shift+T | Hanging indent (decrease)         |
+| Ctrl+1       | Single line spacing               |
+| Ctrl+2       | Double line spacing               |
+| Ctrl+5       | 1.5 line spacing                  |
+| Ctrl+0       | Toggle 12 pt Space Before         |
+| Ctrl+Q       | Clear direct paragraph formatting |
 
 ### Styles
 
-| Shortcut | Effect |
-|---|---|
+| Shortcut     | Effect                                  |
+| ------------ | --------------------------------------- |
 | Ctrl+Shift+S | Focus Style combo on Formatting toolbar |
-| Ctrl+Shift+N | Apply Normal style |
-| Ctrl+Alt+1 | Apply Heading 1 |
-| Ctrl+Alt+2 | Apply Heading 2 |
-| Ctrl+Alt+3 | Apply Heading 3 |
-| Ctrl+Shift+L | Apply List Bullet style |
+| Ctrl+Shift+N | Apply Normal style                      |
+| Ctrl+Alt+1   | Apply Heading 1                         |
+| Ctrl+Alt+2   | Apply Heading 2                         |
+| Ctrl+Alt+3   | Apply Heading 3                         |
+| Ctrl+Shift+L | Apply List Bullet style                 |
 
 ### View Switching
 
-| Shortcut | View |
-|---|---|
-| Ctrl+Alt+N | Normal |
-| Ctrl+Alt+O | Outline |
-| Ctrl+Alt+P | Page Layout |
-| Ctrl+Alt+M | Master Document [verify] |
+| Shortcut   | View                                                        |
+| ---------- | ----------------------------------------------------------- |
+| Ctrl+Alt+N | Normal                                                      |
+| Ctrl+Alt+O | Outline                                                     |
+| Ctrl+Alt+P | Page Layout                                                 |
+| Ctrl+Alt+M | Master Document [verify]                                    |
 | Ctrl+Alt+F | Full Screen [verify — may not have a default binding in 95] |
 
 ### Outline Navigation
 
-| Shortcut | Action |
-|---|---|
-| Alt+Shift+← | Promote one level |
-| Alt+Shift+→ | Demote one level |
-| Alt+Shift+↑ | Move up |
-| Alt+Shift+↓ | Move down |
-| Alt+Shift++ | Expand |
-| Alt+Shift+- | Collapse |
-| Alt+Shift+1..9 | Show headings up through level 1..9 |
-| Alt+Shift+A | Show all |
-| Alt+Shift+L | Show first line only |
-| / (on numeric keypad) | Show formatting |
+| Shortcut              | Action                              |
+| --------------------- | ----------------------------------- |
+| Alt+Shift+←           | Promote one level                   |
+| Alt+Shift+→           | Demote one level                    |
+| Alt+Shift+↑           | Move up                             |
+| Alt+Shift+↓           | Move down                           |
+| Alt+Shift++           | Expand                              |
+| Alt+Shift+-           | Collapse                            |
+| Alt+Shift+1..9        | Show headings up through level 1..9 |
+| Alt+Shift+A           | Show all                            |
+| Alt+Shift+L           | Show first line only                |
+| / (on numeric keypad) | Show formatting                     |
 
 ### Fields
 
-| Shortcut | Action |
-|---|---|
-| Ctrl+F9 | Insert empty field braces |
-| F9 | Update selected field |
-| Shift+F9 | Toggle field code / result (selected) |
-| Alt+F9 | Toggle all fields' codes / results |
-| Ctrl+F11 | Lock field |
-| Ctrl+Shift+F11 | Unlock field |
-| Ctrl+Shift+F9 | Unlink field (convert to result text) |
-| F11 | Next field |
-| Shift+F11 | Previous field |
+| Shortcut       | Action                                |
+| -------------- | ------------------------------------- |
+| Ctrl+F9        | Insert empty field braces             |
+| F9             | Update selected field                 |
+| Shift+F9       | Toggle field code / result (selected) |
+| Alt+F9         | Toggle all fields' codes / results    |
+| Ctrl+F11       | Lock field                            |
+| Ctrl+Shift+F11 | Unlock field                          |
+| Ctrl+Shift+F9  | Unlink field (convert to result text) |
+| F11            | Next field                            |
+| Shift+F11      | Previous field                        |
 
 ### Proofing
 
-| Shortcut | Action |
-|---|---|
-| F7 | Spelling |
-| Shift+F7 | Thesaurus |
-| Alt+F7 | Find next spelling error (for background spell check) [verify] |
+| Shortcut | Action                                                         |
+| -------- | -------------------------------------------------------------- |
+| F7       | Spelling                                                       |
+| Shift+F7 | Thesaurus                                                      |
+| Alt+F7   | Find next spelling error (for background spell check) [verify] |
 
 ### Insertions
 
-| Shortcut | Insertion |
-|---|---|
-| Ctrl+Enter | Page break |
-| Ctrl+Shift+Enter | Column break |
-| Shift+Enter | Line break (soft return, no new paragraph) |
-| Enter | New paragraph |
-| Ctrl+Tab | Tab character in a table cell (since Tab moves to next cell) |
-| Ctrl+Alt+. | Ellipsis (…) |
-| Ctrl+Alt+C | Copyright (©) |
-| Ctrl+Alt+R | Registered (®) |
-| Ctrl+Alt+T | Trademark (™) |
-| Ctrl+Alt+Hyphen | Em dash (—) (on numeric keypad hyphen) |
-| Ctrl+Hyphen | En dash (–) |
-| Ctrl+Shift+Hyphen | Nonbreaking hyphen |
-| Ctrl+Shift+Space | Nonbreaking space |
-| Ctrl+Alt+A | Insert annotation [verify] |
-| Ctrl+Alt+F | Insert footnote [verify] |
-| Ctrl+Alt+D | Insert endnote [verify] |
+| Shortcut          | Insertion                                                    |
+| ----------------- | ------------------------------------------------------------ |
+| Ctrl+Enter        | Page break                                                   |
+| Ctrl+Shift+Enter  | Column break                                                 |
+| Shift+Enter       | Line break (soft return, no new paragraph)                   |
+| Enter             | New paragraph                                                |
+| Ctrl+Tab          | Tab character in a table cell (since Tab moves to next cell) |
+| Ctrl+Alt+.        | Ellipsis (…)                                                 |
+| Ctrl+Alt+C        | Copyright (©)                                                |
+| Ctrl+Alt+R        | Registered (®)                                               |
+| Ctrl+Alt+T        | Trademark (™)                                                |
+| Ctrl+Alt+Hyphen   | Em dash (—) (on numeric keypad hyphen)                       |
+| Ctrl+Hyphen       | En dash (–)                                                  |
+| Ctrl+Shift+Hyphen | Nonbreaking hyphen                                           |
+| Ctrl+Shift+Space  | Nonbreaking space                                            |
+| Ctrl+Alt+A        | Insert annotation [verify]                                   |
+| Ctrl+Alt+F        | Insert footnote [verify]                                     |
+| Ctrl+Alt+D        | Insert endnote [verify]                                      |
 
 ### Macros
 
-| Shortcut | Action |
-|---|---|
-| Alt+F8 | Macro dialog |
-| Alt+F11 | Macro editor [verify — Alt+F11 in 95 may open WordBasic Macro Editor] |
+| Shortcut | Action                                                                |
+| -------- | --------------------------------------------------------------------- |
+| Alt+F8   | Macro dialog                                                          |
+| Alt+F11  | Macro editor [verify — Alt+F11 in 95 may open WordBasic Macro Editor] |
 
 ### Tables
 
-| Shortcut | Action |
-|---|---|
-| Tab | Next cell (or add new row at end) |
-| Shift+Tab | Previous cell |
-| Ctrl+Tab | Tab character inside cell |
-| Alt+Home | First cell in row |
-| Alt+End | Last cell in row |
-| Alt+PageUp | First cell in column |
-| Alt+PageDown | Last cell in column |
-| Ctrl+Shift+Enter | Split table |
+| Shortcut         | Action                            |
+| ---------------- | --------------------------------- |
+| Tab              | Next cell (or add new row at end) |
+| Shift+Tab        | Previous cell                     |
+| Ctrl+Tab         | Tab character inside cell         |
+| Alt+Home         | First cell in row                 |
+| Alt+End          | Last cell in row                  |
+| Alt+PageUp       | First cell in column              |
+| Alt+PageDown     | Last cell in column               |
+| Ctrl+Shift+Enter | Split table                       |
 
 ### Help
 
-| Shortcut | Action |
-|---|---|
-| F1 | Help Topics (or contextual help) |
+| Shortcut | Action                                            |
+| -------- | ------------------------------------------------- |
+| F1       | Help Topics (or contextual help)                  |
 | Shift+F1 | What's This? cursor (click next element for help) |
 
 ### Windows / Misc
 
-| Shortcut | Action |
-|---|---|
-| Esc | Cancel menu / dialog / selection |
-| F10 | Activate menu bar |
-| Alt | Activate/deactivate menu bar |
-| Alt+F7 | Find next spelling error [verify] |
-| Ctrl+F10 | Maximize document window |
-| Ctrl+F5 | Restore document window size |
+| Shortcut | Action                            |
+| -------- | --------------------------------- |
+| Esc      | Cancel menu / dialog / selection  |
+| F10      | Activate menu bar                 |
+| Alt      | Activate/deactivate menu bar      |
+| Alt+F7   | Find next spelling error [verify] |
+| Ctrl+F10 | Maximize document window          |
+| Ctrl+F5  | Restore document window size      |
 
 ## MDI Behavior
 
@@ -3513,23 +3513,23 @@ Below is the complete Word 95 default keyboard map. Shortcuts are grouped by fun
 
 - Full-featured file search with properties-based filtering.
 - Components:
-    - **File Name** text box (with wildcards).
-    - **Location** combo: drive / folder selector (Include Subfolders checkbox).
-    - **Files of Type** combo (same as Open).
-    - **Search Criteria** expandable list:
-        - Text or Property: find files by text content or by a property.
-        - Date Last Saved: before/after/on.
-        - Date Created: before/after/on.
-        - Last Saved By: username.
-        - Any property from Summary Info.
-        - Multiple criteria joined by And/Or.
-    - **Search Options**:
-        - Match All Word Forms (inflected variants).
-        - Match Case.
-    - **Results List**: filename, size, last modified, folder.
-    - **Preview Pane**: renders the first page of the selected document (if "Save Preview Picture" is enabled in the target doc).
-    - **View**: List / Preview / File Info combo.
-    - **Command and Settings** menu: Open Read Only, Open Copy, Save Search As (stores query for reuse), Delete, Rename, Print, Summary Info.
+  - **File Name** text box (with wildcards).
+  - **Location** combo: drive / folder selector (Include Subfolders checkbox).
+  - **Files of Type** combo (same as Open).
+  - **Search Criteria** expandable list:
+    - Text or Property: find files by text content or by a property.
+    - Date Last Saved: before/after/on.
+    - Date Created: before/after/on.
+    - Last Saved By: username.
+    - Any property from Summary Info.
+    - Multiple criteria joined by And/Or.
+  - **Search Options**:
+    - Match All Word Forms (inflected variants).
+    - Match Case.
+  - **Results List**: filename, size, last modified, folder.
+  - **Preview Pane**: renders the first page of the selected document (if "Save Preview Picture" is enabled in the target doc).
+  - **View**: List / Preview / File Info combo.
+  - **Command and Settings** menu: Open Read Only, Open Copy, Save Search As (stores query for reuse), Delete, Rename, Print, Summary Info.
 
 ### Summary Info Dialog
 
@@ -3543,32 +3543,32 @@ Below is the complete Word 95 default keyboard map. Shortcuts are grouped by fun
 ### Print Dialog (File → Print, Ctrl+P)
 
 - **Printer** group:
-    - Name combo (all installed printers).
-    - Status: Idle / Printing / Offline / Out of Paper.
-    - Type: driver name.
-    - Where: port.
-    - Comment: printer description.
-    - Properties… button (opens printer-specific driver dialog: paper size, resolution, orientation, color, duplex, etc.).
-    - Print to File checkbox (prompts for `.prn` output path).
+  - Name combo (all installed printers).
+  - Status: Idle / Printing / Offline / Out of Paper.
+  - Type: driver name.
+  - Where: port.
+  - Comment: printer description.
+  - Properties… button (opens printer-specific driver dialog: paper size, resolution, orientation, color, duplex, etc.).
+  - Print to File checkbox (prompts for `.prn` output path).
 - **Page Range** group:
-    - ○ All
-    - ○ Current Page
-    - ○ Selection (grayed unless there is a selection)
-    - ○ Pages: text field accepting page numbers and ranges separated by commas (e.g., `1,3-5,8-10`).
+  - ○ All
+  - ○ Current Page
+  - ○ Selection (grayed unless there is a selection)
+  - ○ Pages: text field accepting page numbers and ranges separated by commas (e.g., `1,3-5,8-10`).
 - **Copies** group:
-    - Number of Copies spin.
-    - Collate checkbox (default on): when on, prints sets 1-N then 1-N; when off, prints all copies of page 1 then page 2 etc.
+  - Number of Copies spin.
+  - Collate checkbox (default on): when on, prints sets 1-N then 1-N; when off, prints all copies of page 1 then page 2 etc.
 - **Print What** combo:
-    - Document
-    - Summary Info
-    - Annotations (a list of annotation texts)
-    - Styles (every style's name and description)
-    - AutoText Entries
-    - Key Assignments (custom keyboard shortcuts)
+  - Document
+  - Summary Info
+  - Annotations (a list of annotation texts)
+  - Styles (every style's name and description)
+  - AutoText Entries
+  - Key Assignments (custom keyboard shortcuts)
 - **Print** combo:
-    - All Pages in Range
-    - Odd Pages
-    - Even Pages
+  - All Pages in Range
+  - Odd Pages
+  - Even Pages
 - **Options…** button: opens Print tab of Options dialog.
 
 ### Print Preview
@@ -3576,16 +3576,16 @@ Below is the complete Word 95 default keyboard map. Shortcuts are grouped by fun
 - View → Print Preview (Ctrl+F2).
 - Shows pages as they will print.
 - Print Preview toolbar:
-    - Print button.
-    - Magnifier toggle (arrow cursor with + / arrow cursor with text-edit).
-    - One Page button.
-    - Multiple Pages dropdown (pick grid: 1×1, 1×2, 1×3, 2×1, 2×2, 2×3, 3×3, 6×3).
-    - Zoom combo.
-    - View Ruler toggle.
-    - Shrink to Fit button: reduces document's font sizes to eliminate the last partial page if it has < 1/3 of a full page of content.
-    - Full Screen toggle.
-    - Close button.
-    - Help button.
+  - Print button.
+  - Magnifier toggle (arrow cursor with + / arrow cursor with text-edit).
+  - One Page button.
+  - Multiple Pages dropdown (pick grid: 1×1, 1×2, 1×3, 2×1, 2×2, 2×3, 3×3, 6×3).
+  - Zoom combo.
+  - View Ruler toggle.
+  - Shrink to Fit button: reduces document's font sizes to eliminate the last partial page if it has < 1/3 of a full page of content.
+  - Full Screen toggle.
+  - Close button.
+  - Help button.
 - **Margin Edit in Preview**: drag the page margins directly on the rulers (appearing as gray bars on the page edges).
 - **Caret Edit in Preview**: with Magnifier off, click in text to place caret and type.
 
@@ -3604,9 +3604,9 @@ Below is the complete Word 95 default keyboard map. Shortcuts are grouped by fun
 - Toggled on via the TipWizard button on the Standard toolbar or Options → General → TipWizard Active.
 - Shows one tip at a time; tips rotate automatically or can be advanced/rewound manually.
 - Tips are context-aware: Word monitors user actions for "inefficient" patterns and offers a tip.
-    - Typing many spaces to center? Tip: "Use the Center button or Ctrl+E."
-    - Using Enter to force spacing? Tip: "Use Space Before/After."
-    - Repeated cut-paste within a paragraph? Tip: "Use Format Painter."
+  - Typing many spaces to center? Tip: "Use the Center button or Ctrl+E."
+  - Using Enter to force spacing? Tip: "Use Space Before/After."
+  - Repeated cut-paste within a paragraph? Tip: "Use Format Painter."
 - **Show Me** button (appears on certain tips): plays a brief animated demo of the suggested feature.
 - Tips database: a set of ~150 tips in the Tips.doc file.
 
@@ -3624,8 +3624,8 @@ Below is the complete Word 95 default keyboard map. Shortcuts are grouped by fun
 - Opens a dialog for WordPerfect 5.1/6.x users.
 - Command list: common WP commands (Block, Center, Flush Right, Format, List Files, Merge, Spell, Thesaurus, Underline, Bold, Italic, Font, Retrieve, Save, Exit, …).
 - Click a WP command to see:
-    - The Word equivalent (command name, menu path, keyboard shortcut).
-    - Optional "Demo" button (plays animated demo of the Word way).
+  - The Word equivalent (command name, menu path, keyboard shortcut).
+  - Optional "Demo" button (plays animated demo of the Word way).
 - Options → General → Help for WordPerfect Users: when on, pressing a WP-style key sequence (like `/` for menu) displays instructions for the Word way.
 - Options → General → Navigation Keys for WordPerfect Users: when on, PageUp/PageDown use WP semantics (screens, not document-relative), Esc behaves like WP.
 
@@ -3656,9 +3656,9 @@ Below is the complete Word 95 default keyboard map. Shortcuts are grouped by fun
 
 - When opening a document that uses a font not installed locally, Word offers substitution.
 - Options → Compatibility → Font Substitution… dialog:
-    - Missing Document Font list.
-    - Substituted Font combo (defaults to the best match).
-    - "Convert Permanently" button: replaces the font in the document's storage.
+  - Missing Document Font list.
+  - Substituted Font combo (defaults to the best match).
+  - "Convert Permanently" button: replaces the font in the document's storage.
 
 ### Compatibility Options
 
@@ -3722,14 +3722,14 @@ Word 95 opens the following formats via its converter DLLs:
 ### Command-Line Arguments
 
 - `WinWord.exe [file] [/n] [/m] [/t] [/f] [/q] [/mMacroName] [/pxprintername]`:
-    - file: document to open on startup.
-    - `/n`: start with no new document (show empty workspace).
-    - `/m`: disable AutoExec macros.
-    - `/t`: open as template (for edit, not as new-doc).
-    - `/f`: force Options dialog first.
-    - `/q`: quiet startup (suppress Tip of Day).
-    - `/m{MacroName}`: run named macro after startup.
-    - `/p{PrinterName}`: set default printer for session.
+  - file: document to open on startup.
+  - `/n`: start with no new document (show empty workspace).
+  - `/m`: disable AutoExec macros.
+  - `/t`: open as template (for edit, not as new-doc).
+  - `/f`: force Options dialog first.
+  - `/q`: quiet startup (suppress Tip of Day).
+  - `/m{MacroName}`: run named macro after startup.
+  - `/p{PrinterName}`: set default printer for session.
 
 ### AutoRecover / AutoSave
 
@@ -3758,109 +3758,109 @@ For each document, the `.doc` file contains:
 - **Pictures** — inline metadata + bitmap/metafile data.
 - **Summary Info** — stored in the OLE storage's SummaryInformation stream.
 
-Our target is DOCX — we map each of these to the corresponding ECMA-376 part (word/document.xml, word/styles.xml, word/numbering.xml, word/settings.xml, word/fontTable.xml, word/media/*, word/embeddings/*, etc.) and preserve the semantics.
+Our target is DOCX — we map each of these to the corresponding ECMA-376 part (word/document.xml, word/styles.xml, word/numbering.xml, word/settings.xml, word/fontTable.xml, word/media/_, word/embeddings/_, etc.) and preserve the semantics.
 
 ## Feature Availability Flags (for our implementation checklist)
 
 The following table summarizes whether each feature is a must-have ("M"), nice-to-have ("N"), or can be deferred ("D") for our Word 95 parity implementation.
 
-| Feature | Priority |
-|---|---|
-| Menu bar with all 9 menus | M |
-| Standard toolbar | M |
-| Formatting toolbar | M |
-| Ruler (horizontal) | M |
-| Ruler (vertical) | M |
-| Normal view | M |
-| Page Layout view | M |
-| Outline view | M |
-| Master Document view | N |
-| Full Screen view | M |
-| Print Preview | M |
-| Status bar with all regions | M |
-| Right-click context menus (all 8 kinds) | M |
-| MDI with New Window / Split / Arrange | M |
-| Undo/Redo with history dropdown | M |
-| Find/Replace/Go To (tabbed) | M |
-| Bookmarks | M |
-| Styles (paragraph) | M |
-| Templates (.dot equivalent in our format) | M |
-| Sections (with per-section page setup) | M |
-| Headers/footers (3 variants per section) | M |
-| Footnotes / Endnotes | M |
-| Page numbers (all formats) | M |
-| Tables (all features except Draw Table) | M |
-| Convert Text ⇌ Table | M |
-| Table AutoFormat | M |
-| Table Sort | M |
-| Table Formula | M |
-| Frames (floating, wrapping) | M |
-| Insert Picture (all 15 formats) | M |
-| OLE 2.0 Insert Object | M |
-| Equation Editor 1.x/2.x | M |
-| WordArt 2.0 | M |
-| Organization Chart 2.0 | N |
-| Microsoft Graph 5.0 | N |
-| Symbol dialog | M |
-| Field dialog + all field codes | M |
-| Field codes toggle (Alt+F9) | M |
-| Form fields (Text, Checkbox, Drop-Down) | M |
-| Protect Document | M |
-| Break dialog (all 4 section types + page + column) | M |
-| Spelling (modal and background) | M |
-| Grammar | N |
-| Thesaurus | M |
-| Hyphenation (auto + manual) | M |
-| Language marking | M |
-| Word Count | M |
-| AutoCorrect | M |
-| AutoText | M |
-| AutoFormat (now + as-you-type) | M |
-| Mail Merge Helper (all sources, all output) | M |
-| Envelopes and Labels | M |
-| Revisions (Mark, Accept/Reject, Compare, Merge) | M |
-| Annotations (with pane) | M |
-| WordBasic macro execution | D (read-only preservation) |
-| Customize (Toolbars, Menus, Keyboard) | M |
-| Options dialog (12 tabs) | M |
-| File → New (with template picker) | M |
-| Find File | N |
-| Summary Info | M |
-| Print dialog (all options) | M |
-| TipWizard | N |
-| Answer Wizard | N |
-| WordPerfect Help | D |
-| Tip of the Day on startup | N |
-| Drawing layer (all shapes, fill/line/shadow, group) | M |
-| Rotate 90° / Flip | M |
-| Snap to Grid | M |
-| Freeform/polyline reshape | M |
-| 3-D effects on shapes | D |
-| Pattern fills | N |
-| Gradient fills (Word 95 only has solid + pattern) | — |
-| Drop Cap | M |
-| Columns (up to 6) | M |
-| Bullets and Numbering (7 styles each) | M |
-| Multilevel / Outline numbered | M |
-| Heading numbering | M |
-| Borders and Shading (paragraph + table) | M |
-| Style Gallery | N |
-| Organizer | M |
-| Global templates | M |
-| MRU list | M |
-| Confirm Conversion at Open | M |
-| AutoSave to recovery file | M |
-| Fast Saves | D |
-| Backup copies | M |
-| Blue background, white text | N |
-| Style area | N |
-| Print preview shrink-to-fit | N |
-| Insert Database | N |
-| Table Wizard | N |
-| Built-in wizards (Letter, Memo, Fax, Resume, ...) | N |
-| Calendar wizard | D |
-| Internet Assistant (hyperlinks + HTML) | D |
-| The Microsoft Network | D |
+| Feature                                             | Priority                   |
+| --------------------------------------------------- | -------------------------- |
+| Menu bar with all 9 menus                           | M                          |
+| Standard toolbar                                    | M                          |
+| Formatting toolbar                                  | M                          |
+| Ruler (horizontal)                                  | M                          |
+| Ruler (vertical)                                    | M                          |
+| Normal view                                         | M                          |
+| Page Layout view                                    | M                          |
+| Outline view                                        | M                          |
+| Master Document view                                | N                          |
+| Full Screen view                                    | M                          |
+| Print Preview                                       | M                          |
+| Status bar with all regions                         | M                          |
+| Right-click context menus (all 8 kinds)             | M                          |
+| MDI with New Window / Split / Arrange               | M                          |
+| Undo/Redo with history dropdown                     | M                          |
+| Find/Replace/Go To (tabbed)                         | M                          |
+| Bookmarks                                           | M                          |
+| Styles (paragraph)                                  | M                          |
+| Templates (.dot equivalent in our format)           | M                          |
+| Sections (with per-section page setup)              | M                          |
+| Headers/footers (3 variants per section)            | M                          |
+| Footnotes / Endnotes                                | M                          |
+| Page numbers (all formats)                          | M                          |
+| Tables (all features except Draw Table)             | M                          |
+| Convert Text ⇌ Table                                | M                          |
+| Table AutoFormat                                    | M                          |
+| Table Sort                                          | M                          |
+| Table Formula                                       | M                          |
+| Frames (floating, wrapping)                         | M                          |
+| Insert Picture (all 15 formats)                     | M                          |
+| OLE 2.0 Insert Object                               | M                          |
+| Equation Editor 1.x/2.x                             | M                          |
+| WordArt 2.0                                         | M                          |
+| Organization Chart 2.0                              | N                          |
+| Microsoft Graph 5.0                                 | N                          |
+| Symbol dialog                                       | M                          |
+| Field dialog + all field codes                      | M                          |
+| Field codes toggle (Alt+F9)                         | M                          |
+| Form fields (Text, Checkbox, Drop-Down)             | M                          |
+| Protect Document                                    | M                          |
+| Break dialog (all 4 section types + page + column)  | M                          |
+| Spelling (modal and background)                     | M                          |
+| Grammar                                             | N                          |
+| Thesaurus                                           | M                          |
+| Hyphenation (auto + manual)                         | M                          |
+| Language marking                                    | M                          |
+| Word Count                                          | M                          |
+| AutoCorrect                                         | M                          |
+| AutoText                                            | M                          |
+| AutoFormat (now + as-you-type)                      | M                          |
+| Mail Merge Helper (all sources, all output)         | M                          |
+| Envelopes and Labels                                | M                          |
+| Revisions (Mark, Accept/Reject, Compare, Merge)     | M                          |
+| Annotations (with pane)                             | M                          |
+| WordBasic macro execution                           | D (read-only preservation) |
+| Customize (Toolbars, Menus, Keyboard)               | M                          |
+| Options dialog (12 tabs)                            | M                          |
+| File → New (with template picker)                   | M                          |
+| Find File                                           | N                          |
+| Summary Info                                        | M                          |
+| Print dialog (all options)                          | M                          |
+| TipWizard                                           | N                          |
+| Answer Wizard                                       | N                          |
+| WordPerfect Help                                    | D                          |
+| Tip of the Day on startup                           | N                          |
+| Drawing layer (all shapes, fill/line/shadow, group) | M                          |
+| Rotate 90° / Flip                                   | M                          |
+| Snap to Grid                                        | M                          |
+| Freeform/polyline reshape                           | M                          |
+| 3-D effects on shapes                               | D                          |
+| Pattern fills                                       | N                          |
+| Gradient fills (Word 95 only has solid + pattern)   | —                          |
+| Drop Cap                                            | M                          |
+| Columns (up to 6)                                   | M                          |
+| Bullets and Numbering (7 styles each)               | M                          |
+| Multilevel / Outline numbered                       | M                          |
+| Heading numbering                                   | M                          |
+| Borders and Shading (paragraph + table)             | M                          |
+| Style Gallery                                       | N                          |
+| Organizer                                           | M                          |
+| Global templates                                    | M                          |
+| MRU list                                            | M                          |
+| Confirm Conversion at Open                          | M                          |
+| AutoSave to recovery file                           | M                          |
+| Fast Saves                                          | D                          |
+| Backup copies                                       | M                          |
+| Blue background, white text                         | N                          |
+| Style area                                          | N                          |
+| Print preview shrink-to-fit                         | N                          |
+| Insert Database                                     | N                          |
+| Table Wizard                                        | N                          |
+| Built-in wizards (Letter, Memo, Fax, Resume, ...)   | N                          |
+| Calendar wizard                                     | D                          |
+| Internet Assistant (hyperlinks + HTML)              | D                          |
+| The Microsoft Network                               | D                          |
 
 ## Appendix A: Dialog Box Layout Conventions
 
@@ -3890,45 +3890,45 @@ The following table summarizes whether each feature is a must-have ("M"), nice-t
 
 The standard 16-color palette used for font color, highlight color, line/fill colors:
 
-| Index | Name | RGB |
-|---|---|---|
-| 0 | Auto | (defer to system) |
-| 1 | Black | 00 00 00 |
-| 2 | Blue | 00 00 FF |
-| 3 | Cyan | 00 FF FF |
-| 4 | Green | 00 FF 00 |
-| 5 | Magenta | FF 00 FF |
-| 6 | Red | FF 00 00 |
-| 7 | Yellow | FF FF 00 |
-| 8 | White | FF FF FF |
-| 9 | Dark Blue | 00 00 80 |
-| 10 | Dark Cyan | 00 80 80 |
-| 11 | Dark Green | 00 80 00 |
-| 12 | Dark Magenta | 80 00 80 |
-| 13 | Dark Red | 80 00 00 |
-| 14 | Dark Yellow | 80 80 00 |
-| 15 | Dark Gray | 80 80 80 |
-| 16 | Light Gray | C0 C0 C0 |
+| Index | Name         | RGB               |
+| ----- | ------------ | ----------------- |
+| 0     | Auto         | (defer to system) |
+| 1     | Black        | 00 00 00          |
+| 2     | Blue         | 00 00 FF          |
+| 3     | Cyan         | 00 FF FF          |
+| 4     | Green        | 00 FF 00          |
+| 5     | Magenta      | FF 00 FF          |
+| 6     | Red          | FF 00 00          |
+| 7     | Yellow       | FF FF 00          |
+| 8     | White        | FF FF FF          |
+| 9     | Dark Blue    | 00 00 80          |
+| 10    | Dark Cyan    | 00 80 80          |
+| 11    | Dark Green   | 00 80 00          |
+| 12    | Dark Magenta | 80 00 80          |
+| 13    | Dark Red     | 80 00 00          |
+| 14    | Dark Yellow  | 80 80 00          |
+| 15    | Dark Gray    | 80 80 80          |
+| 16    | Light Gray   | C0 C0 C0          |
 
 Highlight palette (15 colors + None; introduced Word 95):
 
-| Index | Name | RGB |
-|---|---|---|
-| 1 | Yellow | FF FF 00 |
-| 2 | Bright Green | 00 FF 00 |
-| 3 | Turquoise | 00 FF FF |
-| 4 | Pink | FF 00 FF |
-| 5 | Blue | 00 00 FF |
-| 6 | Red | FF 00 00 |
-| 7 | Dark Blue | 00 00 80 |
-| 8 | Teal | 00 80 80 |
-| 9 | Green | 00 80 00 |
-| 10 | Violet | 80 00 80 |
-| 11 | Dark Red | 80 00 00 |
-| 12 | Dark Yellow | 80 80 00 |
-| 13 | Gray 50% | 80 80 80 |
-| 14 | Gray 25% | C0 C0 C0 |
-| 15 | Black | 00 00 00 |
+| Index | Name         | RGB      |
+| ----- | ------------ | -------- |
+| 1     | Yellow       | FF FF 00 |
+| 2     | Bright Green | 00 FF 00 |
+| 3     | Turquoise    | 00 FF FF |
+| 4     | Pink         | FF 00 FF |
+| 5     | Blue         | 00 00 FF |
+| 6     | Red          | FF 00 00 |
+| 7     | Dark Blue    | 00 00 80 |
+| 8     | Teal         | 00 80 80 |
+| 9     | Green        | 00 80 00 |
+| 10    | Violet       | 80 00 80 |
+| 11    | Dark Red     | 80 00 00 |
+| 12    | Dark Yellow  | 80 80 00 |
+| 13    | Gray 50%     | 80 80 80 |
+| 14    | Gray 25%     | C0 C0 C0 |
+| 15    | Black        | 00 00 00 |
 
 ## Appendix D: Numbered List Format Strings
 
@@ -3982,96 +3982,96 @@ Supported number formats within placeholders:
 
 For round-tripping purposes, when a WordBasic macro appears in a document, we record the text verbatim but do not execute. We also maintain a mapping from WordBasic command names to our internal command IDs for documentation/user-facing warnings:
 
-| WordBasic Command | Our Internal Command |
-|---|---|
-| FileNewDefault | file.new |
-| FileOpen | file.open |
-| FileSave | file.save |
-| FileSaveAs | file.saveAs |
-| FileClose | file.close |
-| FilePrint | file.print |
-| FileExit | app.exit |
-| EditUndo | edit.undo |
-| EditRedo | edit.redo |
-| EditCut | edit.cut |
-| EditCopy | edit.copy |
-| EditPaste | edit.paste |
-| EditClear | edit.clear |
-| EditSelectAll | edit.selectAll |
-| EditFind | edit.find |
-| EditReplace | edit.replace |
-| EditGoTo | edit.goTo |
-| EditBookmark | edit.bookmark |
-| EditAutoText | edit.autoText |
-| InsertPara | insert.paragraph |
-| InsertBreak | insert.break |
-| InsertDateTime | insert.dateTime |
-| InsertField | insert.field |
-| InsertFootnote | insert.footnote |
-| InsertPicture | insert.picture |
-| InsertObject | insert.object |
-| InsertSymbol | insert.symbol |
-| InsertTable | insert.table |
-| FormatFont | format.font |
-| FormatParagraph | format.paragraph |
-| FormatBordersAndShading | format.bordersAndShading |
-| FormatColumns | format.columns |
-| FormatChangeCase | format.changeCase |
+| WordBasic Command         | Our Internal Command       |
+| ------------------------- | -------------------------- |
+| FileNewDefault            | file.new                   |
+| FileOpen                  | file.open                  |
+| FileSave                  | file.save                  |
+| FileSaveAs                | file.saveAs                |
+| FileClose                 | file.close                 |
+| FilePrint                 | file.print                 |
+| FileExit                  | app.exit                   |
+| EditUndo                  | edit.undo                  |
+| EditRedo                  | edit.redo                  |
+| EditCut                   | edit.cut                   |
+| EditCopy                  | edit.copy                  |
+| EditPaste                 | edit.paste                 |
+| EditClear                 | edit.clear                 |
+| EditSelectAll             | edit.selectAll             |
+| EditFind                  | edit.find                  |
+| EditReplace               | edit.replace               |
+| EditGoTo                  | edit.goTo                  |
+| EditBookmark              | edit.bookmark              |
+| EditAutoText              | edit.autoText              |
+| InsertPara                | insert.paragraph           |
+| InsertBreak               | insert.break               |
+| InsertDateTime            | insert.dateTime            |
+| InsertField               | insert.field               |
+| InsertFootnote            | insert.footnote            |
+| InsertPicture             | insert.picture             |
+| InsertObject              | insert.object              |
+| InsertSymbol              | insert.symbol              |
+| InsertTable               | insert.table               |
+| FormatFont                | format.font                |
+| FormatParagraph           | format.paragraph           |
+| FormatBordersAndShading   | format.bordersAndShading   |
+| FormatColumns             | format.columns             |
+| FormatChangeCase          | format.changeCase          |
 | FormatBulletsAndNumbering | format.bulletsAndNumbering |
-| FormatStyle | format.style |
-| FormatAutoFormat | format.autoFormat |
-| FormatFrame | format.frame |
-| Bold | format.bold |
-| Italic | format.italic |
-| Underline | format.underline |
-| WordUnderline | format.underline.word |
-| DoubleUnderline | format.underline.double |
-| DottedUnderline | format.underline.dotted |
-| Strikethrough | format.strikethrough |
-| Hidden | format.hidden |
-| SmallCaps | format.smallCaps |
-| AllCaps | format.allCaps |
-| Superscript | format.superscript |
-| Subscript | format.subscript |
-| TableInsertTable | table.insert |
-| TableInsertRow | table.insertRow |
-| TableDeleteRow | table.deleteRow |
-| TableMergeCells | table.mergeCells |
-| TableSplitCells | table.splitCells |
-| TableSort | table.sort |
-| TableFormula | table.formula |
-| TableAutoFormat | table.autoFormat |
-| ToolsSpelling | tools.spelling |
-| ToolsGrammar | tools.grammar |
-| ToolsThesaurus | tools.thesaurus |
-| ToolsHyphenation | tools.hyphenation |
-| ToolsWordCount | tools.wordCount |
-| ToolsAutoCorrect | tools.autoCorrect |
-| ToolsMacro | tools.macro |
-| ViewNormal | view.normal |
-| ViewOutline | view.outline |
-| ViewPage | view.pageLayout |
-| ViewMasterDocument | view.masterDocument |
-| ViewZoom | view.zoom |
-| ViewFullScreen | view.fullScreen |
-| ViewFieldCodes | view.fieldCodes |
-| CharLeft | nav.charLeft |
-| CharRight | nav.charRight |
-| WordLeft | nav.wordLeft |
-| WordRight | nav.wordRight |
-| LineUp | nav.lineUp |
-| LineDown | nav.lineDown |
-| StartOfLine | nav.startOfLine |
-| EndOfLine | nav.endOfLine |
-| StartOfDocument | nav.startOfDocument |
-| EndOfDocument | nav.endOfDocument |
-| ParaUp | nav.paragraphUp |
-| ParaDown | nav.paragraphDown |
-| ExtendSelection | nav.extendSelection |
-| ShrinkSelection | nav.shrinkSelection |
-| SelectCurWord | nav.selectWord |
-| SelectCurSent | nav.selectSentence |
-| SelectCurPara | nav.selectParagraph |
+| FormatStyle               | format.style               |
+| FormatAutoFormat          | format.autoFormat          |
+| FormatFrame               | format.frame               |
+| Bold                      | format.bold                |
+| Italic                    | format.italic              |
+| Underline                 | format.underline           |
+| WordUnderline             | format.underline.word      |
+| DoubleUnderline           | format.underline.double    |
+| DottedUnderline           | format.underline.dotted    |
+| Strikethrough             | format.strikethrough       |
+| Hidden                    | format.hidden              |
+| SmallCaps                 | format.smallCaps           |
+| AllCaps                   | format.allCaps             |
+| Superscript               | format.superscript         |
+| Subscript                 | format.subscript           |
+| TableInsertTable          | table.insert               |
+| TableInsertRow            | table.insertRow            |
+| TableDeleteRow            | table.deleteRow            |
+| TableMergeCells           | table.mergeCells           |
+| TableSplitCells           | table.splitCells           |
+| TableSort                 | table.sort                 |
+| TableFormula              | table.formula              |
+| TableAutoFormat           | table.autoFormat           |
+| ToolsSpelling             | tools.spelling             |
+| ToolsGrammar              | tools.grammar              |
+| ToolsThesaurus            | tools.thesaurus            |
+| ToolsHyphenation          | tools.hyphenation          |
+| ToolsWordCount            | tools.wordCount            |
+| ToolsAutoCorrect          | tools.autoCorrect          |
+| ToolsMacro                | tools.macro                |
+| ViewNormal                | view.normal                |
+| ViewOutline               | view.outline               |
+| ViewPage                  | view.pageLayout            |
+| ViewMasterDocument        | view.masterDocument        |
+| ViewZoom                  | view.zoom                  |
+| ViewFullScreen            | view.fullScreen            |
+| ViewFieldCodes            | view.fieldCodes            |
+| CharLeft                  | nav.charLeft               |
+| CharRight                 | nav.charRight              |
+| WordLeft                  | nav.wordLeft               |
+| WordRight                 | nav.wordRight              |
+| LineUp                    | nav.lineUp                 |
+| LineDown                  | nav.lineDown               |
+| StartOfLine               | nav.startOfLine            |
+| EndOfLine                 | nav.endOfLine              |
+| StartOfDocument           | nav.startOfDocument        |
+| EndOfDocument             | nav.endOfDocument          |
+| ParaUp                    | nav.paragraphUp            |
+| ParaDown                  | nav.paragraphDown          |
+| ExtendSelection           | nav.extendSelection        |
+| ShrinkSelection           | nav.shrinkSelection        |
+| SelectCurWord             | nav.selectWord             |
+| SelectCurSent             | nav.selectSentence         |
+| SelectCurPara             | nav.selectParagraph        |
 
 (Full mapping: all ~900 commands catalogued in a separate `wordbasic-commands.json` reference to be produced during implementation. The list above is representative of the top 100 most commonly macro'd commands.)
 
@@ -4081,21 +4081,21 @@ The status bar is 22 pixels tall, using the default Windows 95 system font (Smal
 
 Left to right (typical Page Layout view):
 
-| Region | Typical Width | Text |
-|---|---|---|
-| Page number | 60 px | `Page 3` |
-| Section number | 50 px | `Sec 1` |
-| Total pages | 40 px | `3/12` |
-| Vertical position | 60 px | `At 4.5"` |
-| Line number | 30 px | `Ln 17` |
-| Column number | 30 px | `Col 42` |
-| REC | 25 px | gray/dark `REC` |
-| MRK | 25 px | |
-| EXT | 25 px | |
-| OVR | 25 px | |
-| WPH | 25 px | |
-| Book icon | 18 px | background spellcheck status |
-| (flexible space) | * | |
+| Region            | Typical Width | Text                         |
+| ----------------- | ------------- | ---------------------------- |
+| Page number       | 60 px         | `Page 3`                     |
+| Section number    | 50 px         | `Sec 1`                      |
+| Total pages       | 40 px         | `3/12`                       |
+| Vertical position | 60 px         | `At 4.5"`                    |
+| Line number       | 30 px         | `Ln 17`                      |
+| Column number     | 30 px         | `Col 42`                     |
+| REC               | 25 px         | gray/dark `REC`              |
+| MRK               | 25 px         |                              |
+| EXT               | 25 px         |                              |
+| OVR               | 25 px         |                              |
+| WPH               | 25 px         |                              |
+| Book icon         | 18 px         | background spellcheck status |
+| (flexible space)  | \*            |                              |
 
 All regions are clickable (REC opens Record Macro dialog; MRK/EXT/OVR/WPH toggle; position regions open Go To; book icon toggles background spelling).
 
@@ -4105,17 +4105,17 @@ To avoid mnemonic conflicts across the 9 menus, Word 95 assigns unique access le
 
 Menu-bar mnemonics:
 
-| Menu | Mnemonic |
-|---|---|
-| File | F |
-| Edit | E |
-| View | V |
-| Insert | I |
-| Format | O |
-| Tools | T |
-| Table | A |
-| Window | W |
-| Help | H |
+| Menu   | Mnemonic |
+| ------ | -------- |
+| File   | F        |
+| Edit   | E        |
+| View   | V        |
+| Insert | I        |
+| Format | O        |
+| Tools  | T        |
+| Table  | A        |
+| Window | W        |
+| Help   | H        |
 
 Note Format uses "O" because "F" is taken by File.
 
@@ -4125,7 +4125,7 @@ Exact text of commonly-seen Word 95 error dialogs:
 
 - "The disk is full. Save the document to a different disk or remove unneeded files." (title: "Microsoft Word")
 - "This action cannot be completed because the {filename} file is in use. Close the file and try again." (title: "Microsoft Word")
-- "Word cannot save or create this file. The disk may be full or write-protected. Try one or more of the following: * Free more memory. * Make sure the disk you want to save the file on is not full, write-protected, or damaged. (Save)"
+- "Word cannot save or create this file. The disk may be full or write-protected. Try one or more of the following: _ Free more memory. _ Make sure the disk you want to save the file on is not full, write-protected, or damaged. (Save)"
 - "Do you want to save the changes you made to {filename}?" — Yes / No / Cancel.
 - "Changes have been made that affect the global template, Normal.dot. Do you want to save those changes?" — Yes / No.
 - "Word cannot open this document. The file may be damaged or in a format Word cannot open." (title: "Microsoft Word")
@@ -5247,34 +5247,34 @@ This is the "expert" category showing every named command. Examples include:
 
 To help separate Word 95 from its predecessor Word 6.0:
 
-| Feature | Word 6.0 | Word 95 |
-|---|---|---|
-| Platform | 16-bit Windows 3.1 | 32-bit Windows 95 / NT |
-| Long filename support | No (8.3 DOS names) | Yes (Windows 95 VFAT) |
-| TipWizard | No | Yes |
-| Answer Wizard | No | Yes |
-| Background spell check (red squiggle) | No | Yes |
-| Automatic Save (recovery) | No (only File → Save) | Yes (N-minute AutoSave) |
-| AutoCorrect | Yes | Yes (expanded dictionary, new options) |
-| AutoText | Glossary (renamed AutoText) | AutoText (still allows legacy term) |
-| Find All Word Forms | No | Yes |
-| Address Book / Insert Address | No | Yes |
-| Highlight (character highlighting) | No | Yes |
-| Style Gallery | No | Yes |
-| Template Wizards (Letter, Fax, Memo, Resume) | Some | Comprehensive |
-| WordMail | No | Yes (integration with Exchange) |
-| Shrink to Fit in Print Preview | No | Yes |
-| Large document threshold | Slower | Faster via 32-bit |
-| Multiple font sizes per paragraph | Yes | Yes |
-| Drawing layer | Yes | Yes (improved; WordArt 2.0) |
-| Mail Merge | Yes (simpler) | Yes (full Helper with query options) |
-| WordBasic | Yes | Yes (backwards compatible) |
-| OLE | OLE 1.x mostly | OLE 2.0 (in-place activation) |
-| MDI | Yes | Yes |
-| Print Preview | Basic | Enhanced (margin-edit) |
-| Spelling engine | Inso Houghton Mifflin | Same (updated lexicon) |
-| Grammar | No (pre-release or optional) | Yes (CIRRUS by Inso) |
-| Thesaurus | Inso | Same |
+| Feature                                      | Word 6.0                     | Word 95                                |
+| -------------------------------------------- | ---------------------------- | -------------------------------------- |
+| Platform                                     | 16-bit Windows 3.1           | 32-bit Windows 95 / NT                 |
+| Long filename support                        | No (8.3 DOS names)           | Yes (Windows 95 VFAT)                  |
+| TipWizard                                    | No                           | Yes                                    |
+| Answer Wizard                                | No                           | Yes                                    |
+| Background spell check (red squiggle)        | No                           | Yes                                    |
+| Automatic Save (recovery)                    | No (only File → Save)        | Yes (N-minute AutoSave)                |
+| AutoCorrect                                  | Yes                          | Yes (expanded dictionary, new options) |
+| AutoText                                     | Glossary (renamed AutoText)  | AutoText (still allows legacy term)    |
+| Find All Word Forms                          | No                           | Yes                                    |
+| Address Book / Insert Address                | No                           | Yes                                    |
+| Highlight (character highlighting)           | No                           | Yes                                    |
+| Style Gallery                                | No                           | Yes                                    |
+| Template Wizards (Letter, Fax, Memo, Resume) | Some                         | Comprehensive                          |
+| WordMail                                     | No                           | Yes (integration with Exchange)        |
+| Shrink to Fit in Print Preview               | No                           | Yes                                    |
+| Large document threshold                     | Slower                       | Faster via 32-bit                      |
+| Multiple font sizes per paragraph            | Yes                          | Yes                                    |
+| Drawing layer                                | Yes                          | Yes (improved; WordArt 2.0)            |
+| Mail Merge                                   | Yes (simpler)                | Yes (full Helper with query options)   |
+| WordBasic                                    | Yes                          | Yes (backwards compatible)             |
+| OLE                                          | OLE 1.x mostly               | OLE 2.0 (in-place activation)          |
+| MDI                                          | Yes                          | Yes                                    |
+| Print Preview                                | Basic                        | Enhanced (margin-edit)                 |
+| Spelling engine                              | Inso Houghton Mifflin        | Same (updated lexicon)                 |
+| Grammar                                      | No (pre-release or optional) | Yes (CIRRUS by Inso)                   |
+| Thesaurus                                    | Inso                         | Same                                   |
 
 ## Appendix Z: Final Checklist for Implementation
 

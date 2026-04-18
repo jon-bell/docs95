@@ -20,15 +20,18 @@ An `EngineBridge` (provided via React Context, not a module-scoped singleton —
 ## Consequences
 
 ### Positive
+
 - Fine-grained reactivity; React renders only affected slices (`docs/architecture/ui-components.md:268-287`).
 - Domain undo remains pure: no UI state accidentally inside a patch.
 - Stores segregate by volatility, matching the context-splitting guidance in `ui-components.md:3094-3106`.
 
 ### Negative
+
 - Three subscribe paths for contributors to learn.
 - Cross-store invariants (theme → prefs → engine typography port) require explicit orchestration.
 
 ### Follow-up required
+
 - `EngineBridge` must be provided via React Context at the composition root; `getEngineBridge()` singleton pattern (`ui-components.md:3201-3204`) is removed.
 
 ## Alternatives considered

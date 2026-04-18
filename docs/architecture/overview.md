@@ -176,12 +176,13 @@ A plugin declares:
 ```ts
 interface Plugin {
   id: string;
-  schema?: SchemaExtension;       // new node types / marks
-  commands?: CommandDef[];         // registered with CommandBus
-  keymap?: KeyBinding[];           // default accelerators
-  inputHandlers?: InputHandler[];  // beforeInput, paste, drop
-  decorations?: DecorationSource[];// UI-only overlays
-  serializers?: {                  // ast↔domain mappers per format
+  schema?: SchemaExtension; // new node types / marks
+  commands?: CommandDef[]; // registered with CommandBus
+  keymap?: KeyBinding[]; // default accelerators
+  inputHandlers?: InputHandler[]; // beforeInput, paste, drop
+  decorations?: DecorationSource[]; // UI-only overlays
+  serializers?: {
+    // ast↔domain mappers per format
     docx?: DocxMapper;
     rtf?: RtfMapper;
     html?: HtmlMapper;
@@ -371,16 +372,16 @@ Each milestone ends with a green CI, a demo, and an updated ADR log.
 
 ## 11. Risks
 
-| Risk | Likelihood | Impact | Mitigation |
-|---|---|---|---|
-| Custom editor (no contenteditable) breaks IME / AT | High | High | IME test matrix, accessibility tree first-class, reference against VS Code and CodeMirror patterns |
-| Pagination divergence from Word on complex tables | Medium | High | Golden corpus + cross-renderer tests against LibreOffice; incremental hardening |
-| Performance regresses on 1000-page docs | Medium | High | Parallel layout workers from M0; perf harness in CI; Canvas fallback mode if DOM thrashes |
-| DOCX round-trip loses exotic features | Medium | Medium | Opaque preservation of unknown XML; corpus tests; explicit fidelity ledger |
-| Font-metrics mismatch across OSes | High | Medium | Bundle a core font set; warn on substitution; metric compatibility shim |
-| WordBasic macros confuse users who expect them to run | Low | Medium | Clear UI messaging; preserve verbatim; never execute |
-| Electron security regression | Low | High | Baseline config frozen; per-release checklist; pinned Electron majors |
-| Scope creep beyond Word 95 | High | Medium | NON-SCOPE lists in every doc; ADR required to add anything post-95 |
+| Risk                                                  | Likelihood | Impact | Mitigation                                                                                         |
+| ----------------------------------------------------- | ---------- | ------ | -------------------------------------------------------------------------------------------------- |
+| Custom editor (no contenteditable) breaks IME / AT    | High       | High   | IME test matrix, accessibility tree first-class, reference against VS Code and CodeMirror patterns |
+| Pagination divergence from Word on complex tables     | Medium     | High   | Golden corpus + cross-renderer tests against LibreOffice; incremental hardening                    |
+| Performance regresses on 1000-page docs               | Medium     | High   | Parallel layout workers from M0; perf harness in CI; Canvas fallback mode if DOM thrashes          |
+| DOCX round-trip loses exotic features                 | Medium     | Medium | Opaque preservation of unknown XML; corpus tests; explicit fidelity ledger                         |
+| Font-metrics mismatch across OSes                     | High       | Medium | Bundle a core font set; warn on substitution; metric compatibility shim                            |
+| WordBasic macros confuse users who expect them to run | Low        | Medium | Clear UI messaging; preserve verbatim; never execute                                               |
+| Electron security regression                          | Low        | High   | Baseline config frozen; per-release checklist; pinned Electron majors                              |
+| Scope creep beyond Word 95                            | High       | Medium | NON-SCOPE lists in every doc; ADR required to add anything post-95                                 |
 
 ## 12. Architecture Decision Records
 
@@ -401,23 +402,23 @@ Significant choices are recorded as ADRs under `docs/adr/`. An ADR has a stable 
 
 ### Requirements
 
-| Document | Purpose | Owner |
-|---|---|---|
-| [`requirements/features.md`](../requirements/features.md) | Definitive Word 95 feature inventory (5 300 lines) | PM / Research |
-| [`requirements/docx-format.md`](../requirements/docx-format.md) | ECMA-376 Transitional subset we implement (3 400 lines) | Persistence lead |
-| [`requirements/ux.md`](../requirements/ux.md) | UX and interaction spec (2 800 lines) | UX / UI lead |
-| [`requirements/non-functional.md`](../requirements/non-functional.md) | Performance, reliability, security, testing budgets (1 500 lines) | Tech lead |
+| Document                                                              | Purpose                                                           | Owner            |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------- | ---------------- |
+| [`requirements/features.md`](../requirements/features.md)             | Definitive Word 95 feature inventory (5 300 lines)                | PM / Research    |
+| [`requirements/docx-format.md`](../requirements/docx-format.md)       | ECMA-376 Transitional subset we implement (3 400 lines)           | Persistence lead |
+| [`requirements/ux.md`](../requirements/ux.md)                         | UX and interaction spec (2 800 lines)                             | UX / UI lead     |
+| [`requirements/non-functional.md`](../requirements/non-functional.md) | Performance, reliability, security, testing budgets (1 500 lines) | Tech lead        |
 
 ### Architecture
 
-| Document | Purpose | Owner |
-|---|---|---|
-| [`architecture/overview.md`](overview.md) | This document — layers, topology, flows | Tech lead |
-| [`architecture/editor-core.md`](editor-core.md) | Domain + engine + plugins + IME (3 600 lines) | Core lead |
-| [`architecture/rendering.md`](rendering.md) | Measure/shape/break/paginate/render (3 200 lines) | Layout lead |
-| [`architecture/persistence.md`](persistence.md) | DOCX read/write, alt formats (3 700 lines) | Persistence lead |
-| [`architecture/electron.md`](electron.md) | Main/preload/utility, IPC, OS integration (2 800 lines) | Platform lead |
-| [`architecture/ui-components.md`](ui-components.md) | React component system, theming, dialogs (3 900 lines) | UI lead |
+| Document                                            | Purpose                                                 | Owner            |
+| --------------------------------------------------- | ------------------------------------------------------- | ---------------- |
+| [`architecture/overview.md`](overview.md)           | This document — layers, topology, flows                 | Tech lead        |
+| [`architecture/editor-core.md`](editor-core.md)     | Domain + engine + plugins + IME (3 600 lines)           | Core lead        |
+| [`architecture/rendering.md`](rendering.md)         | Measure/shape/break/paginate/render (3 200 lines)       | Layout lead      |
+| [`architecture/persistence.md`](persistence.md)     | DOCX read/write, alt formats (3 700 lines)              | Persistence lead |
+| [`architecture/electron.md`](electron.md)           | Main/preload/utility, IPC, OS integration (2 800 lines) | Platform lead    |
+| [`architecture/ui-components.md`](ui-components.md) | React component system, theming, dialogs (3 900 lines)  | UI lead          |
 
 ## 14. Reading order for new engineers
 

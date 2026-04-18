@@ -5,7 +5,7 @@
 
 ## Context
 
-`docs/architecture/persistence.md:1916` preserves OLE embedded bytes verbatim on round-trip. Our non-execution posture (ADR-0007) protects *us* — we never launch OLE servers locally. But a recipient opening our saved file in stock Word may still be prompted to launch the OLE server and execute the embedded bytes. Review Phase 4 P4-C2 escalated this to Critical for *recipients* (Warning for our users).
+`docs/architecture/persistence.md:1916` preserves OLE embedded bytes verbatim on round-trip. Our non-execution posture (ADR-0007) protects _us_ — we never launch OLE servers locally. But a recipient opening our saved file in stock Word may still be prompted to launch the OLE server and execute the embedded bytes. Review Phase 4 P4-C2 escalated this to Critical for _recipients_ (Warning for our users).
 
 ## Decision
 
@@ -20,16 +20,19 @@ On save, if the document contains any OLE object:
 ## Consequences
 
 ### Positive
+
 - Addresses P4-C2 recipient risk.
 - Preserves ADR-0001's round-trip default while giving users a safety opt-in.
 - Known-malicious CLSIDs are refused as an active defense, not a best-effort warning.
 
 ### Negative
+
 - Banner-fatigue risk; mitigated by per-document "don't ask again".
 - Malicious-CLSID list must be maintained; stale lists are a real vulnerability.
 - Stripped-then-saved documents no longer round-trip; user must understand this.
 
 ### Follow-up required
+
 - Define the malicious-CLSID update channel (signed bundle shipped with the app; monthly refresh; manual override disabled by default).
 - Specify the banner UX in `docs/requirements/ux.md`.
 - Add an integration test: document with benign OLE CLSID → save → open → byte-equal OLE stream.
@@ -39,7 +42,7 @@ On save, if the document contains any OLE object:
 
 - **Always strip OLE on save.** Rejected: violates the round-trip contract (ADR-0001); many legitimate documents contain benign OLE (Excel worksheets, Equation 2.x).
 - **Never surface a banner.** Rejected: silent recipient risk; P4-C2 unaddressed.
-- **Warn on open instead of on save.** Rejected: users who read a document without editing it are not the right audience; the risk materializes on *distribution*, not reading.
+- **Warn on open instead of on save.** Rejected: users who read a document without editing it are not the right audience; the risk materializes on _distribution_, not reading.
 
 ## References
 

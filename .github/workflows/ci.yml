@@ -1,0 +1,67 @@
+name: CI
+
+# TODO(M1): Extend the matrix to include macos-latest and windows-latest once
+# Electron GUI under Xvfb and Windows virtual desktop are validated. The current
+# Ubuntu-only run is the M0 baseline.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ci:
+    name: Build, test, E2E (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type-check
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Unit tests (with coverage)
+        run: pnpm test -- --coverage
+
+      - name: Build
+        run: pnpm build
+
+      - name: Install Playwright browsers + system deps
+        # chromium is required by Playwright's bundled Electron runner on Linux.
+        # --with-deps installs the OS-level libraries that Electron needs
+        # (libnss3, libatk, libdrm, etc.) which are absent on bare Ubuntu runners.
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: packages/app
+
+      - name: E2E smoke tests
+        # xvfb-run provides a virtual framebuffer; Electron requires a display
+        # server even in headless mode on Linux.
+        run: xvfb-run -a pnpm --filter @word/app e2e
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: packages/app/playwright-report/
+          retention-days: 7

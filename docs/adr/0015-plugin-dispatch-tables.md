@@ -30,16 +30,19 @@ An ESLint rule `no-kind-switch` forbids `switch (x.kind)` and chained `if (x.kin
 ## Consequences
 
 ### Positive
+
 - Features are genuinely pluggable; adding a DOCX element touches one plugin file, not five core files.
 - Tests register spy handlers at runtime to observe dispatch.
 - Dead-code deletion per unused feature is one config change.
 
 ### Negative
+
 - One indirection per dispatch; performance-negligible in practice.
 - Dispatch-table typing requires care; template types (`Record<Kind, Handler<OfKind<Kind>>>`) do the work in TS 5.
 - Registration ordering bugs surface at boot, not at build time; mitigated by boot-time conformance checks.
 
 ### Follow-up required
+
 - Audit all existing type switches at M0 exit; file one refactor issue per switch.
 - Author the `no-kind-switch` ESLint rule under `tooling/eslint-config/rules/`.
 

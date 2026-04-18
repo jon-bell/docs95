@@ -30,13 +30,13 @@
 
 ### 1.2 Why Transitional, not Strict
 
-| Feature                              | Transitional | Strict |
-|--------------------------------------|--------------|--------|
-| VML (`v:`, `o:` namespaces)          | Allowed      | Banned |
-| Legacy compat flags (`w:compat`)     | Rich set     | Reduced |
-| `mc:AlternateContent` fallback to VML| Allowed      | Banned |
-| Deprecated font scheme attrs         | Allowed      | Banned |
-| `w:fldSimple`                        | Allowed      | Banned (must use complex) |
+| Feature                               | Transitional | Strict                    |
+| ------------------------------------- | ------------ | ------------------------- |
+| VML (`v:`, `o:` namespaces)           | Allowed      | Banned                    |
+| Legacy compat flags (`w:compat`)      | Rich set     | Reduced                   |
+| `mc:AlternateContent` fallback to VML | Allowed      | Banned                    |
+| Deprecated font scheme attrs          | Allowed      | Banned                    |
+| `w:fldSimple`                         | Allowed      | Banned (must use complex) |
 
 Word 95-era constructs (and Word's own output up through today) rely on VML
 for legacy drawings and on complex compat flags. Strict is the wrong
@@ -46,12 +46,12 @@ read Strict, we normalize to Transitional on write.
 
 ### 1.3 ECMA-376 Parts we care about
 
-| Part | Title                                        | Use |
-|------|----------------------------------------------|-----|
-| 1    | Fundamentals and Markup Language Reference   | Element/attribute semantics |
-| 2    | Open Packaging Conventions (OPC)             | ZIP layout, relationships, content types |
-| 3    | Markup Compatibility (MCE)                   | `mc:Ignorable`, `mc:AlternateContent` |
-| 4    | Transitional Migration Features              | VML and deprecated-but-valid constructs |
+| Part | Title                                      | Use                                      |
+| ---- | ------------------------------------------ | ---------------------------------------- |
+| 1    | Fundamentals and Markup Language Reference | Element/attribute semantics              |
+| 2    | Open Packaging Conventions (OPC)           | ZIP layout, relationships, content types |
+| 3    | Markup Compatibility (MCE)                 | `mc:Ignorable`, `mc:AlternateContent`    |
+| 4    | Transitional Migration Features            | VML and deprecated-but-valid constructs  |
 
 Part 2 (OPC) is shared with XLSX/PPTX and is the single source of truth
 for package-level concerns (relationships, content types, part naming
@@ -77,36 +77,36 @@ case-insensitive but **we preserve case** on round-trip.
 
 ### 2.1 Part inventory (minimum + full set)
 
-| Part path                               | Mandatory? | Content type                                                       | Purpose |
-|-----------------------------------------|------------|--------------------------------------------------------------------|---------|
-| `[Content_Types].xml`                   | Yes        | n/a (root of package)                                              | Maps file extensions and explicit part paths to content types. |
-| `_rels/.rels`                           | Yes        | `application/vnd.openxmlformats-package.relationships+xml`        | Package-level relationships; names the main document part. |
-| `word/document.xml`                     | Yes        | `application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml` | Main story: body, paragraphs, tables, sections. |
-| `word/_rels/document.xml.rels`          | Yes        | `application/vnd.openxmlformats-package.relationships+xml`        | Document-scoped relationships: styles, numbering, images, hyperlinks, headers, footers, footnotes, endnotes, comments, settings, fontTable, theme, webSettings, glossary, etc. |
-| `word/styles.xml`                       | Recommended | `...wordprocessingml.styles+xml`                                   | Style definitions (paragraph, character, table, numbering). |
-| `word/settings.xml`                     | Recommended | `...wordprocessingml.settings+xml`                                 | Document-wide settings and `w:compat` flags. |
-| `word/fontTable.xml`                    | Recommended | `...wordprocessingml.fontTable+xml`                                | Declared fonts with panose, pitch, family, charset, embedRegular, etc. |
-| `word/numbering.xml`                    | If lists   | `...wordprocessingml.numbering+xml`                                | Abstract numbering definitions and concrete list instances. |
-| `word/theme/theme1.xml`                 | Recommended | `...theme+xml`                                                     | DrawingML theme (font/color schemes). Required by Word when theme-referenced values appear. |
-| `word/webSettings.xml`                  | Optional   | `...wordprocessingml.webSettings+xml`                              | HTML/web export hints; preserved on read. |
-| `word/footnotes.xml`                    | If footnotes | `...wordprocessingml.footnotes+xml`                              | Footnote content parts. |
-| `word/endnotes.xml`                     | If endnotes | `...wordprocessingml.endnotes+xml`                                 | Endnote content parts. |
-| `word/comments.xml`                     | If comments | `...wordprocessingml.comments+xml`                                 | Comment bodies. |
-| `word/commentsExtended.xml`             | Optional ([MS-DOCX]) | `...wordprocessingml.commentsExtended+xml`                | Parent/descendant relationships for threaded comments (w15). |
-| `word/commentsIds.xml`                  | Optional (w16) | vendor CT                                                      | Durable GUIDs for comments ([verify]: we preserve only). |
-| `word/people.xml`                       | Optional ([MS-DOCX]) | `...wordprocessingml.people+xml`                          | Author/reviewer identity records (`w15:person`). |
-| `word/header1.xml`, `word/header2.xml`, ... | If headers | `...wordprocessingml.header+xml`                                | One part per distinct header (default/first/even, per section). |
-| `word/footer1.xml`, `word/footer2.xml`, ... | If footers | `...wordprocessingml.footer+xml`                                | One part per distinct footer. |
-| `word/glossary/document.xml`            | If AutoText | `...wordprocessingml.document.glossary+xml`                      | Glossary document (Building Blocks / AutoText). |
-| `word/glossary/_rels/document.xml.rels` | If glossary | relationships CT                                                 | Glossary-scoped relationships. |
-| `word/glossary/styles.xml`, `numbering.xml`, `fontTable.xml`, `webSettings.xml` | If glossary | as above | Parallel supporting parts. |
-| `word/media/image1.png`, `image2.jpeg`, ... | If images | `image/png`, `image/jpeg`, `image/gif`, `image/x-wmf`, `image/x-emf` | Image binaries. |
-| `word/embeddings/oleObject1.bin`, `.xlsx`, ... | If OLE | vendor-specific                                                | OLE and embedded documents. |
-| `word/vbaProject.bin`                   | Only `.docm` | `application/vnd.ms-office.vbaProject`                            | VBA binary. Round-trip as opaque; never execute. |
-| `customXml/item1.xml`, `itemProps1.xml` | Optional   | `application/xml`, `...customXmlProperties+xml`                     | Attached custom XML parts. |
-| `docProps/core.xml`                     | Recommended | `application/vnd.openxmlformats-package.core-properties+xml`     | Dublin-Core-like author/title/subject metadata. |
-| `docProps/app.xml`                      | Recommended | `...extended-properties+xml`                                       | Application-extended metadata (page count, company, etc.). |
-| `docProps/custom.xml`                   | Optional   | `...custom-properties+xml`                                         | User-defined properties. |
+| Part path                                                                       | Mandatory?           | Content type                                                                       | Purpose                                                                                                                                                                        |
+| ------------------------------------------------------------------------------- | -------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `[Content_Types].xml`                                                           | Yes                  | n/a (root of package)                                                              | Maps file extensions and explicit part paths to content types.                                                                                                                 |
+| `_rels/.rels`                                                                   | Yes                  | `application/vnd.openxmlformats-package.relationships+xml`                         | Package-level relationships; names the main document part.                                                                                                                     |
+| `word/document.xml`                                                             | Yes                  | `application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml` | Main story: body, paragraphs, tables, sections.                                                                                                                                |
+| `word/_rels/document.xml.rels`                                                  | Yes                  | `application/vnd.openxmlformats-package.relationships+xml`                         | Document-scoped relationships: styles, numbering, images, hyperlinks, headers, footers, footnotes, endnotes, comments, settings, fontTable, theme, webSettings, glossary, etc. |
+| `word/styles.xml`                                                               | Recommended          | `...wordprocessingml.styles+xml`                                                   | Style definitions (paragraph, character, table, numbering).                                                                                                                    |
+| `word/settings.xml`                                                             | Recommended          | `...wordprocessingml.settings+xml`                                                 | Document-wide settings and `w:compat` flags.                                                                                                                                   |
+| `word/fontTable.xml`                                                            | Recommended          | `...wordprocessingml.fontTable+xml`                                                | Declared fonts with panose, pitch, family, charset, embedRegular, etc.                                                                                                         |
+| `word/numbering.xml`                                                            | If lists             | `...wordprocessingml.numbering+xml`                                                | Abstract numbering definitions and concrete list instances.                                                                                                                    |
+| `word/theme/theme1.xml`                                                         | Recommended          | `...theme+xml`                                                                     | DrawingML theme (font/color schemes). Required by Word when theme-referenced values appear.                                                                                    |
+| `word/webSettings.xml`                                                          | Optional             | `...wordprocessingml.webSettings+xml`                                              | HTML/web export hints; preserved on read.                                                                                                                                      |
+| `word/footnotes.xml`                                                            | If footnotes         | `...wordprocessingml.footnotes+xml`                                                | Footnote content parts.                                                                                                                                                        |
+| `word/endnotes.xml`                                                             | If endnotes          | `...wordprocessingml.endnotes+xml`                                                 | Endnote content parts.                                                                                                                                                         |
+| `word/comments.xml`                                                             | If comments          | `...wordprocessingml.comments+xml`                                                 | Comment bodies.                                                                                                                                                                |
+| `word/commentsExtended.xml`                                                     | Optional ([MS-DOCX]) | `...wordprocessingml.commentsExtended+xml`                                         | Parent/descendant relationships for threaded comments (w15).                                                                                                                   |
+| `word/commentsIds.xml`                                                          | Optional (w16)       | vendor CT                                                                          | Durable GUIDs for comments ([verify]: we preserve only).                                                                                                                       |
+| `word/people.xml`                                                               | Optional ([MS-DOCX]) | `...wordprocessingml.people+xml`                                                   | Author/reviewer identity records (`w15:person`).                                                                                                                               |
+| `word/header1.xml`, `word/header2.xml`, ...                                     | If headers           | `...wordprocessingml.header+xml`                                                   | One part per distinct header (default/first/even, per section).                                                                                                                |
+| `word/footer1.xml`, `word/footer2.xml`, ...                                     | If footers           | `...wordprocessingml.footer+xml`                                                   | One part per distinct footer.                                                                                                                                                  |
+| `word/glossary/document.xml`                                                    | If AutoText          | `...wordprocessingml.document.glossary+xml`                                        | Glossary document (Building Blocks / AutoText).                                                                                                                                |
+| `word/glossary/_rels/document.xml.rels`                                         | If glossary          | relationships CT                                                                   | Glossary-scoped relationships.                                                                                                                                                 |
+| `word/glossary/styles.xml`, `numbering.xml`, `fontTable.xml`, `webSettings.xml` | If glossary          | as above                                                                           | Parallel supporting parts.                                                                                                                                                     |
+| `word/media/image1.png`, `image2.jpeg`, ...                                     | If images            | `image/png`, `image/jpeg`, `image/gif`, `image/x-wmf`, `image/x-emf`               | Image binaries.                                                                                                                                                                |
+| `word/embeddings/oleObject1.bin`, `.xlsx`, ...                                  | If OLE               | vendor-specific                                                                    | OLE and embedded documents.                                                                                                                                                    |
+| `word/vbaProject.bin`                                                           | Only `.docm`         | `application/vnd.ms-office.vbaProject`                                             | VBA binary. Round-trip as opaque; never execute.                                                                                                                               |
+| `customXml/item1.xml`, `itemProps1.xml`                                         | Optional             | `application/xml`, `...customXmlProperties+xml`                                    | Attached custom XML parts.                                                                                                                                                     |
+| `docProps/core.xml`                                                             | Recommended          | `application/vnd.openxmlformats-package.core-properties+xml`                       | Dublin-Core-like author/title/subject metadata.                                                                                                                                |
+| `docProps/app.xml`                                                              | Recommended          | `...extended-properties+xml`                                                       | Application-extended metadata (page count, company, etc.).                                                                                                                     |
+| `docProps/custom.xml`                                                           | Optional             | `...custom-properties+xml`                                                         | User-defined properties.                                                                                                                                                       |
 
 ### 2.2 `[Content_Types].xml`
 
@@ -141,6 +141,7 @@ cannot be inferred from extension.
 ```
 
 **Rules we enforce:**
+
 - Case-insensitive match on `Extension` attribute per Part 2 §10.1.2.2;
   we store the canonical lowercase form.
 - An `Override` wins over `Default` for the same part path.
@@ -171,6 +172,7 @@ common metadata.
 ```
 
 **Notes:**
+
 - Relationship IDs are opaque to us outside their containing part but
   **must be unique per part**. We generate `rId{n}` sequentially.
 - The `officeDocument` relationship type (not `mainDocument`) is the one
@@ -256,27 +258,27 @@ Missing an expected edge on read = repair; emit a warning.
 We maintain a single canonical prefix table. Emit declarations on the root
 element of each part; never redeclare.
 
-| Prefix | Namespace URI                                                                              | Use |
-|--------|---------------------------------------------------------------------------------------------|-----|
-| `w`    | `http://schemas.openxmlformats.org/wordprocessingml/2006/main`                              | Core WordprocessingML. |
-| `w14`  | `http://schemas.microsoft.com/office/word/2010/wordml`                                      | Word 2010 extensions (text effects, glow, shadow). |
-| `w15`  | `http://schemas.microsoft.com/office/word/2012/wordml`                                      | Word 2013 extensions (commentsExtended, people, collab). |
-| `w16se`| `http://schemas.microsoft.com/office/word/2015/wordml/symex`                                | Symbol-entity extension (Word 2016). [verify] |
-| `w16cid`| `http://schemas.microsoft.com/office/word/2016/wordml/cid`                                 | Comment durable IDs. [verify] |
-| `w16`  | `http://schemas.microsoft.com/office/word/2018/wordml`                                      | Newer Word. Preserve on read. |
-| `m`    | `http://schemas.openxmlformats.org/officeDocument/2006/math`                                | OMML (Office Math Markup). |
-| `r`    | `http://schemas.openxmlformats.org/officeDocument/2006/relationships`                       | Relationship-ID attributes (`r:id`, `r:embed`, `r:link`). |
-| `wp`   | `http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing`                    | WordprocessingML drawing anchors/inline. |
-| `wp14` | `http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing`                       | Word 2010 positioning extensions. |
-| `a`    | `http://schemas.openxmlformats.org/drawingml/2006/main`                                     | DrawingML shared. |
-| `pic`  | `http://schemas.openxmlformats.org/drawingml/2006/picture`                                  | DrawingML picture (used inside `a:graphicData` for images). |
-| `v`    | `urn:schemas-microsoft-com:vml`                                                              | VML (legacy vector markup). |
-| `o`    | `urn:schemas-microsoft-com:office:office`                                                    | Office-shared VML extensions. |
-| `w10`  | `urn:schemas-microsoft-com:office:word`                                                      | Word-specific VML extensions. |
-| `mc`   | `http://schemas.openxmlformats.org/markup-compatibility/2006`                                | Markup Compatibility. |
-| `mo`   | `http://schemas.microsoft.com/office/mac/office/2008/main`                                   | Mac Office extensions. [verify] |
-| `sl`   | `http://schemas.openxmlformats.org/schemaLibrary/2006/main`                                  | Schema-library references (custom XML). |
-| `xml`  | `http://www.w3.org/XML/1998/namespace`                                                       | Built-in (`xml:space`, `xml:lang`). |
+| Prefix   | Namespace URI                                                            | Use                                                         |
+| -------- | ------------------------------------------------------------------------ | ----------------------------------------------------------- |
+| `w`      | `http://schemas.openxmlformats.org/wordprocessingml/2006/main`           | Core WordprocessingML.                                      |
+| `w14`    | `http://schemas.microsoft.com/office/word/2010/wordml`                   | Word 2010 extensions (text effects, glow, shadow).          |
+| `w15`    | `http://schemas.microsoft.com/office/word/2012/wordml`                   | Word 2013 extensions (commentsExtended, people, collab).    |
+| `w16se`  | `http://schemas.microsoft.com/office/word/2015/wordml/symex`             | Symbol-entity extension (Word 2016). [verify]               |
+| `w16cid` | `http://schemas.microsoft.com/office/word/2016/wordml/cid`               | Comment durable IDs. [verify]                               |
+| `w16`    | `http://schemas.microsoft.com/office/word/2018/wordml`                   | Newer Word. Preserve on read.                               |
+| `m`      | `http://schemas.openxmlformats.org/officeDocument/2006/math`             | OMML (Office Math Markup).                                  |
+| `r`      | `http://schemas.openxmlformats.org/officeDocument/2006/relationships`    | Relationship-ID attributes (`r:id`, `r:embed`, `r:link`).   |
+| `wp`     | `http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing` | WordprocessingML drawing anchors/inline.                    |
+| `wp14`   | `http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing`    | Word 2010 positioning extensions.                           |
+| `a`      | `http://schemas.openxmlformats.org/drawingml/2006/main`                  | DrawingML shared.                                           |
+| `pic`    | `http://schemas.openxmlformats.org/drawingml/2006/picture`               | DrawingML picture (used inside `a:graphicData` for images). |
+| `v`      | `urn:schemas-microsoft-com:vml`                                          | VML (legacy vector markup).                                 |
+| `o`      | `urn:schemas-microsoft-com:office:office`                                | Office-shared VML extensions.                               |
+| `w10`    | `urn:schemas-microsoft-com:office:word`                                  | Word-specific VML extensions.                               |
+| `mc`     | `http://schemas.openxmlformats.org/markup-compatibility/2006`            | Markup Compatibility.                                       |
+| `mo`     | `http://schemas.microsoft.com/office/mac/office/2008/main`               | Mac Office extensions. [verify]                             |
+| `sl`     | `http://schemas.openxmlformats.org/schemaLibrary/2006/main`              | Schema-library references (custom XML).                     |
+| `xml`    | `http://www.w3.org/XML/1998/namespace`                                   | Built-in (`xml:space`, `xml:lang`).                         |
 
 **Important relationship URI:** in OPC rels files, the `r` prefix we use
 inside `document.xml` is **not** used in rels files themselves;
@@ -324,56 +326,56 @@ Getting units right is the difference between "looks like Word" and
 
 ### 4.1 Unit inventory
 
-| Unit           | Definition                         | Typical use                                                          |
-|----------------|-------------------------------------|----------------------------------------------------------------------|
-| **twip**       | 1/1440 inch = 1/20 point            | Most `w:` length values: margins, indents, spacing, tab stops, page size, cell width (when `type="dxa"`). |
-| **half-point** | 0.5 point                           | Font size (`w:sz`, `w:szCs`). `val="24"` = 12pt. Also border widths in some places. |
-| **eighth-point** | 0.125 point                       | Paragraph/table/cell border widths (`w:sz` on `w:pBdr`/`w:tblBorders`). |
-| **EMU**        | 1/914400 inch = 1/360000 cm = 1/12700 pt | All DrawingML positions, offsets, extents (`wp:extent`, `a:off`, `a:ext`). |
-| **pct (fifths)** | Fiftieth-of-a-percent            | Widths when `type="pct"`. `val="5000"` = 100%. |
-| **percent**    | Whole percent                       | Some newer attributes (e.g. `w:val="50%"` on measurements in post-2010 extensions). |
-| **EMU-angle / 60000ths of a degree** | 1/60000°       | Rotations in DrawingML (`a:off` and `rot`). |
-| **points**     | 1/72 inch                           | Rare in raw XML; used in UI rendering. |
-| **pixels (Web)** | CSS px (96 DPI)                  | Web-only parts (`webSettings.xml`). |
-| **chars**      | Character widths                    | Asian layout: `w:docGrid@w:charSpace`. |
-| **lines**      | Default line height                 | Line spacing with `w:lineRule="atLeast"` or `"exact"` in twips, or `"auto"` where val is 240ths of a line. |
+| Unit                                 | Definition                               | Typical use                                                                                                |
+| ------------------------------------ | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **twip**                             | 1/1440 inch = 1/20 point                 | Most `w:` length values: margins, indents, spacing, tab stops, page size, cell width (when `type="dxa"`).  |
+| **half-point**                       | 0.5 point                                | Font size (`w:sz`, `w:szCs`). `val="24"` = 12pt. Also border widths in some places.                        |
+| **eighth-point**                     | 0.125 point                              | Paragraph/table/cell border widths (`w:sz` on `w:pBdr`/`w:tblBorders`).                                    |
+| **EMU**                              | 1/914400 inch = 1/360000 cm = 1/12700 pt | All DrawingML positions, offsets, extents (`wp:extent`, `a:off`, `a:ext`).                                 |
+| **pct (fifths)**                     | Fiftieth-of-a-percent                    | Widths when `type="pct"`. `val="5000"` = 100%.                                                             |
+| **percent**                          | Whole percent                            | Some newer attributes (e.g. `w:val="50%"` on measurements in post-2010 extensions).                        |
+| **EMU-angle / 60000ths of a degree** | 1/60000°                                 | Rotations in DrawingML (`a:off` and `rot`).                                                                |
+| **points**                           | 1/72 inch                                | Rare in raw XML; used in UI rendering.                                                                     |
+| **pixels (Web)**                     | CSS px (96 DPI)                          | Web-only parts (`webSettings.xml`).                                                                        |
+| **chars**                            | Character widths                         | Asian layout: `w:docGrid@w:charSpace`.                                                                     |
+| **lines**                            | Default line height                      | Line spacing with `w:lineRule="atLeast"` or `"exact"` in twips, or `"auto"` where val is 240ths of a line. |
 
 ### 4.2 Conversion table
 
 All values are inches unless noted.
 
-| From              | Multiply by | To             |
-|-------------------|-------------|----------------|
-| inches            | 1440        | twips          |
-| cm                | 567         | twips          |
-| mm                | 56.6929...  | twips          |
-| points            | 20          | twips          |
-| twips             | 1/1440      | inches         |
-| twips             | 1/20        | points         |
-| inches            | 914400      | EMU            |
-| cm                | 360000      | EMU            |
-| points            | 12700       | EMU            |
-| EMU               | 1/914400    | inches         |
-| EMU               | 1/12700     | points         |
-| pixels (96 DPI)   | 9525        | EMU            |
+| From              | Multiply by | To                |
+| ----------------- | ----------- | ----------------- |
+| inches            | 1440        | twips             |
+| cm                | 567         | twips             |
+| mm                | 56.6929...  | twips             |
+| points            | 20          | twips             |
+| twips             | 1/1440      | inches            |
+| twips             | 1/20        | points            |
+| inches            | 914400      | EMU               |
+| cm                | 360000      | EMU               |
+| points            | 12700       | EMU               |
+| EMU               | 1/914400    | inches            |
+| EMU               | 1/12700     | points            |
+| pixels (96 DPI)   | 9525        | EMU               |
 | percent           | 50          | fifths-of-percent |
-| fifths-of-percent | 1/50        | percent        |
+| fifths-of-percent | 1/50        | percent           |
 
 ### 4.3 Representative attribute/value types
 
-| Attribute              | Type              | Example                          |
-|------------------------|-------------------|----------------------------------|
-| `w:sz` (font)          | half-points (int) | `<w:sz w:val="24"/>` → 12pt      |
-| `w:spacing@w:before`   | twips (int)       | `w:before="120"` → 6pt           |
-| `w:spacing@w:line`     | lineRule-dependent | `w:line="240" w:lineRule="auto"` → single |
-| `w:ind@w:left`         | twips (signed)    | `w:left="720"` → 0.5"            |
-| `w:ind@w:firstLine`    | twips (>=0)       | `w:firstLine="360"` → 0.25"      |
-| `w:ind@w:hanging`      | twips (>=0)       | `w:hanging="360"` → 0.25" hang   |
-| `w:pgSz@w:w / w:h`     | twips             | Letter = `w="12240" h="15840"`   |
-| `w:pgMar@w:top etc.`   | twips             | 1" = `top="1440"`                |
-| `w:tblW@w:w`           | depends on `type` | `type="dxa"` → twips; `"pct"` → fifths-of-percent |
-| `w:pBdr/w:top@w:sz`    | eighth-points     | `w:sz="8"` → 1pt                 |
-| `wp:extent@cx / cy`    | EMU               | 1" = `cx="914400"`               |
+| Attribute            | Type               | Example                                           |
+| -------------------- | ------------------ | ------------------------------------------------- |
+| `w:sz` (font)        | half-points (int)  | `<w:sz w:val="24"/>` → 12pt                       |
+| `w:spacing@w:before` | twips (int)        | `w:before="120"` → 6pt                            |
+| `w:spacing@w:line`   | lineRule-dependent | `w:line="240" w:lineRule="auto"` → single         |
+| `w:ind@w:left`       | twips (signed)     | `w:left="720"` → 0.5"                             |
+| `w:ind@w:firstLine`  | twips (>=0)        | `w:firstLine="360"` → 0.25"                       |
+| `w:ind@w:hanging`    | twips (>=0)        | `w:hanging="360"` → 0.25" hang                    |
+| `w:pgSz@w:w / w:h`   | twips              | Letter = `w="12240" h="15840"`                    |
+| `w:pgMar@w:top etc.` | twips              | 1" = `top="1440"`                                 |
+| `w:tblW@w:w`         | depends on `type`  | `type="dxa"` → twips; `"pct"` → fifths-of-percent |
+| `w:pBdr/w:top@w:sz`  | eighth-points      | `w:sz="8"` → 1pt                                  |
+| `wp:extent@cx / cy`  | EMU                | 1" = `cx="914400"`                                |
 
 ### 4.4 Rounding rules
 
@@ -428,30 +430,31 @@ child `w:rPr`. Order inside `w:rPr` is schema-fixed by ECMA-376 CT_RPr.
 
 **Word 95 feature coverage:**
 
-| Word 95 UI                 | OOXML element      | Notes |
-|----------------------------|--------------------|-------|
-| Font name                  | `w:rFonts`         | Four slots: `ascii`, `hAnsi` (high-ANSI), `cs` (complex scripts), `eastAsia`. Word 95 Latin-only docs populate `ascii` and often `hAnsi` only. |
-| Font size                  | `w:sz` (half-pt)   | `w:szCs` for complex-script size. |
-| Bold                       | `w:b`              | Absent = off; `w:b/` = on; `<w:b w:val="false"/>` = explicit off (used in toggle overrides). |
-| Italic                     | `w:i`              | |
-| Underline                  | `w:u @w:val`       | Values: `single`, `double`, `thick`, `dotted`, `dash`, `dotDash`, `wave`, `words`, `none`, etc. Word 95 had single, double, words-only. |
-| Strikethrough              | `w:strike`         | Single-strike. |
-| Double strikethrough       | `w:dstrike`        | Word 97+; Word 95 lacked but we write. |
-| Superscript / subscript    | `w:vertAlign`      | `superscript` / `subscript` / `baseline`. |
-| Color                      | `w:color @w:val`   | `RRGGBB` hex or `auto`. Word 95 had 16 palette colors; we accept any. |
-| Highlight                  | `w:highlight`      | 16 fixed names: `yellow`, `green`, `cyan`, `magenta`, `blue`, `red`, `darkBlue`, etc. |
-| Hidden                     | `w:vanish`         | Omit from layout (not print) unless setting override. |
-| All caps                   | `w:caps`           | |
-| Small caps                 | `w:smallCaps`      | |
-| Character spacing (expand/condense) | `w:spacing @w:val` | Twips; signed. |
-| Kerning above N pt         | `w:kern @w:val`    | Half-points; 0 disables. |
-| Position (raised/lowered)  | `w:position @w:val`| Half-points signed. |
-| Effects: blink, outline, emboss, shadow, imprint | `w:effect`, `w:outline`, `w:emboss`, `w:shadow`, `w:imprint` | `w:effect` enumerates `blinkBackground`, `lights`, `antsBlack`, `antsRed`, `shimmer`, `sparkle`. |
-| Emphasis marks (Asian)     | `w:em`             | Word 95 lacked; round-trip only. |
-| Language                   | `w:lang`           | Three slots: Latin, east Asian, bidi. |
-| Run style                  | `w:rStyle`         | References style by styleId. Note §5.3. |
+| Word 95 UI                                       | OOXML element                                                | Notes                                                                                                                                          |
+| ------------------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Font name                                        | `w:rFonts`                                                   | Four slots: `ascii`, `hAnsi` (high-ANSI), `cs` (complex scripts), `eastAsia`. Word 95 Latin-only docs populate `ascii` and often `hAnsi` only. |
+| Font size                                        | `w:sz` (half-pt)                                             | `w:szCs` for complex-script size.                                                                                                              |
+| Bold                                             | `w:b`                                                        | Absent = off; `w:b/` = on; `<w:b w:val="false"/>` = explicit off (used in toggle overrides).                                                   |
+| Italic                                           | `w:i`                                                        |                                                                                                                                                |
+| Underline                                        | `w:u @w:val`                                                 | Values: `single`, `double`, `thick`, `dotted`, `dash`, `dotDash`, `wave`, `words`, `none`, etc. Word 95 had single, double, words-only.        |
+| Strikethrough                                    | `w:strike`                                                   | Single-strike.                                                                                                                                 |
+| Double strikethrough                             | `w:dstrike`                                                  | Word 97+; Word 95 lacked but we write.                                                                                                         |
+| Superscript / subscript                          | `w:vertAlign`                                                | `superscript` / `subscript` / `baseline`.                                                                                                      |
+| Color                                            | `w:color @w:val`                                             | `RRGGBB` hex or `auto`. Word 95 had 16 palette colors; we accept any.                                                                          |
+| Highlight                                        | `w:highlight`                                                | 16 fixed names: `yellow`, `green`, `cyan`, `magenta`, `blue`, `red`, `darkBlue`, etc.                                                          |
+| Hidden                                           | `w:vanish`                                                   | Omit from layout (not print) unless setting override.                                                                                          |
+| All caps                                         | `w:caps`                                                     |                                                                                                                                                |
+| Small caps                                       | `w:smallCaps`                                                |                                                                                                                                                |
+| Character spacing (expand/condense)              | `w:spacing @w:val`                                           | Twips; signed.                                                                                                                                 |
+| Kerning above N pt                               | `w:kern @w:val`                                              | Half-points; 0 disables.                                                                                                                       |
+| Position (raised/lowered)                        | `w:position @w:val`                                          | Half-points signed.                                                                                                                            |
+| Effects: blink, outline, emboss, shadow, imprint | `w:effect`, `w:outline`, `w:emboss`, `w:shadow`, `w:imprint` | `w:effect` enumerates `blinkBackground`, `lights`, `antsBlack`, `antsRed`, `shimmer`, `sparkle`.                                               |
+| Emphasis marks (Asian)                           | `w:em`                                                       | Word 95 lacked; round-trip only.                                                                                                               |
+| Language                                         | `w:lang`                                                     | Three slots: Latin, east Asian, bidi.                                                                                                          |
+| Run style                                        | `w:rStyle`                                                   | References style by styleId. Note §5.3.                                                                                                        |
 
 #### 5.1.1 Toggle properties (`w:b`, `w:i`, `w:caps`, `w:smallCaps`,
+
 `w:strike`, `w:dstrike`, `w:vanish`, `w:emboss`, `w:imprint`, `w:outline`,
 `w:shadow`)
 
@@ -505,36 +508,36 @@ with missing levels contributing 0. Tests live under
 
 **Word 95 feature coverage:**
 
-| Word 95 UI                          | OOXML element            |
-|-------------------------------------|--------------------------|
-| Paragraph style                     | `w:pStyle`               |
-| Alignment (left/right/center/justify) | `w:jc @w:val` (`left`, `center`, `right`, `both`, `distribute` not in 95, preserve only) |
-| Left/right/first-line/hanging indent | `w:ind`                 |
-| Space before/after                  | `w:spacing @w:before/@w:after` |
-| Line spacing (single/1.5/double/at-least/exactly/multiple) | `w:spacing @w:line + @w:lineRule` (`auto` with 240/360/480; `atLeast`; `exact`) |
-| Keep with next                      | `w:keepNext`             |
-| Keep lines together                 | `w:keepLines`            |
-| Page break before                   | `w:pageBreakBefore`      |
-| Widow/orphan control                | `w:widowControl`         |
-| Suppress line numbers               | `w:suppressLineNumbers`  |
-| Suppress auto-hyphenation           | `w:suppressAutoHyphens`  |
-| Borders (box, top, bottom, left, right, between, bar) | `w:pBdr`    |
-| Shading                             | `w:shd`                  |
-| Tabs (left/center/right/decimal/bar + leaders) | `w:tabs/w:tab`  |
-| Bullets/numbering                   | `w:numPr`                |
-| Outline level                       | `w:outlineLvl`           |
-| Frame (Word 95 "Frame…" dialog)     | `w:framePr` (see §5.20)  |
+| Word 95 UI                                                 | OOXML element                                                                            |
+| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Paragraph style                                            | `w:pStyle`                                                                               |
+| Alignment (left/right/center/justify)                      | `w:jc @w:val` (`left`, `center`, `right`, `both`, `distribute` not in 95, preserve only) |
+| Left/right/first-line/hanging indent                       | `w:ind`                                                                                  |
+| Space before/after                                         | `w:spacing @w:before/@w:after`                                                           |
+| Line spacing (single/1.5/double/at-least/exactly/multiple) | `w:spacing @w:line + @w:lineRule` (`auto` with 240/360/480; `atLeast`; `exact`)          |
+| Keep with next                                             | `w:keepNext`                                                                             |
+| Keep lines together                                        | `w:keepLines`                                                                            |
+| Page break before                                          | `w:pageBreakBefore`                                                                      |
+| Widow/orphan control                                       | `w:widowControl`                                                                         |
+| Suppress line numbers                                      | `w:suppressLineNumbers`                                                                  |
+| Suppress auto-hyphenation                                  | `w:suppressAutoHyphens`                                                                  |
+| Borders (box, top, bottom, left, right, between, bar)      | `w:pBdr`                                                                                 |
+| Shading                                                    | `w:shd`                                                                                  |
+| Tabs (left/center/right/decimal/bar + leaders)             | `w:tabs/w:tab`                                                                           |
+| Bullets/numbering                                          | `w:numPr`                                                                                |
+| Outline level                                              | `w:outlineLvl`                                                                           |
+| Frame (Word 95 "Frame…" dialog)                            | `w:framePr` (see §5.20)                                                                  |
 
 #### 5.2.1 `w:spacing` permutations
 
-| Word 95 choice         | XML                                                                 |
-|------------------------|----------------------------------------------------------------------|
-| Single                 | `<w:spacing w:line="240" w:lineRule="auto"/>`                       |
-| 1.5 lines              | `<w:spacing w:line="360" w:lineRule="auto"/>`                       |
-| Double                 | `<w:spacing w:line="480" w:lineRule="auto"/>`                       |
-| At least N pt          | `<w:spacing w:line="{twips}" w:lineRule="atLeast"/>`                 |
-| Exactly N pt           | `<w:spacing w:line="{twips}" w:lineRule="exact"/>`                   |
-| Multiple (N lines)     | `<w:spacing w:line="{N*240}" w:lineRule="auto"/>`                    |
+| Word 95 choice     | XML                                                  |
+| ------------------ | ---------------------------------------------------- |
+| Single             | `<w:spacing w:line="240" w:lineRule="auto"/>`        |
+| 1.5 lines          | `<w:spacing w:line="360" w:lineRule="auto"/>`        |
+| Double             | `<w:spacing w:line="480" w:lineRule="auto"/>`        |
+| At least N pt      | `<w:spacing w:line="{twips}" w:lineRule="atLeast"/>` |
+| Exactly N pt       | `<w:spacing w:line="{twips}" w:lineRule="exact"/>`   |
+| Multiple (N lines) | `<w:spacing w:line="{N*240}" w:lineRule="auto"/>`    |
 
 ### 5.3 Styles (`word/styles.xml`)
 
@@ -626,6 +629,7 @@ with missing levels contributing 0. Tests live under
 **Style types:** `paragraph`, `character`, `table`, `numbering`.
 
 **Attributes:**
+
 - `@w:styleId` — opaque identifier (unique per part). Cross-referenced
   from `w:pStyle`, `w:rStyle`, `w:tblStyle`, `w:numStyleLink`.
 - `@w:type` — one of the four above.
@@ -637,6 +641,7 @@ with missing levels contributing 0. Tests live under
   names in Word's UI.
 
 **Inheritance/relationships:**
+
 - `w:basedOn @w:val` — parent style. DAG, no cycles (we detect and break).
 - `w:next @w:val` — style to apply to the following paragraph after Enter.
 - `w:link @w:val` — companion character ↔ paragraph style link; Word uses
@@ -713,21 +718,22 @@ and `w:num` (concrete list instance, with optional level overrides).
 
 **Key attributes on `w:lvl`:**
 
-| Attribute          | Values                                                                                         |
-|--------------------|-------------------------------------------------------------------------------------------------|
-| `w:ilvl`           | 0-8                                                                                             |
-| `w:tplc`           | Template code (hex). Word uses to match gallery definitions.                                    |
-| `w:tentative`      | "Tentative" level.                                                                              |
-| `w:start`          | First value.                                                                                    |
-| `w:numFmt`         | `decimal`, `upperRoman`, `lowerRoman`, `upperLetter`, `lowerLetter`, `bullet`, `ordinalText`, `cardinalText`, `decimalZero`, `none`, `chicago`, many Asian variants... |
-| `w:lvlText`        | `%1`, `%2` substituted by current value at each level. E.g. `%1.%2` for "2.3". Can contain literal chars. |
-| `w:lvlJc`          | `left`, `center`, `right`, `start`, `end`                                                       |
-| `w:suff`           | `tab`, `space`, `nothing` — separator after number                                              |
-| `w:isLgl`          | Legal numbering (convert upper levels to arabic)                                                |
-| `w:lvlRestart`     | `N` → restart at level `N`                                                                       |
-| `w:pStyle`         | Link level to paragraph style                                                                    |
+| Attribute      | Values                                                                                                                                                                 |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `w:ilvl`       | 0-8                                                                                                                                                                    |
+| `w:tplc`       | Template code (hex). Word uses to match gallery definitions.                                                                                                           |
+| `w:tentative`  | "Tentative" level.                                                                                                                                                     |
+| `w:start`      | First value.                                                                                                                                                           |
+| `w:numFmt`     | `decimal`, `upperRoman`, `lowerRoman`, `upperLetter`, `lowerLetter`, `bullet`, `ordinalText`, `cardinalText`, `decimalZero`, `none`, `chicago`, many Asian variants... |
+| `w:lvlText`    | `%1`, `%2` substituted by current value at each level. E.g. `%1.%2` for "2.3". Can contain literal chars.                                                              |
+| `w:lvlJc`      | `left`, `center`, `right`, `start`, `end`                                                                                                                              |
+| `w:suff`       | `tab`, `space`, `nothing` — separator after number                                                                                                                     |
+| `w:isLgl`      | Legal numbering (convert upper levels to arabic)                                                                                                                       |
+| `w:lvlRestart` | `N` → restart at level `N`                                                                                                                                             |
+| `w:pStyle`     | Link level to paragraph style                                                                                                                                          |
 
 **`w:num` / `w:lvlOverride`:**
+
 - A document referencing `<w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr>` resolves to `w:num@w:numId=1`, then to `w:abstractNum` via `w:abstractNumId`, then to `w:lvl@w:ilvl=0` inside that abstractNum.
 - `w:lvlOverride` can override or restart at a given level for one concrete list.
 
@@ -801,19 +807,19 @@ consumers require this.
 
 **`w:tblPr` children (selected):**
 
-| Element        | Purpose |
-|----------------|---------|
-| `w:tblStyle`   | Style reference. |
-| `w:tblW`       | Preferred width. `@w:type`: `auto`, `dxa`, `pct`, `nil`. |
-| `w:jc`         | Table alignment on page (left/center/right). |
-| `w:tblInd`     | Left indent of the table. |
-| `w:tblBorders` | Table-level borders. Children: `top`, `left`, `bottom`, `right`, `insideH`, `insideV`. |
-| `w:shd`        | Table-level shading (rarely used). |
-| `w:tblLayout`  | `@w:type="fixed"` or `"autofit"`. Word 95 = autofit by default. |
-| `w:tblCellMar` | Default cell margins (`top`, `left`, `bottom`, `right`). |
+| Element        | Purpose                                                                                       |
+| -------------- | --------------------------------------------------------------------------------------------- |
+| `w:tblStyle`   | Style reference.                                                                              |
+| `w:tblW`       | Preferred width. `@w:type`: `auto`, `dxa`, `pct`, `nil`.                                      |
+| `w:jc`         | Table alignment on page (left/center/right).                                                  |
+| `w:tblInd`     | Left indent of the table.                                                                     |
+| `w:tblBorders` | Table-level borders. Children: `top`, `left`, `bottom`, `right`, `insideH`, `insideV`.        |
+| `w:shd`        | Table-level shading (rarely used).                                                            |
+| `w:tblLayout`  | `@w:type="fixed"` or `"autofit"`. Word 95 = autofit by default.                               |
+| `w:tblCellMar` | Default cell margins (`top`, `left`, `bottom`, `right`).                                      |
 | `w:tblLook`    | Conditional-formatting mask for table style parts (hdrRow/totalRow/firstCol/lastCol/banding). |
-| `w:tblOverlap` | `"never"` for absolutely positioned tables; keep apart. |
-| `w:tblpPr`     | Floating table position (Word 95 had floating tables via frames; Word 2000+ via `w:tblpPr`). |
+| `w:tblOverlap` | `"never"` for absolutely positioned tables; keep apart.                                       |
+| `w:tblpPr`     | Floating table position (Word 95 had floating tables via frames; Word 2000+ via `w:tblpPr`).  |
 
 **`w:trPr`:** `w:trHeight` (`val` twips, `hRule` = `auto`/`atLeast`/`exact`),
 `w:tblHeader` (repeat on each page), `w:cantSplit`, `w:jc` (row-level
@@ -955,6 +961,7 @@ contains `w:footnote` / `w:endnote` elements, each with a unique `@w:id`.
 ```
 
 **Settings** in `settings.xml`:
+
 ```xml
 <w:footnotePr>
   <w:pos w:val="pageBottom"/>
@@ -1008,6 +1015,7 @@ Word 95 "Annotations" became "Comments" in Word 97 XML.
 ```
 
 **Threaded comments (w15 `commentsExtended.xml`):**
+
 ```xml
 <w15:commentsEx xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml">
   <w15:commentEx w15:paraId="00000001" w15:done="0"/>
@@ -1023,6 +1031,7 @@ files and always emit top-level `w:comment` for our own output.
 Two forms.
 
 **Simple field** (entire instruction in one element):
+
 ```xml
 <w:p>
   <w:r><w:t xml:space="preserve">Page </w:t></w:r>
@@ -1037,6 +1046,7 @@ Two forms.
 ```
 
 **Complex field** (supports nesting and runs inside instruction):
+
 ```xml
 <w:r><w:fldChar w:fldCharType="begin"/></w:r>
 <w:r><w:instrText xml:space="preserve">REF Bookmark1 \h \* MERGEFORMAT</w:instrText></w:r>
@@ -1047,35 +1057,35 @@ Two forms.
 
 **Word 95 fields we must implement (common list, not exhaustive):**
 
-| Field code | Purpose | Notes |
-|------------|---------|-------|
-| `PAGE`     | Current page number | |
-| `NUMPAGES` | Total pages | |
-| `DATE`     | Today's date | `\@ "format"` |
-| `TIME`     | Current time | |
-| `CREATEDATE`, `SAVEDATE`, `PRINTDATE` | Metadata dates | |
-| `AUTHOR`, `TITLE`, `SUBJECT`, `KEYWORDS` | Metadata | |
-| `FILENAME` | File name | `\p` full path |
-| `FILESIZE` | Kilobytes | |
-| `TOC`      | Table of contents | `\o "1-9" \h \z \u` |
-| `TOA`      | Table of authorities | |
-| `TOF`      | Table of figures | |
-| `INDEX`    | Index | |
-| `XE`       | Index entry | |
-| `TC`       | TOC entry | |
-| `SEQ`      | Sequence / caption | |
-| `REF`      | Cross-reference | |
-| `PAGEREF`  | Cross-reference to page | |
-| `STYLEREF` | Nearest paragraph of style | |
-| `HYPERLINK`| Hyperlink field | Legacy form; modern uses `w:hyperlink`. |
-| `MERGEFIELD`, `IF`, `NEXT`, `ASK`, `FILLIN`, `DATABASE` | Mail merge | |
-| `DOCPROPERTY` | Core/extended property | |
-| `FORMTEXT`, `FORMCHECKBOX`, `FORMDROPDOWN` | Form fields with `w:ffData` | |
-| `EQ`       | Equation Editor 1.x inline | **Opaque** in v1. |
-| `SYMBOL`   | Unicode symbol | |
-| `PRIVATE`  | Private data holder (WP-era) | Preserve. |
-| `LISTNUM`  | Inline numbering | |
-| `GOTOBUTTON`, `MACROBUTTON` | Interactive jumps | Preserve; don't run macros. |
+| Field code                                              | Purpose                      | Notes                                   |
+| ------------------------------------------------------- | ---------------------------- | --------------------------------------- |
+| `PAGE`                                                  | Current page number          |                                         |
+| `NUMPAGES`                                              | Total pages                  |                                         |
+| `DATE`                                                  | Today's date                 | `\@ "format"`                           |
+| `TIME`                                                  | Current time                 |                                         |
+| `CREATEDATE`, `SAVEDATE`, `PRINTDATE`                   | Metadata dates               |                                         |
+| `AUTHOR`, `TITLE`, `SUBJECT`, `KEYWORDS`                | Metadata                     |                                         |
+| `FILENAME`                                              | File name                    | `\p` full path                          |
+| `FILESIZE`                                              | Kilobytes                    |                                         |
+| `TOC`                                                   | Table of contents            | `\o "1-9" \h \z \u`                     |
+| `TOA`                                                   | Table of authorities         |                                         |
+| `TOF`                                                   | Table of figures             |                                         |
+| `INDEX`                                                 | Index                        |                                         |
+| `XE`                                                    | Index entry                  |                                         |
+| `TC`                                                    | TOC entry                    |                                         |
+| `SEQ`                                                   | Sequence / caption           |                                         |
+| `REF`                                                   | Cross-reference              |                                         |
+| `PAGEREF`                                               | Cross-reference to page      |                                         |
+| `STYLEREF`                                              | Nearest paragraph of style   |                                         |
+| `HYPERLINK`                                             | Hyperlink field              | Legacy form; modern uses `w:hyperlink`. |
+| `MERGEFIELD`, `IF`, `NEXT`, `ASK`, `FILLIN`, `DATABASE` | Mail merge                   |                                         |
+| `DOCPROPERTY`                                           | Core/extended property       |                                         |
+| `FORMTEXT`, `FORMCHECKBOX`, `FORMDROPDOWN`              | Form fields with `w:ffData`  |                                         |
+| `EQ`                                                    | Equation Editor 1.x inline   | **Opaque** in v1.                       |
+| `SYMBOL`                                                | Unicode symbol               |                                         |
+| `PRIVATE`                                               | Private data holder (WP-era) | Preserve.                               |
+| `LISTNUM`                                               | Inline numbering             |                                         |
+| `GOTOBUTTON`, `MACROBUTTON`                             | Interactive jumps            | Preserve; don't run macros.             |
 
 Field result is advisory; Word always reserves the right to recompute.
 Our engine will recompute fields on open and before save unless
@@ -1084,6 +1094,7 @@ Our engine will recompute fields on open and before save unless
 ### 5.11 Hyperlinks
 
 **Modern element form:**
+
 ```xml
 <w:hyperlink r:id="rId13" w:anchor="section2" w:history="1">
   <w:r>
@@ -1100,6 +1111,7 @@ recent links.
 **Internal bookmark link:** omit `r:id`, use `@w:anchor="BookmarkName"`.
 
 **Legacy field form** (Word 95 round-trip):
+
 ```xml
 <w:r><w:fldChar w:fldCharType="begin"/></w:r>
 <w:r><w:instrText xml:space="preserve">HYPERLINK "https://example.com/"</w:instrText></w:r>
@@ -1119,6 +1131,7 @@ Our writer emits the element form; reader handles both.
 ```
 
 **Rules:**
+
 - `@w:id` is unique per document (any non-negative integer). Start and
   End must match by id.
 - `@w:name` is display name; spaces not allowed in Word-style names but
@@ -1225,6 +1238,7 @@ Inline image, referencing an embedded binary via a relationship:
 ```
 
 Anchored (floating) image:
+
 ```xml
 <wp:anchor distT="0" distB="0" distL="114300" distR="114300"
            simplePos="0" relativeHeight="251658240"
@@ -1244,6 +1258,7 @@ Wrap elements: `wp:wrapNone`, `wp:wrapSquare`, `wp:wrapTight`,
 `wp:wrapThrough`, `wp:wrapTopAndBottom`.
 
 **VML fallback** (for older consumers / Word 95 legacy):
+
 ```xml
 <mc:AlternateContent>
   <mc:Choice Requires="wps">
@@ -1388,6 +1403,7 @@ properties:
 ```
 
 **Attributes:**
+
 - `@w:w / @w:h` — size in twips; `@w:hRule` = `atLeast`/`exact`.
 - `@w:hSpace / @w:vSpace` — distance from wrapped text (twips).
 - `@w:wrap` — `auto`, `around`, `none`, `tight`, `through`, `notBeside`.
@@ -1406,6 +1422,7 @@ explicitly uses the "Frame…" command in our UI.
 Word 95 "Revisions" map directly to OOXML revision elements.
 
 **Inserted runs/paragraphs:**
+
 ```xml
 <w:p>
   <w:r><w:t xml:space="preserve">Original. </w:t></w:r>
@@ -1416,6 +1433,7 @@ Word 95 "Revisions" map directly to OOXML revision elements.
 ```
 
 **Deleted runs:**
+
 ```xml
 <w:del w:id="2" w:author="Jon" w:date="2026-04-17T10:05:00Z">
   <w:r><w:delText xml:space="preserve">removed text </w:delText></w:r>
@@ -1426,6 +1444,7 @@ Word 95 "Revisions" map directly to OOXML revision elements.
 way.)
 
 **Move** (Word 2010+ but preserve on round-trip):
+
 ```xml
 <w:moveFrom w:id="3" w:author="Jon" w:date="...">
   <w:r><w:t>moved text</w:t></w:r>
@@ -1437,6 +1456,7 @@ way.)
 ```
 
 **Property changes (tracked formatting):**
+
 - `w:rPrChange` inside `w:rPr` — stores previous rPr.
 - `w:pPrChange` inside `w:pPr`.
 - `w:sectPrChange` inside `w:sectPr`.
@@ -1444,6 +1464,7 @@ way.)
 - `w:tblGridChange`, `w:trPrChange`, `w:tcPrChange`.
 
 Example:
+
 ```xml
 <w:rPr>
   <w:b/>
@@ -1523,6 +1544,7 @@ as a `vbaProject.bin` by a later Word (Word 97+ auto-converted WordBasic
 to VBA).
 
 **Our policy:**
+
 - New documents are `.docx`, macro-free.
 - If input is `.docm` or contains `vbaProject.bin`: preserve the binary
   as opaque bytes; change the package content type to
@@ -1570,85 +1592,86 @@ language-neutral. The `@w:name` is the locale-neutral canonical name
 ("heading 1" lower-case) used by Word for latent-style lookup; localized
 names are attached via `w:aliases`.
 
-| Word 95 name         | styleId           | Type      | Notes |
-|----------------------|-------------------|-----------|-------|
-| Normal               | `Normal`          | paragraph | `w:default="1"` |
-| Heading 1            | `Heading1`        | paragraph | `outlineLvl=0`, `basedOn=Normal`, `next=Normal`, `link=Heading1Char` |
-| Heading 2            | `Heading2`        | paragraph | `outlineLvl=1` |
-| Heading 3            | `Heading3`        | paragraph | `outlineLvl=2` |
-| Heading 4            | `Heading4`        | paragraph | `outlineLvl=3` |
-| Heading 5            | `Heading5`        | paragraph | `outlineLvl=4` |
-| Heading 6            | `Heading6`        | paragraph | `outlineLvl=5` |
-| Heading 7            | `Heading7`        | paragraph | `outlineLvl=6` |
-| Heading 8            | `Heading8`        | paragraph | `outlineLvl=7` |
-| Heading 9            | `Heading9`        | paragraph | `outlineLvl=8` |
-| Default Paragraph Font | `DefaultParagraphFont` | character | `w:default="1"` |
-| Header               | `Header`          | paragraph | Used in `w:hdr` |
-| Footer               | `Footer`          | paragraph | Used in `w:ftr` |
-| Footnote Text        | `FootnoteText`    | paragraph | |
-| Footnote Reference   | `FootnoteReference` | character | Superscript char style |
-| Endnote Text         | `EndnoteText`     | paragraph | |
-| Endnote Reference    | `EndnoteReference`| character | |
-| Comment Text         | `CommentText`     | paragraph | (was "Annotation Text" in Word 95) |
-| Comment Reference    | `CommentReference`| character | (was "Annotation Reference") |
-| Comment Subject      | `CommentSubject`  | paragraph | (was "Annotation Subject") |
-| Page Number          | `PageNumber`      | character | |
-| Line Number          | `LineNumber`      | character | |
-| Caption              | `Caption`         | paragraph | |
-| Table of Figures     | `TableofFigures`  | paragraph | |
-| Table of Authorities | `TableofAuthorities` | paragraph | |
-| TOA Heading          | `TOAHeading`      | paragraph | |
-| TOC 1..9             | `TOC1`..`TOC9`    | paragraph | One per level |
-| Table Grid           | `TableGrid`       | table     | |
-| Normal Table         | `TableNormal`     | table     | `w:default="1"` |
-| Normal (Web)         | `NormalWeb`       | paragraph | |
-| Hyperlink            | `Hyperlink`       | character | Blue underline |
-| FollowedHyperlink    | `FollowedHyperlink` | character | Purple underline |
-| List                 | `List`            | paragraph | |
-| List 2..5            | `List2`..`List5`  | paragraph | |
-| List Bullet          | `ListBullet`      | paragraph | |
-| List Bullet 2..5     | `ListBullet2`..`ListBullet5` | paragraph | |
-| List Number          | `ListNumber`      | paragraph | |
-| List Number 2..5     | `ListNumber2`..`ListNumber5` | paragraph | |
-| List Continue        | `ListContinue`    | paragraph | |
-| List Continue 2..5   | `ListContinue2`..`ListContinue5` | paragraph | |
-| Body Text            | `BodyText`        | paragraph | |
-| Body Text 2          | `BodyText2`       | paragraph | |
-| Body Text 3          | `BodyText3`       | paragraph | |
-| Body Text Indent     | `BodyTextIndent`  | paragraph | |
-| Body Text Indent 2   | `BodyTextIndent2` | paragraph | |
-| Body Text Indent 3   | `BodyTextIndent3` | paragraph | |
-| Body Text First Indent | `BodyTextFirstIndent` | paragraph | |
-| Body Text First Indent 2 | `BodyTextFirstIndent2` | paragraph | |
-| Salutation           | `Salutation`      | paragraph | Letter-writing |
-| Closing              | `Closing`         | paragraph | |
-| Signature            | `Signature`       | paragraph | |
-| Date                 | `Date`            | paragraph | |
-| Subtitle             | `Subtitle`        | paragraph | |
-| Title                | `Title`           | paragraph | |
-| Document Map         | `DocumentMap`     | paragraph | |
-| Plain Text           | `PlainText`       | paragraph | Mono |
-| Message Header       | `MessageHeader`   | paragraph | |
-| Envelope Address     | `EnvelopeAddress` | paragraph | |
-| Envelope Return      | `EnvelopeReturn`  | paragraph | |
-| Index 1..9           | `Index1`..`Index9`| paragraph | |
-| Index Heading        | `IndexHeading`    | paragraph | |
-| TOA Heading          | `TOAHeading`      | paragraph | |
-| Block Text           | `BlockText`       | paragraph | |
-| Emphasis             | `Emphasis`        | character | Italic |
-| Strong               | `Strong`          | character | Bold |
-| HTML Address         | `HTMLAddress`     | paragraph | |
-| HTML Cite            | `HTMLCite`        | character | |
-| HTML Code            | `HTMLCode`        | character | |
-| HTML Definition      | `HTMLDefinition`  | character | |
-| HTML Keyboard        | `HTMLKeyboard`    | character | |
-| HTML Preformatted    | `HTMLPreformatted`| paragraph | |
-| HTML Sample          | `HTMLSample`      | character | |
-| HTML Typewriter      | `HTMLTypewriter`  | character | |
-| HTML Variable        | `HTMLVariable`    | character | |
-| Macro Text           | `MacroText`       | paragraph | |
+| Word 95 name             | styleId                          | Type      | Notes                                                                |
+| ------------------------ | -------------------------------- | --------- | -------------------------------------------------------------------- |
+| Normal                   | `Normal`                         | paragraph | `w:default="1"`                                                      |
+| Heading 1                | `Heading1`                       | paragraph | `outlineLvl=0`, `basedOn=Normal`, `next=Normal`, `link=Heading1Char` |
+| Heading 2                | `Heading2`                       | paragraph | `outlineLvl=1`                                                       |
+| Heading 3                | `Heading3`                       | paragraph | `outlineLvl=2`                                                       |
+| Heading 4                | `Heading4`                       | paragraph | `outlineLvl=3`                                                       |
+| Heading 5                | `Heading5`                       | paragraph | `outlineLvl=4`                                                       |
+| Heading 6                | `Heading6`                       | paragraph | `outlineLvl=5`                                                       |
+| Heading 7                | `Heading7`                       | paragraph | `outlineLvl=6`                                                       |
+| Heading 8                | `Heading8`                       | paragraph | `outlineLvl=7`                                                       |
+| Heading 9                | `Heading9`                       | paragraph | `outlineLvl=8`                                                       |
+| Default Paragraph Font   | `DefaultParagraphFont`           | character | `w:default="1"`                                                      |
+| Header                   | `Header`                         | paragraph | Used in `w:hdr`                                                      |
+| Footer                   | `Footer`                         | paragraph | Used in `w:ftr`                                                      |
+| Footnote Text            | `FootnoteText`                   | paragraph |                                                                      |
+| Footnote Reference       | `FootnoteReference`              | character | Superscript char style                                               |
+| Endnote Text             | `EndnoteText`                    | paragraph |                                                                      |
+| Endnote Reference        | `EndnoteReference`               | character |                                                                      |
+| Comment Text             | `CommentText`                    | paragraph | (was "Annotation Text" in Word 95)                                   |
+| Comment Reference        | `CommentReference`               | character | (was "Annotation Reference")                                         |
+| Comment Subject          | `CommentSubject`                 | paragraph | (was "Annotation Subject")                                           |
+| Page Number              | `PageNumber`                     | character |                                                                      |
+| Line Number              | `LineNumber`                     | character |                                                                      |
+| Caption                  | `Caption`                        | paragraph |                                                                      |
+| Table of Figures         | `TableofFigures`                 | paragraph |                                                                      |
+| Table of Authorities     | `TableofAuthorities`             | paragraph |                                                                      |
+| TOA Heading              | `TOAHeading`                     | paragraph |                                                                      |
+| TOC 1..9                 | `TOC1`..`TOC9`                   | paragraph | One per level                                                        |
+| Table Grid               | `TableGrid`                      | table     |                                                                      |
+| Normal Table             | `TableNormal`                    | table     | `w:default="1"`                                                      |
+| Normal (Web)             | `NormalWeb`                      | paragraph |                                                                      |
+| Hyperlink                | `Hyperlink`                      | character | Blue underline                                                       |
+| FollowedHyperlink        | `FollowedHyperlink`              | character | Purple underline                                                     |
+| List                     | `List`                           | paragraph |                                                                      |
+| List 2..5                | `List2`..`List5`                 | paragraph |                                                                      |
+| List Bullet              | `ListBullet`                     | paragraph |                                                                      |
+| List Bullet 2..5         | `ListBullet2`..`ListBullet5`     | paragraph |                                                                      |
+| List Number              | `ListNumber`                     | paragraph |                                                                      |
+| List Number 2..5         | `ListNumber2`..`ListNumber5`     | paragraph |                                                                      |
+| List Continue            | `ListContinue`                   | paragraph |                                                                      |
+| List Continue 2..5       | `ListContinue2`..`ListContinue5` | paragraph |                                                                      |
+| Body Text                | `BodyText`                       | paragraph |                                                                      |
+| Body Text 2              | `BodyText2`                      | paragraph |                                                                      |
+| Body Text 3              | `BodyText3`                      | paragraph |                                                                      |
+| Body Text Indent         | `BodyTextIndent`                 | paragraph |                                                                      |
+| Body Text Indent 2       | `BodyTextIndent2`                | paragraph |                                                                      |
+| Body Text Indent 3       | `BodyTextIndent3`                | paragraph |                                                                      |
+| Body Text First Indent   | `BodyTextFirstIndent`            | paragraph |                                                                      |
+| Body Text First Indent 2 | `BodyTextFirstIndent2`           | paragraph |                                                                      |
+| Salutation               | `Salutation`                     | paragraph | Letter-writing                                                       |
+| Closing                  | `Closing`                        | paragraph |                                                                      |
+| Signature                | `Signature`                      | paragraph |                                                                      |
+| Date                     | `Date`                           | paragraph |                                                                      |
+| Subtitle                 | `Subtitle`                       | paragraph |                                                                      |
+| Title                    | `Title`                          | paragraph |                                                                      |
+| Document Map             | `DocumentMap`                    | paragraph |                                                                      |
+| Plain Text               | `PlainText`                      | paragraph | Mono                                                                 |
+| Message Header           | `MessageHeader`                  | paragraph |                                                                      |
+| Envelope Address         | `EnvelopeAddress`                | paragraph |                                                                      |
+| Envelope Return          | `EnvelopeReturn`                 | paragraph |                                                                      |
+| Index 1..9               | `Index1`..`Index9`               | paragraph |                                                                      |
+| Index Heading            | `IndexHeading`                   | paragraph |                                                                      |
+| TOA Heading              | `TOAHeading`                     | paragraph |                                                                      |
+| Block Text               | `BlockText`                      | paragraph |                                                                      |
+| Emphasis                 | `Emphasis`                       | character | Italic                                                               |
+| Strong                   | `Strong`                         | character | Bold                                                                 |
+| HTML Address             | `HTMLAddress`                    | paragraph |                                                                      |
+| HTML Cite                | `HTMLCite`                       | character |                                                                      |
+| HTML Code                | `HTMLCode`                       | character |                                                                      |
+| HTML Definition          | `HTMLDefinition`                 | character |                                                                      |
+| HTML Keyboard            | `HTMLKeyboard`                   | character |                                                                      |
+| HTML Preformatted        | `HTMLPreformatted`               | paragraph |                                                                      |
+| HTML Sample              | `HTMLSample`                     | character |                                                                      |
+| HTML Typewriter          | `HTMLTypewriter`                 | character |                                                                      |
+| HTML Variable            | `HTMLVariable`                   | character |                                                                      |
+| Macro Text               | `MacroText`                      | paragraph |                                                                      |
 
 **Rules for our writer:**
+
 - StyleId is derived from the locale-neutral name by concatenating words
   (PascalCase-ish): "heading 1" → `Heading1`, "List Bullet" →
   `ListBullet`.
@@ -1715,6 +1738,7 @@ Add `wordjb` to `mc:Ignorable` on the containing part root.
 ### 7.5 Round-trip tests
 
 `src/serialize/__tests__/round-trip.test.ts` must:
+
 - Open every fixture in `test/fixtures/docx/`.
 - Parse, then emit, then parse the emitted bytes.
 - Assert the two parse trees are structurally equal modulo known
@@ -1744,7 +1768,7 @@ Add `wordjb` to `mc:Ignorable` on the containing part root.
 ### 8.2 Attribute ordering
 
 Per element, emit attributes in the order specified by the ECMA-376
-schema (CT_* complex types). When multiple attributes have the same
+schema (CT\_\* complex types). When multiple attributes have the same
 logical group (e.g. `w:val` then decorators), put `w:val` first.
 
 Namespace declarations first on the element that introduces them.
@@ -1758,6 +1782,7 @@ Runs with leading/trailing whitespace require `xml:space="preserve"`:
 ```
 
 Rules:
+
 - Emit `xml:space="preserve"` on `w:t` **whenever** the text contains
   leading or trailing whitespace, or any U+0009/U+000A/U+000D characters.
 - The same rule applies to `w:delText`, `w:instrText`.
@@ -1771,6 +1796,7 @@ property elements. Our writer enforces this order exactly; our reader
 tolerates any order.
 
 Canonical `w:rPr` order (abridged):
+
 1. `w:rStyle`
 2. `w:rFonts`
 3. `w:b`, `w:bCs`
@@ -1802,6 +1828,7 @@ Canonical `w:rPr` order (abridged):
 29. `w:oMath`
 
 Canonical `w:pPr` order (abridged):
+
 1. `w:pStyle`
 2. `w:keepNext`
 3. `w:keepLines`
@@ -1871,6 +1898,7 @@ production we seed from a cryptographic source.
 
 `src/validate/` ships an ECMA-376 XSD-based validator wired to the
 bundled schemas:
+
 - `vendor/ecma-376/wml.xsd`
 - `vendor/ecma-376/dml-main.xsd`
 - `vendor/ecma-376/dml-wordprocessingDrawing.xsd`
@@ -1886,6 +1914,7 @@ errors. In release builds validation is off to keep save fast.
 
 Word is famously permissive on read. Examples where we must be equally
 permissive:
+
 - Integer attributes accept leading `+`.
 - Boolean attributes accept any of `1`, `true`, `on`, `t`, and their
   negations. We normalize on write.
@@ -1988,60 +2017,61 @@ injects many flags to reproduce older Word's layout bugs.
 
 ### 10.1 Flag reference (selected)
 
-| Flag                                  | Meaning                                                                                           | Word 95 era? | v1 action |
-|---------------------------------------|---------------------------------------------------------------------------------------------------|--------------|-----------|
-| `useFELayout`                         | East-Asian layout emulation.                                                                      | N (FE=Far East; 97+)  | Preserve only. |
-| `balanceSingleByteDoubleByteWidth`    | SBCS/DBCS width balancing.                                                                        | N            | Preserve only. |
-| `spacingInWholePoints`                | Round paragraph spacing to whole points (Word 6/95 behavior).                                     | Y            | **Implement** when set. |
-| `splitPgBreakAndParaMark`             | Keep mandatory page break separate from paragraph mark.                                           | Y            | **Implement**. |
-| `doNotExpandShiftReturn`              | Don't expand Shift+Enter line break in justified text.                                            | Y            | **Implement**. |
-| `doNotSnapToGridInCell`               | Skip grid snap in table cells.                                                                    | Y            | Preserve only. |
-| `selectFldWithFirstOrLastChar`        | Selecting near field boundary includes the field.                                                 | Y            | Implement. |
-| `noTabHangInd`                        | Hanging indent does not add leading tab.                                                          | Y            | Implement. |
-| `noLeading`                           | Don't add leading to line height (Word 6/95).                                                     | Y            | **Implement**. |
-| `spaceForUL`                          | Underline spaces at end of line.                                                                  | Y            | Implement. |
-| `noColumnBalance`                     | Don't balance columns on last page.                                                               | Y            | Implement. |
-| `noExtraLineSpacing`                  | Suppress extra spacing above first line.                                                          | Y            | Implement. |
-| `doNotLeaveBackslashAlone`            | Translate `\` in field codes.                                                                      | Y            | Preserve only. |
-| `ulTrailSpace`                        | Underline trailing spaces.                                                                         | Y            | Implement. |
-| `lineWrapLikeWord6`                   | Word 6 line-wrap rules.                                                                            | Y            | **Implement**. |
-| `printBodyTextBeforeHeader`           | Print order: body before header (WordPerfect compat).                                              | Y            | Preserve only. |
-| `printColBlack`                       | Print color as black.                                                                              | Y            | Preserve only. |
-| `wpSpaceWidth`                        | WordPerfect space width semantics.                                                                 | Y            | Preserve only. |
-| `showBreaksInFrames`                  | Show page-break markers inside frames.                                                             | Y            | Implement. |
-| `subFontBySize`                       | Pick substitute font by size.                                                                      | Y            | Preserve only. |
-| `suppressBottomSpacing`               | Suppress bottom paragraph spacing on page end.                                                     | Y            | Implement. |
-| `suppressTopSpacing`                  | Suppress top paragraph spacing on page start.                                                      | Y            | Implement. |
-| `suppressSpacingAtTopOfPage`          | Similar; newer flag.                                                                              | N            | Preserve only. |
-| `suppressTopSpacingWP`                | WordPerfect-style suppression.                                                                     | Y            | Preserve only. |
-| `suppressSpBfAfterPgBrk`              | Suppress space-before after page break.                                                            | Y            | Implement. |
-| `swapBordersFacingPages`              | Mirror borders on facing pages.                                                                    | Y            | Implement. |
-| `convMailMergeEsc`                    | Mail-merge escape handling.                                                                        | Y            | Preserve only. |
-| `truncateFontHeightsLikeWP6`          | WordPerfect 6 font metrics.                                                                        | Y            | Preserve only. |
-| `mwSmallCaps`                         | Mac Word small-caps rules.                                                                         | Y            | Preserve only. |
-| `usePrinterMetrics`                   | Layout against printer metrics.                                                                    | Y            | Preserve only. |
-| `doNotSuppressParagraphBorders`       | Don't suppress paragraph borders between consecutive paragraphs of same border.                    | Y            | Implement. |
-| `wrapTrailSpaces`                     | Wrap trailing spaces.                                                                              | Y            | Implement. |
-| `footnoteLayoutLikeWW8`               | Word 97 (WW8) footnote layout.                                                                     | Y (upgrade path) | Implement. |
-| `shapeLayoutLikeWW8`                  | WW8 shape layout.                                                                                  | Y            | Preserve only. |
-| `alignTablesRowByRow`                 | Align each row independently.                                                                      | Y            | Implement. |
-| `forgetLastTabAlignment`              | Legacy tab alignment bug.                                                                          | Y            | Implement. |
-| `adjustLineHeightInTable`             | Adjust line height inside cells.                                                                   | Y            | Implement. |
-| `autoSpaceLikeWord95`                 | Word 95 auto-spacing rules.                                                                        | **Y**        | **Implement**. |
-| `noSpaceRaiseLower`                   | No extra space for raised/lowered text.                                                            | Y            | Implement. |
-| `doNotUseHTMLParagraphAutoSpacing`    | Disable HTML-style auto-spacing.                                                                   | Y            | Implement. |
-| `layoutRawTableWidth`                 | Use raw (un-autofit) table width.                                                                  | Y            | Preserve only. |
-| `layoutTableRowsApart`                | Lay out table rows independently.                                                                  | Y            | Implement. |
-| `useWord97LineBreakRules`             | Word 97 line breaking.                                                                             | Y            | Implement. |
-| `doNotBreakConstrainedForcedTable`    | Keep forced-width table unbroken.                                                                  | Y            | Implement. |
-| `doNotVertAlignCellWithSp`            | Don't vertically align a cell containing a floating shape.                                         | Y            | Implement. |
-| `doNotBreakWrappedTables`             | Don't break across page if wrapped.                                                                | Y            | Implement. |
-| `doNotVertAlignInTxbx`                | Don't vertically align text box.                                                                   | Y            | Preserve only. |
-| `useAnsiKerningPairs`                 | Apply ANSI kerning pairs.                                                                          | Y            | Implement. |
-| `cachedColBalance`                    | Cache column balance.                                                                              | Y            | Preserve only. |
+| Flag                               | Meaning                                                                         | Word 95 era?         | v1 action               |
+| ---------------------------------- | ------------------------------------------------------------------------------- | -------------------- | ----------------------- |
+| `useFELayout`                      | East-Asian layout emulation.                                                    | N (FE=Far East; 97+) | Preserve only.          |
+| `balanceSingleByteDoubleByteWidth` | SBCS/DBCS width balancing.                                                      | N                    | Preserve only.          |
+| `spacingInWholePoints`             | Round paragraph spacing to whole points (Word 6/95 behavior).                   | Y                    | **Implement** when set. |
+| `splitPgBreakAndParaMark`          | Keep mandatory page break separate from paragraph mark.                         | Y                    | **Implement**.          |
+| `doNotExpandShiftReturn`           | Don't expand Shift+Enter line break in justified text.                          | Y                    | **Implement**.          |
+| `doNotSnapToGridInCell`            | Skip grid snap in table cells.                                                  | Y                    | Preserve only.          |
+| `selectFldWithFirstOrLastChar`     | Selecting near field boundary includes the field.                               | Y                    | Implement.              |
+| `noTabHangInd`                     | Hanging indent does not add leading tab.                                        | Y                    | Implement.              |
+| `noLeading`                        | Don't add leading to line height (Word 6/95).                                   | Y                    | **Implement**.          |
+| `spaceForUL`                       | Underline spaces at end of line.                                                | Y                    | Implement.              |
+| `noColumnBalance`                  | Don't balance columns on last page.                                             | Y                    | Implement.              |
+| `noExtraLineSpacing`               | Suppress extra spacing above first line.                                        | Y                    | Implement.              |
+| `doNotLeaveBackslashAlone`         | Translate `\` in field codes.                                                   | Y                    | Preserve only.          |
+| `ulTrailSpace`                     | Underline trailing spaces.                                                      | Y                    | Implement.              |
+| `lineWrapLikeWord6`                | Word 6 line-wrap rules.                                                         | Y                    | **Implement**.          |
+| `printBodyTextBeforeHeader`        | Print order: body before header (WordPerfect compat).                           | Y                    | Preserve only.          |
+| `printColBlack`                    | Print color as black.                                                           | Y                    | Preserve only.          |
+| `wpSpaceWidth`                     | WordPerfect space width semantics.                                              | Y                    | Preserve only.          |
+| `showBreaksInFrames`               | Show page-break markers inside frames.                                          | Y                    | Implement.              |
+| `subFontBySize`                    | Pick substitute font by size.                                                   | Y                    | Preserve only.          |
+| `suppressBottomSpacing`            | Suppress bottom paragraph spacing on page end.                                  | Y                    | Implement.              |
+| `suppressTopSpacing`               | Suppress top paragraph spacing on page start.                                   | Y                    | Implement.              |
+| `suppressSpacingAtTopOfPage`       | Similar; newer flag.                                                            | N                    | Preserve only.          |
+| `suppressTopSpacingWP`             | WordPerfect-style suppression.                                                  | Y                    | Preserve only.          |
+| `suppressSpBfAfterPgBrk`           | Suppress space-before after page break.                                         | Y                    | Implement.              |
+| `swapBordersFacingPages`           | Mirror borders on facing pages.                                                 | Y                    | Implement.              |
+| `convMailMergeEsc`                 | Mail-merge escape handling.                                                     | Y                    | Preserve only.          |
+| `truncateFontHeightsLikeWP6`       | WordPerfect 6 font metrics.                                                     | Y                    | Preserve only.          |
+| `mwSmallCaps`                      | Mac Word small-caps rules.                                                      | Y                    | Preserve only.          |
+| `usePrinterMetrics`                | Layout against printer metrics.                                                 | Y                    | Preserve only.          |
+| `doNotSuppressParagraphBorders`    | Don't suppress paragraph borders between consecutive paragraphs of same border. | Y                    | Implement.              |
+| `wrapTrailSpaces`                  | Wrap trailing spaces.                                                           | Y                    | Implement.              |
+| `footnoteLayoutLikeWW8`            | Word 97 (WW8) footnote layout.                                                  | Y (upgrade path)     | Implement.              |
+| `shapeLayoutLikeWW8`               | WW8 shape layout.                                                               | Y                    | Preserve only.          |
+| `alignTablesRowByRow`              | Align each row independently.                                                   | Y                    | Implement.              |
+| `forgetLastTabAlignment`           | Legacy tab alignment bug.                                                       | Y                    | Implement.              |
+| `adjustLineHeightInTable`          | Adjust line height inside cells.                                                | Y                    | Implement.              |
+| `autoSpaceLikeWord95`              | Word 95 auto-spacing rules.                                                     | **Y**                | **Implement**.          |
+| `noSpaceRaiseLower`                | No extra space for raised/lowered text.                                         | Y                    | Implement.              |
+| `doNotUseHTMLParagraphAutoSpacing` | Disable HTML-style auto-spacing.                                                | Y                    | Implement.              |
+| `layoutRawTableWidth`              | Use raw (un-autofit) table width.                                               | Y                    | Preserve only.          |
+| `layoutTableRowsApart`             | Lay out table rows independently.                                               | Y                    | Implement.              |
+| `useWord97LineBreakRules`          | Word 97 line breaking.                                                          | Y                    | Implement.              |
+| `doNotBreakConstrainedForcedTable` | Keep forced-width table unbroken.                                               | Y                    | Implement.              |
+| `doNotVertAlignCellWithSp`         | Don't vertically align a cell containing a floating shape.                      | Y                    | Implement.              |
+| `doNotBreakWrappedTables`          | Don't break across page if wrapped.                                             | Y                    | Implement.              |
+| `doNotVertAlignInTxbx`             | Don't vertically align text box.                                                | Y                    | Preserve only.          |
+| `useAnsiKerningPairs`              | Apply ANSI kerning pairs.                                                       | Y                    | Implement.              |
+| `cachedColBalance`                 | Cache column balance.                                                           | Y                    | Preserve only.          |
 
 **`w:compatSetting`** (namespaced kv) are newer; we preserve all. The
 most load-bearing is `compatibilityMode`:
+
 - `11` — Word 2003
 - `12` — Word 2007
 - `14` — Word 2010
@@ -2080,16 +2110,16 @@ saves us months.
 
 ### 11.1 Surveyed libraries
 
-| Name             | Language | Strengths                                                      | Weaknesses                                 | For us |
-|------------------|----------|---------------------------------------------------------------|--------------------------------------------|--------|
-| `docx` (npm)     | TS       | Ergonomic write API; popular                                  | Writer-only; opinionated defaults; does not preserve unknown content | Don't adopt; cross-check our writer. |
-| `mammoth`        | JS       | Simple reader; DOCX → HTML                                     | Lossy; opinionated                         | Don't adopt; useful for HTML export comparisons. |
-| `docx4j`         | Java     | Reference-quality; schema-bound POJOs generated from XSD       | Java deployment; bloat                      | **Study for correctness.** |
-| `python-docx`    | Python   | Widely deployed; good style/numbering coverage                 | Missing many features (tracked changes mostly absent) | Cross-reference for common paths. |
-| `Apache POI`     | Java     | Broad format coverage (all OOXML + binary)                     | Sprawling API                               | Consult for binary-era semantics. |
-| `Open-XML-SDK`   | C# .NET  | Microsoft-official; schema-complete                            | Windows-ish deployment                      | **Study for correctness and defaults.** |
-| `oox` (LibreOffice) | C++   | Industrial reader/writer; deep quirks knowledge                | Non-trivial to read                         | Study for quirks and Word tolerances. |
-| `SimpleOOXML`, various niche libs | various | point solutions             | Incomplete                                  | — |
+| Name                              | Language | Strengths                                                | Weaknesses                                                           | For us                                           |
+| --------------------------------- | -------- | -------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------ |
+| `docx` (npm)                      | TS       | Ergonomic write API; popular                             | Writer-only; opinionated defaults; does not preserve unknown content | Don't adopt; cross-check our writer.             |
+| `mammoth`                         | JS       | Simple reader; DOCX → HTML                               | Lossy; opinionated                                                   | Don't adopt; useful for HTML export comparisons. |
+| `docx4j`                          | Java     | Reference-quality; schema-bound POJOs generated from XSD | Java deployment; bloat                                               | **Study for correctness.**                       |
+| `python-docx`                     | Python   | Widely deployed; good style/numbering coverage           | Missing many features (tracked changes mostly absent)                | Cross-reference for common paths.                |
+| `Apache POI`                      | Java     | Broad format coverage (all OOXML + binary)               | Sprawling API                                                        | Consult for binary-era semantics.                |
+| `Open-XML-SDK`                    | C# .NET  | Microsoft-official; schema-complete                      | Windows-ish deployment                                               | **Study for correctness and defaults.**          |
+| `oox` (LibreOffice)               | C++      | Industrial reader/writer; deep quirks knowledge          | Non-trivial to read                                                  | Study for quirks and Word tolerances.            |
+| `SimpleOOXML`, various niche libs | various  | point solutions                                          | Incomplete                                                           | —                                                |
 
 ### 11.2 Recommendation
 
@@ -2132,6 +2162,7 @@ saves us months.
 ### 12.3 No entity expansion
 
 We **disable**:
+
 - DOCTYPE entirely (`<!DOCTYPE` triggers an error; many XML parsers
   default to allowing it, which is a security risk).
 - External entity resolution.
@@ -2159,6 +2190,7 @@ and log a warning (matching Word's real behavior).
 ### 13.1 Streaming emission
 
 Emit to a ZIP writer entry-by-entry. For each part:
+
 1. Open a deflate stream for the entry.
 2. Emit the XML prolog.
 3. Walk the model, writing XML token-by-token; hold no large in-memory
@@ -2221,26 +2253,26 @@ docProps/app.xml
 
 ## 14. Error modes (defensive handling)
 
-| Condition                               | Reader action                                                                     | Writer action |
-|------------------------------------------|------------------------------------------------------------------------------------|---------------|
-| Corrupt ZIP central directory            | Try best-effort recovery (scan for local headers); if that fails, abort with `CorruptPackage`. | — |
-| XML parse error (well-formedness)        | Attempt entity-repair once; else abort that part with `PartParseError`; for non-critical parts (e.g. `webSettings`), skip and continue.  | Never emit invalid XML; validator in dev mode catches. |
-| Schema violation (valid XML, wrong schema) | Log `SchemaViolation`; use default; continue.                                     | Reject in dev mode; accept in release. |
-| Missing required part (`document.xml`)   | Abort `MissingMainDocument`.                                                       | Always emit. |
-| Missing optional part                    | Log, continue.                                                                     | Omit when unused; always emit `styles.xml`, `settings.xml`, `fontTable.xml`. |
-| Broken relationship (target missing)     | Remove inline reference, log `BrokenRelationship`.                                 | Never emit dangling rels. |
-| Circular relationships                   | Detect via DFS with visited set; log `CircularRelationship`; break cycle.          | Never create. |
-| Invalid unicode (surrogates, non-characters) | Replace with U+FFFD; log.                                                       | Reject input text; must be valid UTF-16 converted to UTF-8. |
-| Huge values (DoS)                        | Clamp: font size ≤ 1638 (half-pt max = 819pt), cell width ≤ page width × 100, numbering restart ≤ 1e9. Log. | Never emit beyond clamps. |
-| Zip-slip (path escape)                   | Reject entire package.                                                             | — |
-| Zip-bomb (ratio/size)                    | Abort after threshold.                                                             | — |
-| Extreme nesting (>1000 element levels)   | Abort with `DepthLimitExceeded`.                                                   | — |
-| Token explosion (>10M tokens in one part) | Abort.                                                                            | — |
-| Content-types mismatch                   | Log, trust the actual root element name.                                           | Always emit matching Override. |
-| Duplicate part                           | Keep first, log subsequent.                                                        | Never emit duplicates. |
-| Part not referenced but present          | Keep as-is on round-trip; attach to a "detached parts" bucket for emit.            | — |
-| Relationship references unknown type     | Preserve opaquely; do not try to parse target.                                     | — |
-| Unknown namespace on a root we recognize | Parse what we recognize; preserve rest as UnknownElement.                          | — |
+| Condition                                    | Reader action                                                                                                                           | Writer action                                                                |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Corrupt ZIP central directory                | Try best-effort recovery (scan for local headers); if that fails, abort with `CorruptPackage`.                                          | —                                                                            |
+| XML parse error (well-formedness)            | Attempt entity-repair once; else abort that part with `PartParseError`; for non-critical parts (e.g. `webSettings`), skip and continue. | Never emit invalid XML; validator in dev mode catches.                       |
+| Schema violation (valid XML, wrong schema)   | Log `SchemaViolation`; use default; continue.                                                                                           | Reject in dev mode; accept in release.                                       |
+| Missing required part (`document.xml`)       | Abort `MissingMainDocument`.                                                                                                            | Always emit.                                                                 |
+| Missing optional part                        | Log, continue.                                                                                                                          | Omit when unused; always emit `styles.xml`, `settings.xml`, `fontTable.xml`. |
+| Broken relationship (target missing)         | Remove inline reference, log `BrokenRelationship`.                                                                                      | Never emit dangling rels.                                                    |
+| Circular relationships                       | Detect via DFS with visited set; log `CircularRelationship`; break cycle.                                                               | Never create.                                                                |
+| Invalid unicode (surrogates, non-characters) | Replace with U+FFFD; log.                                                                                                               | Reject input text; must be valid UTF-16 converted to UTF-8.                  |
+| Huge values (DoS)                            | Clamp: font size ≤ 1638 (half-pt max = 819pt), cell width ≤ page width × 100, numbering restart ≤ 1e9. Log.                             | Never emit beyond clamps.                                                    |
+| Zip-slip (path escape)                       | Reject entire package.                                                                                                                  | —                                                                            |
+| Zip-bomb (ratio/size)                        | Abort after threshold.                                                                                                                  | —                                                                            |
+| Extreme nesting (>1000 element levels)       | Abort with `DepthLimitExceeded`.                                                                                                        | —                                                                            |
+| Token explosion (>10M tokens in one part)    | Abort.                                                                                                                                  | —                                                                            |
+| Content-types mismatch                       | Log, trust the actual root element name.                                                                                                | Always emit matching Override.                                               |
+| Duplicate part                               | Keep first, log subsequent.                                                                                                             | Never emit duplicates.                                                       |
+| Part not referenced but present              | Keep as-is on round-trip; attach to a "detached parts" bucket for emit.                                                                 | —                                                                            |
+| Relationship references unknown type         | Preserve opaquely; do not try to parse target.                                                                                          | —                                                                            |
+| Unknown namespace on a root we recognize     | Parse what we recognize; preserve rest as UnknownElement.                                                                               | —                                                                            |
 
 Every error carries a `DocumentDiagnostic` with `severity`, `code`,
 `partName`, `location` (line/col when available), and a suggested fix.
@@ -2394,6 +2426,7 @@ Every error carries a `DocumentDiagnostic` with `severity`, `code`,
 ```
 
 And in `word/_rels/document.xml.rels`:
+
 ```xml
 <Relationship Id="rId13"
               Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink"
@@ -2727,18 +2760,18 @@ See §5.16. `wp:docPr@descr` holds alt text (accessibility).
 
 The few differences that matter to us:
 
-| Concern                              | Transitional                                                  | Strict                                                            |
-|--------------------------------------|---------------------------------------------------------------|-------------------------------------------------------------------|
-| VML (`v:`, `o:`, `w10:`)             | Allowed, as fallback or primary.                              | Banned entirely. Must use DrawingML or omit.                      |
-| `w:pict` element                     | Allowed (wraps VML).                                          | Not allowed.                                                      |
-| `mc:AlternateContent` with VML fallback | Allowed.                                                    | Not allowed (no VML).                                             |
-| `w:fldSimple`                        | Allowed.                                                      | Not allowed — all fields must be complex.                         |
-| `w:noProof` and spelling toggles     | Allowed.                                                      | Same.                                                             |
-| Legacy compat flags (Word 6/95-era)  | Allowed, many.                                                | Many removed; only "modern" set remains.                          |
-| `w:compatSetting@uri` values         | Must be a canonical set but w:name unchecked.                 | Stricter validation.                                              |
-| Deprecated font-scheme attributes    | Accepted.                                                     | Rejected.                                                         |
-| Namespace URIs for core parts        | Same (`...2006/main`).                                        | Strict uses `...2006/main` for WordprocessingML; the transitional vs strict distinction is inside schemas, not root namespace. |
-| Content type of main document        | `...document.main+xml`                                        | Same (the CT does not encode Transitional vs Strict; conformance class is declared via schemas used).                    |
+| Concern                                 | Transitional                                  | Strict                                                                                                                         |
+| --------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| VML (`v:`, `o:`, `w10:`)                | Allowed, as fallback or primary.              | Banned entirely. Must use DrawingML or omit.                                                                                   |
+| `w:pict` element                        | Allowed (wraps VML).                          | Not allowed.                                                                                                                   |
+| `mc:AlternateContent` with VML fallback | Allowed.                                      | Not allowed (no VML).                                                                                                          |
+| `w:fldSimple`                           | Allowed.                                      | Not allowed — all fields must be complex.                                                                                      |
+| `w:noProof` and spelling toggles        | Allowed.                                      | Same.                                                                                                                          |
+| Legacy compat flags (Word 6/95-era)     | Allowed, many.                                | Many removed; only "modern" set remains.                                                                                       |
+| `w:compatSetting@uri` values            | Must be a canonical set but w:name unchecked. | Stricter validation.                                                                                                           |
+| Deprecated font-scheme attributes       | Accepted.                                     | Rejected.                                                                                                                      |
+| Namespace URIs for core parts           | Same (`...2006/main`).                        | Strict uses `...2006/main` for WordprocessingML; the transitional vs strict distinction is inside schemas, not root namespace. |
+| Content type of main document           | `...document.main+xml`                        | Same (the CT does not encode Transitional vs Strict; conformance class is declared via schemas used).                          |
 
 **Our target.** Transitional, Section 4 compliance class W3ML. We emit
 legal Transitional markup only. We accept Strict on read by mapping it
@@ -2768,6 +2801,7 @@ Extended properties: `Application`, `AppVersion`, `Template`,
 `HyperlinksChanged`, `HeadingPairs`, `TitlesOfParts`.
 
 `DocSecurity` values:
+
 - 0: none
 - 1: password-protected
 - 2: read-only recommended
@@ -3211,27 +3245,28 @@ Contents: VML (`v:`).
 
 ## 22. ID and cross-reference conventions
 
-| Kind                              | Attribute            | Allocator policy                                                   |
-|-----------------------------------|----------------------|--------------------------------------------------------------------|
-| Relationships                     | `@Id`                | `rId{n}` sequential per rels file.                                  |
-| Bookmark                          | `@w:id`              | Sequential non-negative int per document. `_GoBack` etc. are names, still with id. |
-| Comment                           | `@w:id`              | Sequential non-negative int per document.                           |
-| Footnote/endnote                  | `@w:id`              | Sequential int. `-1` separator, `0` continuation separator.         |
-| Revision (`w:ins`/`w:del`/etc.)   | `@w:id`              | Sequential int per document.                                        |
-| Paragraph rsid                    | `@w:rsidR` etc.      | Hex, 8 chars; we emit deterministic values.                         |
-| `w14:paraId` / `w14:textId`       | attribute            | 8 hex chars. Seeded PRNG per document.                              |
-| DrawingML `docPr@id`              | attribute            | Sequential positive int per document.                               |
-| DrawingML `cNvPr@id`              | attribute            | Sequential positive int per document.                               |
-| `w:abstractNumId` / `w:numId`     | attribute            | Sequential int per doc; independent counters.                       |
-| Style id                          | `@w:styleId`         | Canonical name → styleId transform (see §6).                        |
-| OLE ObjectID                      | `@ObjectID`          | `_{digits}` (we mint deterministic decimals).                       |
-| VML shape id                      | `@id`                | `_x0000_i{kind}{n}` (Word's pattern). Preserve on round-trip.       |
+| Kind                            | Attribute       | Allocator policy                                                                   |
+| ------------------------------- | --------------- | ---------------------------------------------------------------------------------- |
+| Relationships                   | `@Id`           | `rId{n}` sequential per rels file.                                                 |
+| Bookmark                        | `@w:id`         | Sequential non-negative int per document. `_GoBack` etc. are names, still with id. |
+| Comment                         | `@w:id`         | Sequential non-negative int per document.                                          |
+| Footnote/endnote                | `@w:id`         | Sequential int. `-1` separator, `0` continuation separator.                        |
+| Revision (`w:ins`/`w:del`/etc.) | `@w:id`         | Sequential int per document.                                                       |
+| Paragraph rsid                  | `@w:rsidR` etc. | Hex, 8 chars; we emit deterministic values.                                        |
+| `w14:paraId` / `w14:textId`     | attribute       | 8 hex chars. Seeded PRNG per document.                                             |
+| DrawingML `docPr@id`            | attribute       | Sequential positive int per document.                                              |
+| DrawingML `cNvPr@id`            | attribute       | Sequential positive int per document.                                              |
+| `w:abstractNumId` / `w:numId`   | attribute       | Sequential int per doc; independent counters.                                      |
+| Style id                        | `@w:styleId`    | Canonical name → styleId transform (see §6).                                       |
+| OLE ObjectID                    | `@ObjectID`     | `_{digits}` (we mint deterministic decimals).                                      |
+| VML shape id                    | `@id`           | `_x0000_i{kind}{n}` (Word's pattern). Preserve on round-trip.                      |
 
 ---
 
 ## 23. Field code reference (selected)
 
 Fields are text streams with a short syntax. Common switches:
+
 - `\* MERGEFORMAT` — preserve formatting on update
 - `\* Upper`, `\* Lower`, `\* Caps`, `\* FirstCap` — case
 - `\* Arabic`, `\* Roman`, `\* alphabetic`, `\* ordinal`, etc. — number fmt
@@ -3241,6 +3276,7 @@ Fields are text streams with a short syntax. Common switches:
 - `\f`, `\l` — flag switches
 
 We implement a field engine that recognizes and computes:
+
 - `PAGE`, `NUMPAGES`, `SECTION`, `SECTIONPAGES`
 - `DATE`, `TIME`, `CREATEDATE`, `SAVEDATE`, `PRINTDATE`
 - `AUTHOR`, `TITLE`, `SUBJECT`, `KEYWORDS`, `FILENAME`, `FILESIZE`,
@@ -3252,7 +3288,7 @@ We implement a field engine that recognizes and computes:
 - `MERGEFIELD` (display of merge-field name only; we do not implement
   data-source binding in v1)
 - `FORMTEXT`, `FORMCHECKBOX`, `FORMDROPDOWN`
-- `IF`, `=`  (simple expressions)
+- `IF`, `=` (simple expressions)
 - `SYMBOL`, `LISTNUM`, `GOTOBUTTON`, `MACROBUTTON` (button text only)
 
 Unrecognized fields are preserved verbatim; the displayed "result" runs

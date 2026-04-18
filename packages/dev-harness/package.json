@@ -1,0 +1,26 @@
+{
+  "name": "@word/dev-harness",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "perf": "node --experimental-vm-modules ./dist/perf/runner.js",
+    "perf:update": "node --experimental-vm-modules ./dist/perf/runner.js --update-baseline",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo perf-output"
+  },
+  "dependencies": {
+    "@word/domain": "workspace:*",
+    "@word/engine": "workspace:*",
+    "@word/layout": "workspace:*",
+    "@word/docx": "workspace:*"
+  }
+}

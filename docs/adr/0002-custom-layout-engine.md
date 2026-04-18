@@ -14,16 +14,19 @@ We own the layout pipeline end-to-end, as six deterministic stages (Measure, Lin
 ## Consequences
 
 ### Positive
+
 - Deterministic pagination; testable via JSON diff of `PageLayout[]` and pixel diff of rendered pages.
 - Cross-OS, cross-browser parity.
 - Print output uses the same `PageLayout` as the viewport — no divergence.
 
 ### Negative
+
 - ~3,200 lines of layout to own and defend (`rendering.md`).
 - We rebuild affordances the browser gives for free: spellcheck squiggles, native selection gestures, drag-to-select kinetics.
 - Worker + main-thread coordination cost (see ADR-0010, ADR-0016).
 
 ### Follow-up required
+
 - Canvas-fallback mode for very large documents is referenced in `rendering.md` but needs a specific trigger threshold and switch UX.
 
 ## Alternatives considered

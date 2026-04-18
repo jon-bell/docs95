@@ -59,6 +59,7 @@ These come from `overview.md § 3`. Violations fail review.
 ## Conventions
 
 ### TypeScript
+
 - `strict: true`, `noImplicitAny: true`, `exactOptionalPropertyTypes: true`, `noUncheckedIndexedAccess: true`.
 - Prefer discriminated unions for variant types; no ad-hoc string flags.
 - Exported public API uses named types, not inline shapes.
@@ -66,12 +67,14 @@ These come from `overview.md § 3`. Violations fail review.
 - `readonly` by default for data shapes. Mutability is explicit and local.
 
 ### React
+
 - Function components only. Hooks for state and effects.
 - `React.memo` on any component rendered in a list or hot path.
 - Split contexts by volatility. Never wrap the whole app in one mutable context.
 - `useDeferredValue` / `useTransition` for non-urgent updates (status bar, decorations).
 
 ### Code style
+
 - ESLint + Prettier via `tooling/eslint-config`. Commits are blocked by pre-commit hook if either fails.
 - File names: `kebab-case.ts`. Class names: `PascalCase`. Functions and variables: `camelCase`. Types: `PascalCase`.
 - One public export per file unless the file is an index.
@@ -79,6 +82,7 @@ These come from `overview.md § 3`. Violations fail review.
 - Comments explain **why**, not what. Trivial `// reads the file` comments are rejected.
 
 ### Tests
+
 - Colocated `*.test.ts` next to the unit under test.
 - Vitest for unit. Playwright for E2E. Storybook for UI. axe-core for a11y.
 - Domain invariants covered by `fast-check` property tests.
@@ -86,6 +90,7 @@ These come from `overview.md § 3`. Violations fail review.
 - Budgets from `non-functional.md` are enforced in CI.
 
 ### Git
+
 - Branches: `feat/<slug>`, `fix/<slug>`, `refactor/<slug>`, `docs/<slug>`, `chore/<slug>`.
 - Commits: conventional commits (`feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`). One logical change per commit.
 - PRs: link to the issue, list ADRs affected, include screenshots for UI changes, include perf numbers for layout/render changes.

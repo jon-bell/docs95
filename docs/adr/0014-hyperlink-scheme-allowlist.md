@@ -25,15 +25,18 @@ On save, we **strip** `javascript:` and `data:text/html` URLs from hyperlink tar
 ## Consequences
 
 ### Positive
+
 - Novel schemes default to safe.
 - Security audits answer "what can we open?" from a single, reviewable list.
 - Supply-chain poisoning of a DOCX corpus cannot silently introduce new active schemes.
 
 ### Negative
+
 - Legitimate users of less-common schemes (`tel:`, `callto:`, internal enterprise schemes) face one extra click the first time.
 - Enterprise may need per-deployment allowlist expansion via GPO/config — deferred but anticipated.
 
 ### Follow-up required
+
 - Specify the per-session and persistent confirmation UX in `docs/requirements/ux.md`.
 - Specify the enterprise-policy config key for unlocking additional schemes.
 

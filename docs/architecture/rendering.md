@@ -32,7 +32,7 @@ guarantee. The only way to get this is to own layout.
 We **do** use the DOM as our paint surface. A fully custom Canvas renderer
 would be smaller and faster, but would forfeit native selection (as a
 fallback), accessibility tree, IME caret reporting, and built-in text-find
-by assistive tech. The compromise we take: the DOM is a *dumb* output of our
+by assistive tech. The compromise we take: the DOM is a _dumb_ output of our
 layout — every glyph run is an absolutely positioned `<span>` inside an
 absolutely positioned line box inside a page container. The browser does no
 reflow inside pages (`contain: strict`).
@@ -78,16 +78,16 @@ Word's visual model is **declarative, metric, and deterministic**. A
 printer, every locale — provided fonts are available. Our engine must
 preserve that determinism. That means:
 
-* Layout is a **pure function** of
+- Layout is a **pure function** of
   `(domainSnapshot, sectionSnapshot, styleSnapshot, fontSnapshot, viewConfig)`.
   No randomness, no time-dependent behavior (no animations that change
   line widths), no device-dependent behavior beyond font-metric fallback
   when a font is not installed (where we log a diagnostic).
-* Layout output is **serializable and diffable**. Two runs of the engine on
+- Layout output is **serializable and diffable**. Two runs of the engine on
   the same inputs produce identical `PageLayout[]` structures (byte-equal
   after JSON-serialize). This is the basis for golden-image tests, print
   consistency, and collaborative co-editing future-proofing.
-* The DOM is reconstructed from `PageLayout[]`. The DOM does not carry
+- The DOM is reconstructed from `PageLayout[]`. The DOM does not carry
   information that the layout model lacks. If something is in the DOM, it
   is either derivable from the layout or is ephemeral UI (caret blink).
 
@@ -105,7 +105,7 @@ DOM:
    `aria-label` / text-node content. A Canvas surface is a visual blob
    with no semantics. We can emit an ARIA tree alongside a Canvas, but
    that doubles the model maintenance cost and is inevitably stale.
-   Keeping the DOM as the paint surface means the DOM is *always*
+   Keeping the DOM as the paint surface means the DOM is _always_
    accessible, because it's the same data that renders pixels.
 2. **Selection fallback.** Even though we own selection rendering, users
    triple-click, long-press, and use accessibility gestures that expect
@@ -125,7 +125,7 @@ DOM:
 6. **Hit testing for dev tools.** Inspecting a specific word in DevTools
    aids debugging; Canvas is opaque to that.
 
-Canvas remains in our toolbox for *opt-in* "huge document mode" (risk 23.3)
+Canvas remains in our toolbox for _opt-in_ "huge document mode" (risk 23.3)
 and for shape/SVG composition.
 
 ### 1.3 Why not HTML `contenteditable` with browser layout
@@ -134,43 +134,43 @@ The seductive alternative is to put a giant `<div contenteditable>` on the
 page, style it with `@page` rules, and let the browser paginate. It would
 ship faster. It would also be wrong:
 
-* **Page breaking is unreliable.** `break-before`, `break-inside`, and
+- **Page breaking is unreliable.** `break-before`, `break-inside`, and
   friends are honored by Chromium only in print, inconsistently on screen,
   and they don't support keep-with-next, widow/orphan at Word fidelity,
   or "keep lines together" without workarounds that break other things.
-* **Tables across pages are unpredictable.** Chromium's table algorithm
+- **Tables across pages are unpredictable.** Chromium's table algorithm
   does not split rows at Word-compatible boundaries, does not repeat
   header rows, and does not handle `cantSplit`.
-* **Floats across pages.** A float declared in page 1 won't flow to page 2
+- **Floats across pages.** A float declared in page 1 won't flow to page 2
   the way Word expects; wrap-around contours are approximate.
-* **Footnotes.** The browser has no notion of footnotes anchored to the
+- **Footnotes.** The browser has no notion of footnotes anchored to the
   page.
-* **Selection in nested editables is buggy.** Tables with editable cells
+- **Selection in nested editables is buggy.** Tables with editable cells
   inside an editable doc cause focus-jump issues; caret movement in
   bidi-mixed text is inconsistent browser-to-browser.
-* **IME in complex `contenteditable`.** Composition events get dropped when
+- **IME in complex `contenteditable`.** Composition events get dropped when
   DOM mutates mid-composition; we need fine control.
-* **Print rendering drift.** `webContents.printToPDF` and screen rendering
+- **Print rendering drift.** `webContents.printToPDF` and screen rendering
   produce different results in corner cases.
-* **Determinism across OSes.** Chromium line-breaks Latin/CJK differently
+- **Determinism across OSes.** Chromium line-breaks Latin/CJK differently
   from Word in some cases; we need to match Word.
 
-The verdict: `contenteditable` is a liability. We use a *tiny* hidden
+The verdict: `contenteditable` is a liability. We use a _tiny_ hidden
 editable as an IME intake surface (see §11), not as the document model.
 
 ### 1.4 What we give up by owning layout
 
 Honesty clause:
 
-* **Text shaping.** Browser freely shapes complex scripts (Arabic, Indic,
+- **Text shaping.** Browser freely shapes complex scripts (Arabic, Indic,
   Thai) at paint time, with the system's HarfBuzz. We must reproduce this
   in our measurement layer. We plan a hybrid (Canvas `measureText` MVP,
   HarfBuzz WASM v1.1) and pre-test metric equivalence (see §7.3).
-* **Automatic font fallback.** Browser falls back per glyph. We emulate
+- **Automatic font fallback.** Browser falls back per glyph. We emulate
   this with per-script fallback chains (see §8.3).
-* **Kerning, ligatures, OpenType features.** We ship these via shaped
+- **Kerning, ligatures, OpenType features.** We ship these via shaped
   advances; the browser paints with `font-feature-settings` matching.
-* **Browser performance.** The browser's C++ layout is fast. Ours is
+- **Browser performance.** The browser's C++ layout is fast. Ours is
   JS/WASM. We mitigate with caching, workers, and virtualization.
 
 These costs are real but tractable. The payoff is exact Word-like
@@ -178,12 +178,12 @@ behavior.
 
 ### 1.5 Non-goals
 
-* We are **not** re-implementing HTML/CSS. Our layout model is a
+- We are **not** re-implementing HTML/CSS. Our layout model is a
   word-processor layout model, not a general document layout model.
-* We are **not** building a real-time collaborative OT/CRDT layer in this
+- We are **not** building a real-time collaborative OT/CRDT layer in this
   component. The layout engine accepts immutable snapshots; a future
   collab layer can feed it patches.
-* We are **not** building a renderer for arbitrary rich text from the
+- We are **not** building a renderer for arbitrary rich text from the
   web; we render only what our domain model describes.
 
 ---
@@ -192,14 +192,14 @@ behavior.
 
 ### 2.1 Unit table
 
-| Quantity    | Internal       | DOCX wire       | Rendering                    |
-|-------------|----------------|-----------------|------------------------------|
-| Length      | **twip** (1/1440 in) | twip (most) / EMU (drawingML) | CSS `px` via `twipsToPx` |
-| Font size   | **half-point** (1/2 pt) | half-point | CSS `px` |
-| Line weight | **eighth-point** (1/8 pt) | eighth-point | CSS `px` |
-| Paper size  | twip            | twip           | px |
-| Angles      | **60000ths of a degree** | ECMA-376 unit | `deg` |
-| Colors      | ARGB 0xAARRGGBB | hex string / theme | CSS `#rrggbb` |
+| Quantity    | Internal                  | DOCX wire                     | Rendering                |
+| ----------- | ------------------------- | ----------------------------- | ------------------------ |
+| Length      | **twip** (1/1440 in)      | twip (most) / EMU (drawingML) | CSS `px` via `twipsToPx` |
+| Font size   | **half-point** (1/2 pt)   | half-point                    | CSS `px`                 |
+| Line weight | **eighth-point** (1/8 pt) | eighth-point                  | CSS `px`                 |
+| Paper size  | twip                      | twip                          | px                       |
+| Angles      | **60000ths of a degree**  | ECMA-376 unit                 | `deg`                    |
+| Colors      | ARGB 0xAARRGGBB           | hex string / theme            | CSS `#rrggbb`            |
 
 **EMU (English Metric Unit) = 914400 per inch = 12700 per point.** EMUs
 appear in DrawingML (shapes, images). We convert EMU ↔ twip at the parser
@@ -212,13 +212,13 @@ into off-by-one pixel drift across pages.
 
 ### 2.2 Coordinate system
 
-* **Origin**: top-left corner of the physical page (not the content area).
-* **X** increases rightward (logical leading edge in LTR; visually rightward
+- **Origin**: top-left corner of the physical page (not the content area).
+- **X** increases rightward (logical leading edge in LTR; visually rightward
   in both LTR and RTL — bidi reorder happens within line boxes).
-* **Y** increases downward. Matches CSS and Word.
-* **Line box Y** references the line's **top** (not baseline). Baseline
+- **Y** increases downward. Matches CSS and Word.
+- **Line box Y** references the line's **top** (not baseline). Baseline
   is derived as `top + ascent`.
-* **Glyph run X** references the **leading edge** of the run (left edge
+- **Glyph run X** references the **leading edge** of the run (left edge
   in LTR, right edge in RTL). The logical order matches logical text;
   visual reordering is deferred to the line box's `runs[]` order.
 
@@ -245,38 +245,24 @@ reserved footnote space.
 ```ts
 // src/layout/units.ts
 
-export const TWIPS_PER_INCH   = 1440;
-export const POINTS_PER_INCH  = 72;
-export const TWIPS_PER_POINT  = 20;   // 1440/72
-export const EMUS_PER_INCH    = 914400;
-export const EMUS_PER_POINT   = 12700;
-export const EMUS_PER_TWIP    = 635;  // 914400/1440
+export const TWIPS_PER_INCH = 1440;
+export const POINTS_PER_INCH = 72;
+export const TWIPS_PER_POINT = 20; // 1440/72
+export const EMUS_PER_INCH = 914400;
+export const EMUS_PER_POINT = 12700;
+export const EMUS_PER_TWIP = 635; // 914400/1440
 
-export function twipsToPx(
-  twips: number,
-  zoom: number,
-  dpr: number,
-  cssPixelsPerInch = 96,
-): number {
-  return twips / TWIPS_PER_INCH * cssPixelsPerInch * zoom * dpr;
+export function twipsToPx(twips: number, zoom: number, dpr: number, cssPixelsPerInch = 96): number {
+  return (twips / TWIPS_PER_INCH) * cssPixelsPerInch * zoom * dpr;
 }
 
-export function pxToTwips(
-  px: number,
-  zoom: number,
-  dpr: number,
-  cssPixelsPerInch = 96,
-): number {
-  return px * TWIPS_PER_INCH / (cssPixelsPerInch * zoom * dpr);
+export function pxToTwips(px: number, zoom: number, dpr: number, cssPixelsPerInch = 96): number {
+  return (px * TWIPS_PER_INCH) / (cssPixelsPerInch * zoom * dpr);
 }
 
-export function halfPointsToPx(
-  hp: number,
-  zoom: number,
-  dpr: number,
-): number {
+export function halfPointsToPx(hp: number, zoom: number, dpr: number): number {
   // hp/2 = points; points/72 = inches; inches*96 = CSS px
-  return hp / 2 / POINTS_PER_INCH * 96 * zoom * dpr;
+  return (hp / 2 / POINTS_PER_INCH) * 96 * zoom * dpr;
 }
 ```
 
@@ -289,12 +275,12 @@ round at the final commit.
 
 ### 2.4 DPR and zoom composition
 
-* **`zoom`**: user-controlled (10%–500% in MVP; 10%–2000% eventually).
-* **`dpr`** (`window.devicePixelRatio`): 1 on normal monitors, 2 on HiDPI,
+- **`zoom`**: user-controlled (10%–500% in MVP; 10%–2000% eventually).
+- **`dpr`** (`window.devicePixelRatio`): 1 on normal monitors, 2 on HiDPI,
   1.25/1.5 fractional on Windows at custom scaling.
-* Effective CSS pixel density per inch = `96 * zoom * dpr`.
-* Font size in CSS px = `halfPointsToPx(runFontHp, zoom, dpr)`.
-* We render *actual size* — not zoomed-up 96dpi — because the browser then
+- Effective CSS pixel density per inch = `96 * zoom * dpr`.
+- Font size in CSS px = `halfPointsToPx(runFontHp, zoom, dpr)`.
+- We render _actual size_ — not zoomed-up 96dpi — because the browser then
   paints with the installed font's full hinting, which is what users
   expect in "100% zoom" WYSIWYG.
 
@@ -309,11 +295,11 @@ that enables cheap zoom changes (no re-layout, only re-commit).
 
 Throughout this doc:
 
-* **"px"** without qualification means CSS px (1/96 inch), the thing you
+- **"px"** without qualification means CSS px (1/96 inch), the thing you
   assign to `style.left`.
-* **"device px"** means physical screen pixels. We almost never use this
+- **"device px"** means physical screen pixels. We almost never use this
   term; DPR handles it.
-* **"logical px"** is synonymous with "CSS px".
+- **"logical px"** is synonymous with "CSS px".
 
 ---
 
@@ -376,23 +362,23 @@ Throughout this doc:
 Each stage produces a new immutable object and consumes the previous
 stage's immutable output. This lets us:
 
-* cache aggressively — a `ParaLayout` is keyed by a hash of inputs;
-* run stages in parallel for different paragraphs;
-* reuse upstream outputs when only a downstream input changes (e.g.,
+- cache aggressively — a `ParaLayout` is keyed by a hash of inputs;
+- run stages in parallel for different paragraphs;
+- reuse upstream outputs when only a downstream input changes (e.g.,
   changing page size does not invalidate shaped runs or line breaks at
   fixed widths, though it does invalidate block layout onward).
 
 ### 3.3 Which stages run where
 
-| Stage                | Thread                | Frequency on edit                           |
-|----------------------|-----------------------|---------------------------------------------|
-| 1 Measure            | Worker (N)            | Only dirty runs                             |
-| 2 Line break         | Worker (N)            | Only dirty paragraphs (+ width change)      |
-| 3 Block layout       | Worker (N) per section| Dirty sections                              |
-| 4 Table layout       | Worker (N)            | Dirty tables                                |
-| 5 Pagination         | Main                  | Incremental from first dirty page           |
-| 6 Positioning        | Main                  | Lazy per visible page                       |
-| DOM commit           | Main (rAF)            | One commit per visible page per frame       |
+| Stage          | Thread                 | Frequency on edit                      |
+| -------------- | ---------------------- | -------------------------------------- |
+| 1 Measure      | Worker (N)             | Only dirty runs                        |
+| 2 Line break   | Worker (N)             | Only dirty paragraphs (+ width change) |
+| 3 Block layout | Worker (N) per section | Dirty sections                         |
+| 4 Table layout | Worker (N)             | Dirty tables                           |
+| 5 Pagination   | Main                   | Incremental from first dirty page      |
+| 6 Positioning  | Main                   | Lazy per visible page                  |
+| DOM commit     | Main (rAF)             | One commit per visible page per frame  |
 
 Workers share a font cache (see §8) and an ICU4X WASM instance. See §6.
 
@@ -404,12 +390,12 @@ Workers share a font cache (see §8) and an ICU4X WASM instance. See §6.
 
 For each paragraph, a list of **Runs**, each carrying:
 
-* `text: string` (logical order, NFC-normalized);
-* `props: RunProps` (font family list, size in half-points, weight,
+- `text: string` (logical order, NFC-normalized);
+- `props: RunProps` (font family list, size in half-points, weight,
   italic, underline, color, features `{liga, kern, ss01…}`, language tag
   like `en-US` or `ja-JP`, OpenType script hint if explicit);
-* `runId: RunId` (stable identity for caching);
-* references to inline objects (images, fields, footnote refs).
+- `runId: RunId` (stable identity for caching);
+- references to inline objects (images, fields, footnote refs).
 
 ### 4.2 Segmentation
 
@@ -422,10 +408,10 @@ single language.
 We walk the string code-point by code-point and assign a script via the
 Unicode Script property. Rules:
 
-* `Common` and `Inherited` attach to the run they extend (look back, else
+- `Common` and `Inherited` attach to the run they extend (look back, else
   look forward, else `Latin`).
-* Script changes start a new segment.
-* Digits (`Common`) inside, e.g., Arabic text inherit Arabic direction
+- Script changes start a new segment.
+- Digits (`Common`) inside, e.g., Arabic text inherit Arabic direction
   but retain Latin shaping — handled at bidi level not script.
 
 Implementation: `icu4x::Script` mapper via WASM, or the smaller
@@ -436,9 +422,9 @@ Implementation: `icu4x::Script` mapper via WASM, or the smaller
 The Unicode Bidirectional Algorithm assigns an **embedding level** (0–125;
 in practice 0–15) per character:
 
-* Paragraph level is computed from the first strong character (or from
+- Paragraph level is computed from the first strong character (or from
   `w:bidi`).
-* Characters receive embedding levels after applying X1–X10 rules
+- Characters receive embedding levels after applying X1–X10 rules
   (explicit embeddings/overrides), N0/N1/N2 (neutral resolution), I1/I2
   (implicit levels).
 
@@ -461,37 +447,37 @@ For each shaping segment, produce a **ShapedRun**:
 
 ```ts
 interface ShapedRun {
-  runId:        RunId;
+  runId: RunId;
   segmentIndex: number;
-  script:       Script;
-  level:        number;              // 0 LTR, 1 RTL, 2 LTR, …
-  font:         ResolvedFont;
-  sizeHp:       number;
-  features:     OpenTypeFeatureSet;
-  text:         string;              // logical
-  clusters:     Cluster[];           // one per grapheme cluster
-  width:        number;              // twips; sum of cluster advances
-  ascent:       number;              // twips; from font at sizeHp
-  descent:      number;              // twips
-  lineGap:      number;              // twips
+  script: Script;
+  level: number; // 0 LTR, 1 RTL, 2 LTR, …
+  font: ResolvedFont;
+  sizeHp: number;
+  features: OpenTypeFeatureSet;
+  text: string; // logical
+  clusters: Cluster[]; // one per grapheme cluster
+  width: number; // twips; sum of cluster advances
+  ascent: number; // twips; from font at sizeHp
+  descent: number; // twips
+  lineGap: number; // twips
 }
 
 interface Cluster {
-  logicalStart: number;              // code-point offset into `text`
-  logicalEnd:   number;              // exclusive
-  glyphs:       Glyph[];
-  advance:      number;              // twips, sum of glyph advances
+  logicalStart: number; // code-point offset into `text`
+  logicalEnd: number; // exclusive
+  glyphs: Glyph[];
+  advance: number; // twips, sum of glyph advances
   isWhitespace: boolean;
-  canBreakBefore: boolean;           // UAX #14
-  hyphenatable:  boolean;            // can insert soft hyphen before
+  canBreakBefore: boolean; // UAX #14
+  hyphenatable: boolean; // can insert soft hyphen before
 }
 
 interface Glyph {
-  gid:          number;              // font glyph index
-  xAdvance:     number;              // twips
-  yAdvance:     number;              // twips (usually 0)
-  xOffset:      number;              // twips
-  yOffset:      number;              // twips
+  gid: number; // font glyph index
+  xAdvance: number; // twips
+  yAdvance: number; // twips (usually 0)
+  xOffset: number; // twips
+  yOffset: number; // twips
 }
 ```
 
@@ -509,13 +495,13 @@ the browser will paint. We run:
 const ctx = sharedOffscreenCanvas.getContext('2d', { willReadFrequently: false });
 ctx.font = cssFontShorthand(resolvedFont, sizeHp);
 const m = ctx.measureText(clusterText);
-const advance = m.width;            // CSS px at 1x; we convert to twips
+const advance = m.width; // CSS px at 1x; we convert to twips
 ```
 
 Cluster boundaries: Canvas can't report glyph indices, only widths. We
 split at grapheme cluster boundaries (UAX #29) and `measureText` each
 cluster. For runs of Latin text this is acceptably fast because we cache
-aggressively at the *word* level (see §4.6).
+aggressively at the _word_ level (see §4.6).
 
 We do **not** use Canvas for Arabic, Hebrew, Devanagari, Myanmar, Thai,
 Khmer, Lao, Tibetan, Ethiopic, or any script requiring contextual shaping.
@@ -535,9 +521,9 @@ interface HbShaper {
     face: HbFace,
     text: string,
     opts: {
-      script: string;        // ISO 15924
+      script: string; // ISO 15924
       direction: 'ltr' | 'rtl' | 'ttb' | 'btt';
-      language: string;      // BCP 47
+      language: string; // BCP 47
       features: Record<string, boolean>;
       variations?: Record<string, number>;
     },
@@ -545,7 +531,7 @@ interface HbShaper {
 }
 
 interface HbShapingResult {
-  glyphInfos:   { codepoint: number; cluster: number; flags: number }[];
+  glyphInfos: { codepoint: number; cluster: number; flags: number }[];
   glyphPositions: { xAdvance: number; yAdvance: number; xOffset: number; yOffset: number }[];
 }
 ```
@@ -574,19 +560,19 @@ using `opentype.js` (pure JS) or `fontkit-wasm` (faster):
 ```ts
 interface FontMetrics {
   unitsPerEm: number;
-  ascent:     number;   // hhea.ascent
-  descent:    number;   // hhea.descent, negative
-  lineGap:    number;   // hhea.lineGap
-  capHeight:  number;
-  xHeight:    number;
-  strikeout:  { position: number; thickness: number };
-  underline:  { position: number; thickness: number };
+  ascent: number; // hhea.ascent
+  descent: number; // hhea.descent, negative
+  lineGap: number; // hhea.lineGap
+  capHeight: number;
+  xHeight: number;
+  strikeout: { position: number; thickness: number };
+  underline: { position: number; thickness: number };
   // OS/2 typo metrics for preferred line-height matching Word
-  typoAscent:  number;
+  typoAscent: number;
   typoDescent: number;
   typoLineGap: number;
-  winAscent:   number;
-  winDescent:  number;
+  winAscent: number;
+  winDescent: number;
   useTypoMetrics: boolean; // OS/2 fsSelection bit 7
 }
 ```
@@ -598,19 +584,19 @@ export function scaleMetrics(
   m: FontMetrics,
   sizeHp: number,
 ): { ascent: number; descent: number; lineGap: number } {
-  const px = halfPointsToPx(sizeHp, 1, 1);  // size in px at zoom=1, dpr=1
+  const px = halfPointsToPx(sizeHp, 1, 1); // size in px at zoom=1, dpr=1
   const scale = px / m.unitsPerEm;
   // Word uses OS/2 typo metrics when useTypoMetrics is set;
   // otherwise uses hhea ascent/descent. We match.
   if (m.useTypoMetrics) {
     return {
-      ascent:  m.typoAscent * scale,
+      ascent: m.typoAscent * scale,
       descent: -m.typoDescent * scale,
       lineGap: m.typoLineGap * scale,
     };
   }
   return {
-    ascent:  m.ascent * scale,
+    ascent: m.ascent * scale,
     descent: -m.descent * scale,
     lineGap: m.lineGap * scale,
   };
@@ -624,7 +610,7 @@ We **convert the resulting px to twips** for storage in `ShapedRun`.
 Measurement is the hot path for typing. Cache keys are interned:
 
 ```ts
-type MeasureKey = string;  // hashed fingerprint
+type MeasureKey = string; // hashed fingerprint
 
 function makeMeasureKey(
   fontFamily: string,
@@ -635,20 +621,22 @@ function makeMeasureKey(
   language: string,
   script: Script,
   level: number,
-  text: string,   // normalized
+  text: string, // normalized
 ): MeasureKey {
-  return `${fontFamily}|${sizeHp}|${weight}|${italic ? 1 : 0}|` +
-         `${featureHash(features)}|${language}|${script}|${level}|${text}`;
+  return (
+    `${fontFamily}|${sizeHp}|${weight}|${italic ? 1 : 0}|` +
+    `${featureHash(features)}|${language}|${script}|${level}|${text}`
+  );
 }
 ```
 
 Cache strategies:
 
-* **Cluster cache** at the word level: for each measured word, we store
+- **Cluster cache** at the word level: for each measured word, we store
   `(clusters[], advance)` under the measure key. This hits 99%+ during
   repeated typing (words repeat; identical words → identical caches).
-* **LRU** of bounded size (default 50k entries, ~50 MiB).
-* **Invalidation** on style change: clear all cache entries for the
+- **LRU** of bounded size (default 50k entries, ~50 MiB).
+- **Invalidation** on style change: clear all cache entries for the
   affected `(fontFamily, weight, italic, features, sizeHp)` tuple.
 
 The key includes the language because languages differ in letter forms
@@ -661,40 +649,36 @@ boundaries).
 Inline images, fields, and footnote references appear in the run stream
 and must participate in measurement:
 
-* **Inline image**: treated as a cluster of fixed advance equal to the
+- **Inline image**: treated as a cluster of fixed advance equal to the
   image width in twips (scaled per its `docPr` extents); ascent/descent
   equal to full image height (typically treated as `ascent = height`,
   `descent = 0`, anchored at baseline). This matches Word; vertical
   alignment can be overridden.
-* **Field (page number, date, etc.)**: text measured after expansion; the
+- **Field (page number, date, etc.)**: text measured after expansion; the
   cluster set is marked `ephemeral` so we re-measure on context change
   (page number changes across pages).
-* **Footnote reference marker**: a superscript glyph inserted by the
+- **Footnote reference marker**: a superscript glyph inserted by the
   engine; measurement uses the superscript metrics from the font (half
   size, raised by ~33% of ascent).
 
 ### 4.8 Edge cases in measurement
 
-* **Zero-width joiners/non-joiners**: preserved; HarfBuzz handles them
+- **Zero-width joiners/non-joiners**: preserved; HarfBuzz handles them
   (our Canvas path punts and does not ligate — acceptable in MVP).
-* **Tab character `\t`**: not measured in stage 1 (tabs get widths from
+- **Tab character `\t`**: not measured in stage 1 (tabs get widths from
   tab stops in stage 2). Emits a special cluster `{ kind: 'tab' }`.
-* **Soft hyphen `U+00AD`**: measured as zero-width invisible cluster, but
+- **Soft hyphen `U+00AD`**: measured as zero-width invisible cluster, but
   marked `hyphenatable` (stage 2 may inject a visible hyphen at the
   break).
-* **Non-breaking space `U+00A0`**: normal glyph, `canBreakBefore = false`.
-* **Line feed in a run**: rare but possible in imported docs. We split
+- **Non-breaking space `U+00A0`**: normal glyph, `canBreakBefore = false`.
+- **Line feed in a run**: rare but possible in imported docs. We split
   the paragraph in the parser; measurement sees pre-split runs.
 
 ### 4.9 TypeScript surface
 
 ```ts
 interface MeasurePort {
-  measureParagraph(
-    runs: Run[],
-    paraProps: ParaProps,
-    paraLanguage: string,
-  ): ShapedRun[];
+  measureParagraph(runs: Run[], paraProps: ParaProps, paraLanguage: string): ShapedRun[];
 }
 
 interface ShapingAdapter {
@@ -712,54 +696,54 @@ interface ShapingAdapter {
 
 Input:
 
-* `ShapedRun[]` from stage 1 (logical order);
-* `paraProps`: alignment, first-line indent, left/right indent, tab
+- `ShapedRun[]` from stage 1 (logical order);
+- `paraProps`: alignment, first-line indent, left/right indent, tab
   stops, line spacing rule, spacing-before/after, suppressAutoHyphens,
   keepLinesTogether, keepWithNext, widowControl, bidi flag, dropCap;
-* `contentFrame`: width and exclusions (wraps) by Y.
+- `contentFrame`: width and exclusions (wraps) by Y.
 
 Output: **ParaLayout**:
 
 ```ts
 interface ParaLayout {
-  paraId:  ParaId;
-  width:   number;           // twips, the width used
-  lines:   Line[];
-  height:  number;           // twips, total incl. spacing-before/after
-  hash:    string;           // for cache
-  keepWithNext:      boolean;
+  paraId: ParaId;
+  width: number; // twips, the width used
+  lines: Line[];
+  height: number; // twips, total incl. spacing-before/after
+  hash: string; // for cache
+  keepWithNext: boolean;
   keepLinesTogether: boolean;
-  widowControl:      boolean;
-  bidiLevel:         number;
+  widowControl: boolean;
+  bidiLevel: number;
 }
 
 interface Line {
   // geometry
-  yOffset:     number;   // twips, line top relative to paragraph top
-  xOffset:     number;   // twips, line left relative to content frame left
-  width:       number;   // twips; may be < frame width for centered/right
-  maxWidth:    number;   // twips; the width budget actually available
-  ascent:      number;
-  descent:     number;
-  leading:     number;
+  yOffset: number; // twips, line top relative to paragraph top
+  xOffset: number; // twips, line left relative to content frame left
+  width: number; // twips; may be < frame width for centered/right
+  maxWidth: number; // twips; the width budget actually available
+  ascent: number;
+  descent: number;
+  leading: number;
   // content
-  segments:    LineSegment[];  // visually ordered L→R
-  logicalFirst: number;        // code-point offset in paragraph
-  logicalLast:  number;
-  isFirst:     boolean;
-  isLast:      boolean;
+  segments: LineSegment[]; // visually ordered L→R
+  logicalFirst: number; // code-point offset in paragraph
+  logicalLast: number;
+  isFirst: boolean;
+  isLast: boolean;
   // break metadata
-  endsAt:      'softBreak' | 'paraEnd' | 'columnBreak' | 'pageBreak';
-  hyphenated:  boolean;        // soft hyphen expanded to visible hyphen
-  justifyExtraPerGap: number;  // twips added to each breakable space
+  endsAt: 'softBreak' | 'paraEnd' | 'columnBreak' | 'pageBreak';
+  hyphenated: boolean; // soft hyphen expanded to visible hyphen
+  justifyExtraPerGap: number; // twips added to each breakable space
 }
 
 interface LineSegment {
-  shapedRun:   ShapedRunRef;
-  clusterRange:{ start: number; end: number };
-  xOffset:     number;   // twips, within line
-  advance:     number;   // twips
-  level:       number;   // bidi
+  shapedRun: ShapedRunRef;
+  clusterRange: { start: number; end: number };
+  xOffset: number; // twips, within line
+  advance: number; // twips
+  level: number; // bidi
 }
 ```
 
@@ -769,7 +753,9 @@ We run ICU4X's line-break iterator over the paragraph's concatenated
 logical text:
 
 ```ts
-const iter = icu4xLineSegmenter.segmenter({ strictness: paraProps.strictLineBreak ? 'strict' : 'loose' });
+const iter = icu4xLineSegmenter.segmenter({
+  strictness: paraProps.strictLineBreak ? 'strict' : 'loose',
+});
 const breakPoints: number[] = [...iter.segment(logicalText)];
 ```
 
@@ -785,11 +771,11 @@ We attach `canBreakBefore` flags to clusters during stage 1 already; stage
 
 We implement **both**:
 
-* **First-fit (greedy)**: used in the typing hot path. O(n). The line
+- **First-fit (greedy)**: used in the typing hot path. O(n). The line
   accepts clusters until adding one would exceed the width; then breaks
   at the last `canBreakBefore` candidate. Fast; acceptable for left-aligned
   paragraphs and for interactive editing. About 5–20× faster than K-P.
-* **Knuth-Plass (total-fit)**: used for justified paragraphs and for
+- **Knuth-Plass (total-fit)**: used for justified paragraphs and for
   re-layout batches (document open, view mode change, print). Produces
   paragraphs with minimal total badness — consistent spacing across
   lines, fewer "river" artifacts. O(n²) worst case, O(n) in practice
@@ -803,10 +789,9 @@ justification.
 
 ### 5.4 Knuth-Plass outline
 
-Donald Knuth and Michael Plass (*Software — Practice and Experience*,
-1981) frame line-breaking as a shortest-path problem over a graph where
+Donald Knuth and Michael Plass (_Software — Practice and Experience_, 1981) frame line-breaking as a shortest-path problem over a graph where
 nodes are break opportunities and edges are "lines", each with a
-*badness* cost.
+_badness_ cost.
 
 ```
 boxes    w_i           ideal text width
@@ -824,21 +809,22 @@ Total-fit picks the break sequence minimizing the sum of
 Our implementation:
 
 ```ts
-interface KPNode { index: number; line: number; fitness: 0|1|2|3;
-                   total: number; prev?: KPNode; }
+interface KPNode {
+  index: number;
+  line: number;
+  fitness: 0 | 1 | 2 | 3;
+  total: number;
+  prev?: KPNode;
+}
 
-function breakKnuthPlass(
-  items: KPItem[],
-  lineWidths: number[],
-  opts: KPOpts,
-): number[] {
+function breakKnuthPlass(items: KPItem[], lineWidths: number[], opts: KPOpts): number[] {
   // Active list, feasible lines, dynamic programming.
   // Omitted for brevity; see reference implementation in
   // src/layout/linebreak/knuthPlass.ts
 }
 ```
 
-Reference: Knuth & Plass, *Breaking Paragraphs into Lines*, 1981; also
+Reference: Knuth & Plass, _Breaking Paragraphs into Lines_, 1981; also
 see TeX's `par` algorithm and Bram Stein's linebreak.js for a JS
 blueprint.
 
@@ -862,9 +848,9 @@ distribution logic switches mode based on the line's dominant script:
 
 ```ts
 if (lineIsCJKDominant(line)) {
-  const gaps = line.clusters.filter(c => c.isCJK && !c.isLastInRun);
+  const gaps = line.clusters.filter((c) => c.isCJK && !c.isLastInRun);
   const perGap = extraWidth / gaps.length;
-  gaps.forEach(g => g.advance += perGap);
+  gaps.forEach((g) => (g.advance += perGap));
 } else {
   distributeAcrossWhitespace(line, extraWidth);
 }
@@ -925,7 +911,7 @@ TeX). We ship patterns for common languages keyed by BCP 47:
 
 ```ts
 const hyphenator = await loadHyphenator(paraLanguage);
-const potential = hyphenator.hyphenate(word);  // ['hy', 'phen', 'ation']
+const potential = hyphenator.hyphenate(word); // ['hy', 'phen', 'ation']
 ```
 
 When Knuth-Plass cannot find a feasible break, we re-run with soft-hyphen
@@ -942,37 +928,41 @@ Arabic (kashida justification instead — implemented partially in v1).
 
 `pProps.dropCap = drop | margin` with `dropCapLines = N`:
 
-* Measure the first character's glyph at `ceil(N * lineHeight)` pt size.
-* Reserve a rectangle of that glyph's advance + ~0.125 in gutter.
-* The first `N` lines of the paragraph have their `maxWidth` reduced by
+- Measure the first character's glyph at `ceil(N * lineHeight)` pt size.
+- Reserve a rectangle of that glyph's advance + ~0.125 in gutter.
+- The first `N` lines of the paragraph have their `maxWidth` reduced by
   `capWidth + gutter`; their `xOffset` is pushed right (LTR) by that
   amount.
-* Line 1's leading moves up so the cap's top aligns with line 1's ascent
+- Line 1's leading moves up so the cap's top aligns with line 1's ascent
   (drop style) or with the paragraph's top (margin style).
-* Subsequent lines (>= N+1) use full width.
+- Subsequent lines (>= N+1) use full width.
 
 ### 5.10 Spacing and line-height rules
 
 Word's line-height rules:
 
-* **Single**: `1 × (ascent + descent + lineGap)` of the line's dominant
+- **Single**: `1 × (ascent + descent + lineGap)` of the line's dominant
   font at its size.
-* **1.5 / Double**: `1.5 ×` / `2 ×` single.
-* **Multiple(x)**: `x ×` single.
-* **AtLeast(y)**: `max(singleLineHeight, y)` where `y` is in twips.
-* **Exact(y)**: `y` twips exactly (content may clip).
+- **1.5 / Double**: `1.5 ×` / `2 ×` single.
+- **Multiple(x)**: `x ×` single.
+- **AtLeast(y)**: `max(singleLineHeight, y)` where `y` is in twips.
+- **Exact(y)**: `y` twips exactly (content may clip).
 
 Per line:
 
 ```ts
-function computeLineMetrics(line: Line, rule: LineRule): { ascent, descent, leading } {
+function computeLineMetrics(line: Line, rule: LineRule): { ascent; descent; leading } {
   const dominant = pickDominant(line.segments);
   const natural = dominant.ascent + dominant.descent + dominant.lineGap;
   switch (rule.kind) {
-    case 'single':   return distribute(dominant, natural);
-    case 'multiple': return distribute(dominant, natural * rule.factor);
-    case 'atLeast':  return distribute(dominant, Math.max(natural, rule.twips));
-    case 'exact':    return distribute(dominant, rule.twips);
+    case 'single':
+      return distribute(dominant, natural);
+    case 'multiple':
+      return distribute(dominant, natural * rule.factor);
+    case 'atLeast':
+      return distribute(dominant, Math.max(natural, rule.twips));
+    case 'exact':
+      return distribute(dominant, rule.twips);
   }
 }
 ```
@@ -990,16 +980,18 @@ a page if `contextualSpacing` applies between same-style paragraphs.
 ```ts
 function firstFit(
   runs: ShapedRun[],
-  widths: number[],       // max width per visual line (wraps vary)
+  widths: number[], // max width per visual line (wraps vary)
   para: ParaProps,
 ): Line[] {
   const lines: Line[] = [];
-  let i = 0, lineIdx = 0;
+  let i = 0,
+    lineIdx = 0;
   const clusters = flatten(runs);
   while (i < clusters.length) {
-    const maxW = widths[Math.min(lineIdx, widths.length-1)]
-                 - firstLineIndentIfApplicable(lineIdx, para);
-    let x = 0, lastBreakable = -1;
+    const maxW =
+      widths[Math.min(lineIdx, widths.length - 1)] - firstLineIndentIfApplicable(lineIdx, para);
+    let x = 0,
+      lastBreakable = -1;
     let j = i;
     while (j < clusters.length) {
       const c = clusters[j];
@@ -1013,7 +1005,7 @@ function firstFit(
       x = next;
       j++;
     }
-    const breakAt = (j < clusters.length && lastBreakable > i) ? lastBreakable : j;
+    const breakAt = j < clusters.length && lastBreakable > i ? lastBreakable : j;
     lines.push(buildLine(clusters.slice(i, breakAt), maxW, para));
     i = breakAt;
     // skip one trailing whitespace if any
@@ -1042,10 +1034,10 @@ fingerprint change.
 
 A section's body is a sequence of **blocks**:
 
-* paragraph
-* table
-* section break (marker; resolved to a new section frame)
-* anchored shape (floating) — placed separately, reserves exclusions
+- paragraph
+- table
+- section break (marker; resolved to a new section frame)
+- anchored shape (floating) — placed separately, reserves exclusions
 
 We iterate blocks in order, stacking their laid-out heights vertically in
 the current content frame, tracking current `y` and any active exclusion
@@ -1056,20 +1048,22 @@ rectangles (from floats).
 A `w:framePr`-positioned paragraph or a `wp:anchor`-positioned shape
 declares:
 
-* position: relative to (page | margin | column | paragraph | char);
-* size: explicit or derived;
-* wrap: `none | square | tight | through | topAndBottom | behindText |
-  inFrontOfText`.
+- position: relative to (page | margin | column | paragraph | char);
+- size: explicit or derived;
+- wrap: `none | square | tight | through | topAndBottom | behindText |
+inFrontOfText`.
 
 We resolve anchor to absolute coordinates, then add an **ExclusionZone**
 to the section:
 
 ```ts
 interface ExclusionZone {
-  yTop: number; yBottom: number;    // twips, page-relative
-  xLeft: number; xRight: number;
+  yTop: number;
+  yBottom: number; // twips, page-relative
+  xLeft: number;
+  xRight: number;
   wrapSide: 'both' | 'left' | 'right' | 'largest';
-  contour?: Point2D[];              // for tight/through
+  contour?: Point2D[]; // for tight/through
 }
 ```
 
@@ -1085,9 +1079,9 @@ bottom.
 
 ### 6.3 Inline vs anchored images
 
-* Inline: shows in the run stream; measured as a cluster with image
+- Inline: shows in the run stream; measured as a cluster with image
   dimensions; line height grows if image > line's natural height.
-* Anchored: positioned by anchor; reserves exclusion zone per wrap; has
+- Anchored: positioned by anchor; reserves exclusion zone per wrap; has
   its own Z order.
 
 ### 6.4 Output
@@ -1111,9 +1105,9 @@ tables).
 
 Word supports:
 
-* `tblLayout type=fixed`: use `tblGrid` column widths as declared; cells
+- `tblLayout type=fixed`: use `tblGrid` column widths as declared; cells
   reuse those widths per gridSpan.
-* `tblLayout type=autofit`: measure content's `minContentWidth` (longest
+- `tblLayout type=autofit`: measure content's `minContentWidth` (longest
   word / inline) and `maxContentWidth` (unbroken content) per column,
   then distribute available width.
 
@@ -1153,8 +1147,8 @@ content to the cell height.
 
 Stored on each row:
 
-* `cantSplit`: entire row must fit on one page.
-* `tblHeader`: row is repeated at the top of each new page the table
+- `cantSplit`: entire row must fit on one page.
+- `tblHeader`: row is repeated at the top of each new page the table
   spans.
 
 Pagination (stage 5) uses these.
@@ -1180,7 +1174,7 @@ cycle detection on table IDs (parser should reject cycles too).
 ```ts
 interface TableLayout {
   tableId: TableId;
-  columnWidths: number[];         // twips
+  columnWidths: number[]; // twips
   rows: TableRowLayout[];
   borders: BorderSegment[];
   width: number;
@@ -1198,11 +1192,16 @@ interface TableRowLayout {
 
 interface TableCellLayout {
   cellId: CellId;
-  colStart: number; colSpan: number;
-  rowStart: number; rowSpan: number;
-  x: number; y: number; width: number; height: number;
+  colStart: number;
+  colSpan: number;
+  rowStart: number;
+  rowSpan: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
   padding: { top: number; left: number; bottom: number; right: number };
-  blocks: BlockLayoutRef[];       // paragraphs / nested tables
+  blocks: BlockLayoutRef[]; // paragraphs / nested tables
   vAlign: 'top' | 'center' | 'bottom';
   shading?: Color;
 }
@@ -1219,16 +1218,23 @@ A page is defined by the active section's properties:
 ```ts
 interface PageFrame {
   sectionId: SectionId;
-  pageSize:   { w: number; h: number; orientation: 'portrait' | 'landscape' };
-  pageMargins:{ top: number; right: number; bottom: number; left: number;
-                header: number; footer: number; gutter: number };
-  headerRef?: HeaderId;   // default | first | evenPage
+  pageSize: { w: number; h: number; orientation: 'portrait' | 'landscape' };
+  pageMargins: {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+    header: number;
+    footer: number;
+    gutter: number;
+  };
+  headerRef?: HeaderId; // default | first | evenPage
   footerRef?: FooterId;
-  columns:    ColumnSpec[];  // [{ width, space }]
+  columns: ColumnSpec[]; // [{ width, space }]
   lineNumbers?: LineNumberSpec;
   pageBorders?: PageBordersSpec;
-  watermark?:   WatermarkSpec;
-  vAlign:       'top' | 'center' | 'bottom' | 'both';
+  watermark?: WatermarkSpec;
+  vAlign: 'top' | 'center' | 'bottom' | 'both';
 }
 ```
 
@@ -1250,10 +1256,7 @@ column.space and column.width.
 Pseudocode:
 
 ```ts
-function paginate(
-  sections: SectionLayout[],
-  opts: PaginateOpts,
-): PageLayout[] {
+function paginate(sections: SectionLayout[], opts: PaginateOpts): PageLayout[] {
   const pages: PageLayout[] = [];
   let currentPage = newPageFor(sections[0]);
   let cursor = { column: 0, y: contentY(currentPage, 0) };
@@ -1274,10 +1277,14 @@ function paginate(
 
 function placeBlock(block, page, cursor, pages) {
   switch (block.kind) {
-    case 'paragraph': return placeParagraph(block, page, cursor, pages);
-    case 'table':     return placeTable(block, page, cursor, pages);
-    case 'sectEnd':   return handleSectionEnd(block, page, cursor, pages);
-    case 'anchor':    return placeAnchor(block, page, cursor, pages);
+    case 'paragraph':
+      return placeParagraph(block, page, cursor, pages);
+    case 'table':
+      return placeTable(block, page, cursor, pages);
+    case 'sectEnd':
+      return handleSectionEnd(block, page, cursor, pages);
+    case 'anchor':
+      return placeAnchor(block, page, cursor, pages);
   }
 }
 ```
@@ -1286,9 +1293,9 @@ function placeBlock(block, page, cursor, pages) {
 
 For a paragraph broken across a page:
 
-* Minimum 2 lines at the bottom of the outgoing page (orphan control —
+- Minimum 2 lines at the bottom of the outgoing page (orphan control —
   last line on its own is avoided).
-* Minimum 2 lines at the top of the incoming page (widow control — first
+- Minimum 2 lines at the top of the incoming page (widow control — first
   line on its own is avoided).
 
 Algorithm: if placing a paragraph would leave only 1 line on one page,
@@ -1322,13 +1329,13 @@ If `para.pageBreakBefore = true`, start a new page before this paragraph.
 
 Section break kinds:
 
-* **nextPage**: close current page, start new with new section's
+- **nextPage**: close current page, start new with new section's
   geometry.
-* **continuous**: same page, new section begins on the same Y. If the
+- **continuous**: same page, new section begins on the same Y. If the
   new section has different column count, we render a boundary here.
-* **oddPage** / **evenPage**: close current page; if the next page's
+- **oddPage** / **evenPage**: close current page; if the next page's
   number is wrong parity, insert a blank page.
-* **nextColumn**: jump to next column (intra-section only).
+- **nextColumn**: jump to next column (intra-section only).
 
 ### 8.8 Columns
 
@@ -1387,40 +1394,43 @@ not here — we leave a placeholder and substitute at commit time.
 
 ```ts
 interface PageLayout {
-  pageIndex:  number;
-  sectionId:  SectionId;
-  pageSize:   { w: number; h: number };
-  contentFrames: ContentFrame[];    // one per column
-  header?:    BlockStreamLayout;
-  footer?:    BlockStreamLayout;
+  pageIndex: number;
+  sectionId: SectionId;
+  pageSize: { w: number; h: number };
+  contentFrames: ContentFrame[]; // one per column
+  header?: BlockStreamLayout;
+  footer?: BlockStreamLayout;
   footnotes?: BlockStreamLayout;
-  decorations:{
+  decorations: {
     pageBorder?: BorderBox;
-    watermark?:  DecorationLayout;
-    gridLines?:  GridLineSpec[];
-    margins?:    MarginGuideSpec;
+    watermark?: DecorationLayout;
+    gridLines?: GridLineSpec[];
+    margins?: MarginGuideSpec;
   };
 }
 
 interface ContentFrame {
   columnIndex: number;
-  x: number; y: number; w: number; h: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
   placed: Array<ParaPlacement | TablePlacement | AnchorPlacement>;
 }
 
 interface ParaPlacement {
   paraId: ParaId;
-  yOffset: number;          // twips, where within frame
-  lineRange: { start: number; end: number };  // which lines of the ParaLayout
+  yOffset: number; // twips, where within frame
+  lineRange: { start: number; end: number }; // which lines of the ParaLayout
 }
 ```
 
 ### 8.12 Determinism considerations
 
-* Pagination is single-threaded and ordered: page N depends on page
+- Pagination is single-threaded and ordered: page N depends on page
   N-1's last line. We cannot parallelize across pages without
   sacrificing determinism for keep-with-next chains.
-* We allow *speculative* parallel pagination where sections have hard
+- We allow _speculative_ parallel pagination where sections have hard
   `nextPage` section breaks — each section paginates independently.
 
 ---
@@ -1431,10 +1441,10 @@ interface ParaPlacement {
 
 Page-dependent fields in headers/footers are resolved:
 
-* `PAGE` → current page number (1-based, per section numbering format).
-* `NUMPAGES` → total page count.
-* `SECTIONPAGES` → page count within section.
-* `DATE`/`TIME` → fixed at document last-save; `PRINTDATE` at print.
+- `PAGE` → current page number (1-based, per section numbering format).
+- `NUMPAGES` → total page count.
+- `SECTIONPAGES` → page count within section.
+- `DATE`/`TIME` → fixed at document last-save; `PRINTDATE` at print.
 
 Resolved fields are substituted by re-measuring that run with the new
 text — cheap because the surrounding run structure is stable.
@@ -1450,11 +1460,11 @@ const pxX = twipsToPx(line.xOffset + frame.x, zoom, dpr);
 
 ### 9.3 Page decorations
 
-* **Margin guides**: faint lines at margin boundaries, view-only.
-* **Page border**: rectangular or art-border (Word's ~150 art borders
+- **Margin guides**: faint lines at margin boundaries, view-only.
+- **Page border**: rectangular or art-border (Word's ~150 art borders
   catalog). Art borders use 9-slice SVG.
-* **Watermark**: image/text positioned behind content; fixed per section.
-* **Grid lines** (normal view only): show implicit lines every
+- **Watermark**: image/text positioned behind content; fixed per section.
+- **Grid lines** (normal view only): show implicit lines every
   `docGrid.linePitch`.
 
 ---
@@ -1487,16 +1497,16 @@ type Patch =
 
 Dirty sets per patch:
 
-| Patch             | Dirty ShapedRun | Dirty ParaLayout | Dirty section flow | Re-paginate from  |
-|-------------------|-----------------|------------------|--------------------|-------------------|
-| runText           | that run        | that para        | if para height δ   | that page         |
-| runProps          | that run        | that para        | likely             | that page         |
-| paraProps         | —               | that para        | likely             | that page         |
-| paraSplit/Merge   | —               | both paras       | yes                | that page         |
-| style (used by N) | matching runs   | N paras          | yes                | first of N        |
-| sectionProps      | —               | —                | yes (frame change) | first of section  |
-| tableOp           | cells affected  | cells' paras     | yes                | that page         |
-| insert/deletePara | —               | —                | yes                | that page         |
+| Patch             | Dirty ShapedRun | Dirty ParaLayout | Dirty section flow | Re-paginate from |
+| ----------------- | --------------- | ---------------- | ------------------ | ---------------- |
+| runText           | that run        | that para        | if para height δ   | that page        |
+| runProps          | that run        | that para        | likely             | that page        |
+| paraProps         | —               | that para        | likely             | that page        |
+| paraSplit/Merge   | —               | both paras       | yes                | that page        |
+| style (used by N) | matching runs   | N paras          | yes                | first of N       |
+| sectionProps      | —               | —                | yes (frame change) | first of section |
+| tableOp           | cells affected  | cells' paras     | yes                | that page        |
+| insert/deletePara | —               | —                | yes                | that page        |
 
 ### 10.3 Fast path
 
@@ -1504,16 +1514,16 @@ Dirty sets per patch:
 re-shape only the dirty runs (measurement), re-run line-break for that
 paragraph, compare `newParaLayout.height` to old:
 
-* Heights equal → swap `ParaLayout` in place; no pagination change; DOM
+- Heights equal → swap `ParaLayout` in place; no pagination change; DOM
   patch is a diff of that paragraph's DOM fragment.
-* Heights differ → medium path.
+- Heights differ → medium path.
 
 ### 10.4 Medium path
 
 Paragraph height changed:
 
-* All subsequent block placements on the same page may shift.
-* Pages after this one may need re-pagination.
+- All subsequent block placements on the same page may shift.
+- Pages after this one may need re-pagination.
 
 Strategy: re-run pagination starting from the current page. Stop as soon
 as the post-pagination state equals the prior state at a page boundary
@@ -1534,9 +1544,13 @@ then (Word has a progress indicator for similar operations).
 ```ts
 function paraHash(para: ParaSnapshot, widthBucket: number, styleId: StyleId): string {
   return sha1(
-    para.runs.map(runFingerprint).join('|') + '|' +
-    paraPropsFingerprint(para.props) + '|' +
-    widthBucket + '|' + styleId
+    para.runs.map(runFingerprint).join('|') +
+      '|' +
+      paraPropsFingerprint(para.props) +
+      '|' +
+      widthBucket +
+      '|' +
+      styleId,
   );
 }
 ```
@@ -1568,10 +1582,12 @@ const PageHost: React.FC<{ pages: PageMeta[]; viewport: Rect }> = ({ pages, view
   const visible = selectVisible(pages, viewport, { overscan: 2 });
   return (
     <div className="doc-scroll" style={{ height: totalHeight(pages) }}>
-      {pages.map(p =>
-        visible.has(p.pageIndex)
-          ? <FullPage key={p.pageIndex} page={p} />
-          : <PlaceholderPage key={p.pageIndex} height={p.height} />
+      {pages.map((p) =>
+        visible.has(p.pageIndex) ? (
+          <FullPage key={p.pageIndex} page={p} />
+        ) : (
+          <PlaceholderPage key={p.pageIndex} height={p.height} />
+        ),
       )}
     </div>
   );
@@ -1600,19 +1616,19 @@ On document open:
 
 If target page not yet paginated:
 
-* Estimate its Y from average paragraph heights so far (adaptive).
-* Scroll to the estimated position (may be approximate).
-* Prioritize paginating from the current cursor to the target; re-adjust
+- Estimate its Y from average paragraph heights so far (adaptive).
+- Scroll to the estimated position (may be approximate).
+- Prioritize paginating from the current cursor to the target; re-adjust
   scroll once done.
 
 ### 11.5 Scroll and resize
 
-* Scroll is rAF-throttled; we recompute the visible set at most once
+- Scroll is rAF-throttled; we recompute the visible set at most once
   per frame.
-* Resize triggers a full re-pagination if page-width-affecting (e.g.,
+- Resize triggers a full re-pagination if page-width-affecting (e.g.,
   window width drives rem-based font — we don't support that, but
   content frame width depends on view mode).
-* View mode change: may change content frame width (Normal view) →
+- View mode change: may change content frame width (Normal view) →
   re-pagination.
 
 ### 11.6 Intersection strategy
@@ -1637,12 +1653,12 @@ class LayoutWorkerPool {
 
 Each worker boots with:
 
-* ICU4X WASM (line break, script, normalization).
-* HarfBuzz WASM (shaping).
-* Hyphenation patterns (lazy-load per language).
-* A shared font cache (Worker gets font binaries via `SharedArrayBuffer`
+- ICU4X WASM (line break, script, normalization).
+- HarfBuzz WASM (shaping).
+- Hyphenation patterns (lazy-load per language).
+- A shared font cache (Worker gets font binaries via `SharedArrayBuffer`
   on supported browsers; falls back to copies otherwise).
-* An `OffscreenCanvas` for fast-path Canvas measurement.
+- An `OffscreenCanvas` for fast-path Canvas measurement.
 
 ### 12.2 Protocol
 
@@ -1671,7 +1687,7 @@ type LayoutRequest =
 
 type LayoutResponse =
   | { kind: 'paragraphs'; version: number; layouts: ParaLayout[] }
-  | { kind: 'table';      version: number; layout:  TableLayout };
+  | { kind: 'table'; version: number; layout: TableLayout };
 ```
 
 ### 12.3 Versioning and cancellation
@@ -1684,10 +1700,10 @@ main thread implicitly cancels prior versions.
 
 ### 12.4 Main-thread responsibilities
 
-* Pagination (ordered; needs cumulative state).
-* DOM commit.
-* Input handling.
-* Selection rendering.
+- Pagination (ordered; needs cumulative state).
+- DOM commit.
+- Input handling.
+- Selection rendering.
 
 Everything else is worker-eligible.
 
@@ -1695,9 +1711,9 @@ Everything else is worker-eligible.
 
 Queueing policy:
 
-* High priority: paragraphs in viewport.
-* Medium: paragraphs within overscan.
-* Low: rest of document.
+- High priority: paragraphs in viewport.
+- Medium: paragraphs within overscan.
+- Low: rest of document.
 
 On patch commit, dirty paragraphs move to high priority.
 
@@ -1713,18 +1729,18 @@ exceed this.
 
 ### 13.1 Script-specific notes
 
-* **Latin, Greek, Cyrillic, Armenian, Georgian**: Canvas fast path
+- **Latin, Greek, Cyrillic, Armenian, Georgian**: Canvas fast path
   works; HarfBuzz for correctness of kerning, small caps (`smcp`),
   old-style figures, discretionary ligatures.
-* **CJK (Han, Hangul, Kana)**: Canvas is accurate (mostly monospaced
+- **CJK (Han, Hangul, Kana)**: Canvas is accurate (mostly monospaced
   per-glyph); vertical text requires HarfBuzz in v2.
-* **Arabic, Hebrew**: require HarfBuzz (contextual letter forms,
+- **Arabic, Hebrew**: require HarfBuzz (contextual letter forms,
   ligatures, Hebrew cantillation marks).
-* **Indic scripts (Devanagari, Bengali, Tamil, Telugu, Malayalam,
+- **Indic scripts (Devanagari, Bengali, Tamil, Telugu, Malayalam,
   Gurmukhi)**: HarfBuzz required (reordering, conjuncts).
-* **SE Asian (Thai, Lao, Khmer, Myanmar)**: word segmentation is hard;
+- **SE Asian (Thai, Lao, Khmer, Myanmar)**: word segmentation is hard;
   ICU4X supplies dictionary-based segmentation; shaping via HarfBuzz.
-* **Ethiopic, N'Ko, Tifinagh, etc.**: HarfBuzz.
+- **Ethiopic, N'Ko, Tifinagh, etc.**: HarfBuzz.
 
 ### 13.2 Feature selection
 
@@ -1764,8 +1780,14 @@ interface FontRegistry {
 }
 
 type FontSource =
-  | { kind: 'system'; family: string }            // local()
-  | { kind: 'embedded'; family: string; bytes: Uint8Array; obfuscated?: boolean; obfuscationKey?: string };
+  | { kind: 'system'; family: string } // local()
+  | {
+      kind: 'embedded';
+      family: string;
+      bytes: Uint8Array;
+      obfuscated?: boolean;
+      obfuscationKey?: string;
+    };
 ```
 
 Web-font fetching is disabled by policy (no network at render time).
@@ -1838,11 +1860,11 @@ per font. Metrics cached; font binary retained for HarfBuzz shaping.
 
 ### 15.1 Rules matrix
 
-| `w:lineRule`   | Value in twips `v`   | Effective line height |
-|----------------|----------------------|-----------------------|
-| `auto`         | multiplied by `v/240` | `naturalHeight * v / 240`  |
-| `atLeast`      | minimum               | `max(naturalHeight, v)`    |
-| `exact`        | exact                 | `v`                        |
+| `w:lineRule` | Value in twips `v`    | Effective line height     |
+| ------------ | --------------------- | ------------------------- |
+| `auto`       | multiplied by `v/240` | `naturalHeight * v / 240` |
+| `atLeast`    | minimum               | `max(naturalHeight, v)`   |
+| `exact`      | exact                 | `v`                       |
 
 `naturalHeight` = `max over line's clusters of (ascent + descent) + max
 lineGap` per the **dominant** font's metrics (see §15.2), matching Word
@@ -1869,7 +1891,7 @@ line.ascent  = dominantAscent  + extra / 2
 line.descent = dominantDescent + extra / 2
 ```
 
-Word's actual distribution for `atLeast` and `auto` gives the *extra*
+Word's actual distribution for `atLeast` and `auto` gives the _extra_
 below the baseline (all in descent). We match that when feature flag
 `rendering.lineLeading = 'wordCompatible'` is set (default true for
 DOCX round-trip fidelity).
@@ -1884,26 +1906,26 @@ Selection is a range in **logical text positions**:
 
 ```ts
 interface Position {
-  paraId:  ParaId;
-  offset:  number;   // code-point offset within paragraph
-  bias:    'before' | 'after';  // for boundaries at line starts
+  paraId: ParaId;
+  offset: number; // code-point offset within paragraph
+  bias: 'before' | 'after'; // for boundaries at line starts
 }
 
 interface Selection {
   anchor: Position;
-  focus:  Position;
+  focus: Position;
   rectangular?: { startCol: number; endCol: number };
 }
 ```
 
 ### 16.2 Caret rendering
 
-* 1px vertical DOM element `<div class="caret">` positioned at the
+- 1px vertical DOM element `<div class="caret">` positioned at the
   logical caret's visual location.
-* Height = ascent + descent of the current line.
-* Blink via CSS animation (500ms on / 500ms off) toggled by `aria-hidden`
+- Height = ascent + descent of the current line.
+- Blink via CSS animation (500ms on / 500ms off) toggled by `aria-hidden`
   when the app loses focus.
-* Bidi caret: at a direction boundary, the caret can be at two visual
+- Bidi caret: at a direction boundary, the caret can be at two visual
   positions for one logical position; we show the one matching the
   paragraph direction unless the user explicitly stepped into the other
   side (Word's "keyboard caret" behavior).
@@ -1937,7 +1959,7 @@ Given a page-relative point `(x, y)`:
 2. Within page, binary-search lines by Y.
 3. Within line, linear-scan visual segments by X (small N).
 4. Within segment, walk clusters to find the cluster whose `[xLeft,
-   xRight)` contains `x`. If `x < segment.xOffset`, snap to segment
+xRight)` contains `x`. If `x < segment.xOffset`, snap to segment
    start; if `x >= segment.end`, snap to segment end.
 5. Compute logical position: cluster's `logicalStart` plus a sub-cluster
    offset if we support intra-cluster caret (we do not for composed
@@ -1947,25 +1969,25 @@ Result: a `Position`.
 
 ### 16.6 Cursor movement
 
-* **Left/Right**: move one cluster visually. Logical position adjusts per
+- **Left/Right**: move one cluster visually. Logical position adjusts per
   bidi level (logical + 1 in LTR segments, logical − 1 in RTL segments
   of a bidi-wrapped paragraph).
-* **Up/Down**: maintain a **caret X-goal** (pixel) across lines; find
+- **Up/Down**: maintain a **caret X-goal** (pixel) across lines; find
   the line above/below and hit-test at the goal X.
-* **Word left/right** (Ctrl-arrow): move by UAX #29 word boundaries.
-* **Home/End**: move to line start/end (visual).
-* **Ctrl-Home/End**: document start/end.
-* **PgUp/PgDn**: previous/next page, same relative position.
-* **F8 extend mode**: cycles word/sentence/paragraph/section/document.
+- **Word left/right** (Ctrl-arrow): move by UAX #29 word boundaries.
+- **Home/End**: move to line start/end (visual).
+- **Ctrl-Home/End**: document start/end.
+- **PgUp/PgDn**: previous/next page, same relative position.
+- **F8 extend mode**: cycles word/sentence/paragraph/section/document.
 
 ### 16.7 Cross-page selection
 
 Selection can span pages:
 
-* Highlight rectangles computed per page.
-* Auto-scroll: while dragging near viewport edges, scroll at 200 px/s
+- Highlight rectangles computed per page.
+- Auto-scroll: while dragging near viewport edges, scroll at 200 px/s
   proportional to edge distance; recompute selection on each rAF.
-* On release, focus moves to the focus end.
+- On release, focus moves to the focus end.
 
 ---
 
@@ -1977,14 +1999,15 @@ We maintain a single off-screen `<div contenteditable>` of size 1×1 px
 anchored at the caret's screen position:
 
 ```html
-<div class="ime-surface"
-     contenteditable="true"
-     spellcheck="false"
-     autocorrect="off"
-     autocapitalize="off"
-     style="position:fixed; left:Xpx; top:Ypx; width:1px; height:1px;
-            overflow:hidden; outline:none; caret-color:transparent">
-</div>
+<div
+  class="ime-surface"
+  contenteditable="true"
+  spellcheck="false"
+  autocorrect="off"
+  autocapitalize="off"
+  style="position:fixed; left:Xpx; top:Ypx; width:1px; height:1px;
+            overflow:hidden; outline:none; caret-color:transparent"
+></div>
 ```
 
 ### 17.2 Event flow
@@ -2013,8 +2036,8 @@ run.
 `copy`/`cut`/`paste` listeners on the IME surface (document-level if the
 surface isn't focused — rare).
 
-* Copy: assemble HTML (from layout DOM) + plain text + RTF (optional).
-* Paste: parse HTML → domain fragment; run through domain-command
+- Copy: assemble HTML (from layout DOM) + plain text + RTF (optional).
+- Paste: parse HTML → domain fragment; run through domain-command
   pipeline. Plain-text fallback uses current paragraph props.
 
 ### 17.5 Focus
@@ -2037,9 +2060,9 @@ selection visible (dimmed).
 
 Each page has two SVG children:
 
-* **Below text** SVG: page borders, watermark, below-text floats (wrap
+- **Below text** SVG: page borders, watermark, below-text floats (wrap
   style `behindText`).
-* **Above text** SVG: anchored shapes wrapped `inFrontOfText`, selection
+- **Above text** SVG: anchored shapes wrapped `inFrontOfText`, selection
   handles, revision marks.
 
 ### 18.2 Inline images
@@ -2080,10 +2103,10 @@ full 2007 WordArt catalog to v2.
 
 Legacy Word 95–2003 docs carry OLE embeddings with EMF previews. We:
 
-* Parse EMF via a WASM port of `libEMF` (enhanced metafile) or
+- Parse EMF via a WASM port of `libEMF` (enhanced metafile) or
   convert-on-import via a background worker.
-* Rasterize to PNG at 2× DPR for display.
-* Fall back to placeholder (icon + label) if parsing fails.
+- Rasterize to PNG at 2× DPR for display.
+- Fall back to placeholder (icon + label) if parsing fails.
 
 ### 18.7 Z-order
 
@@ -2105,9 +2128,9 @@ Legacy Word 95–2003 docs carry OLE embeddings with EMF previews. We:
 Zoom is a CSS-level transform (`transform: scale(z)` on the page host)
 for small/moderate zoom changes. Why not re-shape at the new size?
 
-* Rendering is identical visually (browser scales glyph outlines).
-* Line-break is in twips; unchanged.
-* Caret/hit-test conversions include zoom; fine.
+- Rendering is identical visually (browser scales glyph outlines).
+- Line-break is in twips; unchanged.
+- Caret/hit-test conversions include zoom; fine.
 
 Exception: at extreme zoom (< 25% or > 400%), per-glyph grid snapping
 drifts and text appears slightly off. At those extremes we **re-shape**
@@ -2123,20 +2146,20 @@ render at their natural optical size, not stretched. This is gated by
 
 ### 19.2 View modes
 
-* **Page Layout** (default): pages are visible rectangles with margins;
+- **Page Layout** (default): pages are visible rectangles with margins;
   what prints is what shows.
-* **Normal**: continuous vertical stream, narrow margin (0.5"),
+- **Normal**: continuous vertical stream, narrow margin (0.5"),
   no page boundaries drawn, no headers/footers; faster scrolling.
   Uses a single `PageFrame` of `h = Infinity` effectively — pagination
   degenerates to a single "page".
-* **Outline**: reduced styling, indented by heading outlineLvl,
+- **Outline**: reduced styling, indented by heading outlineLvl,
   collapsible by heading. Built as a transformed view on top of the same
   ParaLayout model, skipping non-heading paragraphs below collapse.
-* **Master Document**: outline with subdocument boundaries highlighted.
+- **Master Document**: outline with subdocument boundaries highlighted.
   Subdoc loading deferred.
-* **Full Screen**: chrome hidden; content fills window with minimum
+- **Full Screen**: chrome hidden; content fills window with minimum
   decorations.
-* **Print Preview**: page-layout scaled to fit window; multi-page grid
+- **Print Preview**: page-layout scaled to fit window; multi-page grid
   toggle (2×2, 4×4). Shares layout output with Page Layout view.
 
 ### 19.3 Transitions
@@ -2158,8 +2181,8 @@ container:
 
 ```html
 <div class="print-root">
-  <div class="print-page" style="width:8.5in;height:11in"> … </div>
-  <div class="print-page"> … </div>
+  <div class="print-page" style="width:8.5in;height:11in">…</div>
+  <div class="print-page">…</div>
   …
 </div>
 ```
@@ -2169,15 +2192,15 @@ via CSS `page-break-after: always`.
 
 ### 20.2 Routes
 
-* **Route 1 (MVP)**: `win.webContents.print({ silent, printBackground,
-  deviceName, ... })` with an `onbeforeprint` handler that mounts
+- **Route 1 (MVP)**: `win.webContents.print({ silent, printBackground,
+deviceName, ... })` with an `onbeforeprint` handler that mounts
   `PrintRoot` and `onafterprint` that unmounts. Chromium paginates the
   DOM we gave it; since each `.print-page` is exactly one page size,
   Chromium honors our boundaries.
-* **Route 2**: `win.webContents.printToPDF(options)` → PDF bytes.
+- **Route 2**: `win.webContents.printToPDF(options)` → PDF bytes.
   Useful for "Export to PDF" without involving a printer driver. Same
   mount/unmount dance.
-* **Route 3 (v2)**: Direct PDF generation via `pdf-lib` from our
+- **Route 3 (v2)**: Direct PDF generation via `pdf-lib` from our
   `PageLayout[]`. Lets us embed fonts precisely, produce tagged PDF
   (accessible PDF), and avoid Chromium's quirks. Heavy lift; deferred.
 
@@ -2203,19 +2226,19 @@ OS dialog.
 
 ### 21.1 Semantic DOM
 
-* Each **page** is `<section role="document" aria-label="Page 3">`.
-* Each **paragraph** is `<div role="paragraph">`. Paragraphs with
+- Each **page** is `<section role="document" aria-label="Page 3">`.
+- Each **paragraph** is `<div role="paragraph">`. Paragraphs with
   `pStyle` set to a heading style get `role="heading" aria-level="N"`.
-* Each **line** is a visual presentation node and should not surface to
+- Each **line** is a visual presentation node and should not surface to
   AT. We set `role="presentation"` on line divs.
-* Each **glyph run** `<span>` is a text node; AT reads the contained
+- Each **glyph run** `<span>` is a text node; AT reads the contained
   text node.
-* **Tables** use `<div role="table">` / `<div role="row">` /
+- **Tables** use `<div role="table">` / `<div role="row">` /
   `<div role="cell">` (we don't use native `<table>` because cell
   positions are absolute, not browser-laid-out). `role="columnheader"`
   where applicable.
-* **Images** `<img alt="...">`.
-* **Footnotes** use `<a href="#fn-N" role="doc-noteref">` in body and
+- **Images** `<img alt="...">`.
+- **Footnotes** use `<a href="#fn-N" role="doc-noteref">` in body and
   `<aside role="doc-footnote" id="fn-N">` in footnote area.
 
 ### 21.2 Logical order vs visual order
@@ -2223,11 +2246,11 @@ OS dialog.
 AT must read **logical** text (logical paragraph order, logical run
 order within paragraph). Bidi reordering is visual only. To reconcile:
 
-* We emit `aria-label` on the paragraph `<div>` containing the full
+- We emit `aria-label` on the paragraph `<div>` containing the full
   logical text. AT will announce the `aria-label` instead of walking
   visual children when present. This is slightly wasteful (duplicate
   text) but the simplest correct approach.
-* For visible text children (enabling find/copy/select), we use
+- For visible text children (enabling find/copy/select), we use
   `aria-hidden="true"` on the inner spans to avoid double reading, OR
   we rely on the browser picking `aria-label` over children. We go with
   the former explicitly.
@@ -2244,9 +2267,9 @@ AT reports "caret moved to paragraph X, offset Y" via that mechanism.
 
 ### 21.4 High-contrast & reduce-motion
 
-* Respect `prefers-contrast: more` by strengthening selection/caret
+- Respect `prefers-contrast: more` by strengthening selection/caret
   contrast.
-* Respect `prefers-reduced-motion` by disabling caret blink.
+- Respect `prefers-reduced-motion` by disabling caret blink.
 
 ### 21.5 Keyboard navigation beyond caret
 
@@ -2260,16 +2283,21 @@ keyboard-reachable and styled per OS convention.
 
 ### 22.1 DOM commit strategy
 
-* Build a `DocumentFragment` off-DOM for each dirty page.
-* Populate line/glyph spans.
-* Swap into the page container with one `replaceChildren(fragment)` call.
-* One reflow per page per commit.
+- Build a `DocumentFragment` off-DOM for each dirty page.
+- Populate line/glyph spans.
+- Swap into the page container with one `replaceChildren(fragment)` call.
+- One reflow per page per commit.
 
 ### 22.2 CSS containment
 
 ```css
-.page { contain: strict; content-visibility: auto; }
-.line { contain: layout paint; }
+.page {
+  contain: strict;
+  content-visibility: auto;
+}
+.line {
+  contain: layout paint;
+}
 ```
 
 `contain: strict` isolates page layout from ancestors; the browser
@@ -2280,45 +2308,45 @@ pages).
 
 ### 22.3 Typing hot path
 
-* Debounce commits for 8 ms (one frame at 120 Hz, half a frame at 60 Hz)
+- Debounce commits for 8 ms (one frame at 120 Hz, half a frame at 60 Hz)
   to coalesce keystroke bursts.
-* Fast-path measurement (Canvas for known scripts) avoids HarfBuzz cost
+- Fast-path measurement (Canvas for known scripts) avoids HarfBuzz cost
   during typing of Latin/CJK text.
-* Don't allocate on the hot path: reuse `Cluster` and `Line` pools.
+- Don't allocate on the hot path: reuse `Cluster` and `Line` pools.
 
 ### 22.4 Avoid layout thrash
 
-* Never mix reads (`offsetTop`, `getBoundingClientRect`) and writes in
+- Never mix reads (`offsetTop`, `getBoundingClientRect`) and writes in
   the same micro-task. All reads happen before any write.
-* Render pass schedules via `requestAnimationFrame`; input pass is
+- Render pass schedules via `requestAnimationFrame`; input pass is
   synchronous but defers DOM writes to the rAF.
 
 ### 22.5 Worker batching
 
-* Batch paragraphs in groups of 10–20 per worker message.
-* Batch results back on rAF boundaries.
+- Batch paragraphs in groups of 10–20 per worker message.
+- Batch results back on rAF boundaries.
 
 ### 22.6 Cache sizing
 
-* ParaLayout cache: 50k entries with LRU.
-* Cluster measurement cache: 200k entries with LRU.
-* Font metrics cache: unbounded per resolved font (small).
+- ParaLayout cache: 50k entries with LRU.
+- Cluster measurement cache: 200k entries with LRU.
+- Font metrics cache: unbounded per resolved font (small).
 
 ### 22.7 Numeric caveats
 
-* Avoid `Number.prototype.toFixed`-based hashing — slow.
-* Use integer math for cache keys where possible.
+- Avoid `Number.prototype.toFixed`-based hashing — slow.
+- Use integer math for cache keys where possible.
 
 ### 22.8 Target metrics
 
-| Operation                            | Target (median) | Budget        |
-|--------------------------------------|-----------------|---------------|
-| Type one character                   | < 8 ms e2e      | 16 ms         |
-| Paginate 100 paragraphs (Latin)      | < 50 ms worker  | 100 ms        |
-| Open 100-page document               | < 1 s first paint, < 3 s fully paginated | 5 s |
-| Zoom change (no re-shape)            | < 16 ms         | 33 ms         |
-| Scroll 1 page                        | < 16 ms         | 33 ms         |
-| Print 10 pages                       | < 500 ms pre    | 1 s           |
+| Operation                       | Target (median)                          | Budget |
+| ------------------------------- | ---------------------------------------- | ------ |
+| Type one character              | < 8 ms e2e                               | 16 ms  |
+| Paginate 100 paragraphs (Latin) | < 50 ms worker                           | 100 ms |
+| Open 100-page document          | < 1 s first paint, < 3 s fully paginated | 5 s    |
+| Zoom change (no re-shape)       | < 16 ms                                  | 33 ms  |
+| Scroll 1 page                   | < 16 ms                                  | 33 ms  |
+| Print 10 pages                  | < 500 ms pre                             | 1 s    |
 
 ---
 
@@ -2375,7 +2403,8 @@ interface LayoutEvents {
 ```ts
 export interface ParaLayout {
   paraId: ParaId;
-  width: number; height: number;
+  width: number;
+  height: number;
   lines: Line[];
   hash: string;
   keepWithNext: boolean;
@@ -2385,12 +2414,18 @@ export interface ParaLayout {
 }
 
 export interface Line {
-  yOffset: number; xOffset: number;
-  width: number; maxWidth: number;
-  ascent: number; descent: number; leading: number;
+  yOffset: number;
+  xOffset: number;
+  width: number;
+  maxWidth: number;
+  ascent: number;
+  descent: number;
+  leading: number;
   segments: LineSegment[];
-  logicalFirst: number; logicalLast: number;
-  isFirst: boolean; isLast: boolean;
+  logicalFirst: number;
+  logicalLast: number;
+  isFirst: boolean;
+  isLast: boolean;
   endsAt: 'softBreak' | 'paraEnd' | 'columnBreak' | 'pageBreak';
   hyphenated: boolean;
   justifyExtraPerGap: number;
@@ -2399,7 +2434,8 @@ export interface Line {
 export interface GlyphRun {
   shapedRunRef: ShapedRunRef;
   clusterRange: { start: number; end: number };
-  xOffset: number; advance: number;
+  xOffset: number;
+  advance: number;
   level: number;
   font: ResolvedFontId;
   sizeHp: number;
@@ -2416,17 +2452,23 @@ export interface PageLayout {
   footer?: BlockStreamLayout;
   footnotes?: BlockStreamLayout;
   decorations: PageDecorations;
-  height: number;  // cached for virtualization
+  height: number; // cached for virtualization
 }
 
 export interface FontMetrics {
   unitsPerEm: number;
-  ascent: number; descent: number; lineGap: number;
-  capHeight: number; xHeight: number;
+  ascent: number;
+  descent: number;
+  lineGap: number;
+  capHeight: number;
+  xHeight: number;
   strikeout: { position: number; thickness: number };
   underline: { position: number; thickness: number };
-  typoAscent: number; typoDescent: number; typoLineGap: number;
-  winAscent: number; winDescent: number;
+  typoAscent: number;
+  typoDescent: number;
+  typoLineGap: number;
+  winAscent: number;
+  winDescent: number;
   useTypoMetrics: boolean;
 }
 
@@ -2441,7 +2483,9 @@ export interface ShapedRun {
   text: string;
   clusters: Cluster[];
   width: number;
-  ascent: number; descent: number; lineGap: number;
+  ascent: number;
+  descent: number;
+  lineGap: number;
 }
 ```
 
@@ -2518,22 +2562,22 @@ the stage-2 algorithm is axis-agnostic (operates on `inlineAxis` and
 
 ### 24.3 Huge table (≥ 10k rows)
 
-* **Lazy row layout**: lay out only rows intersecting the viewport plus
+- **Lazy row layout**: lay out only rows intersecting the viewport plus
   overscan.
-* **Virtualize off-screen rows**: known-height placeholders.
-* **Pagination integration**: pagination needs row heights to know where
+- **Virtualize off-screen rows**: known-height placeholders.
+- **Pagination integration**: pagination needs row heights to know where
   page breaks fall. For huge tables, we lay out on demand: pagination
   pauses after the last known-laid-out row, emits a "computing"
   placeholder page, continues once more rows are available.
-* **Column widths** computed from first 1000 rows as a heuristic, then
+- **Column widths** computed from first 1000 rows as a heuristic, then
   widened if later rows exceed.
 
 ### 24.4 Huge image
 
-* Image dimensions respected; we never auto-resize.
-* Preview rasterization at 2× viewport DPR max; full-resolution asset
+- Image dimensions respected; we never auto-resize.
+- Preview rasterization at 2× viewport DPR max; full-resolution asset
   only loaded for print.
-* Lazy-load off-screen image `<img>` via `loading="lazy"`.
+- Lazy-load off-screen image `<img>` via `loading="lazy"`.
 
 ### 24.5 Unsupported font
 
@@ -2649,11 +2693,11 @@ visible caret jumps are acceptable (Word's behavior).
 
 `F8` toggles through expand-by-unit modes. Each unit has a segmentation:
 
-* word: UAX #29 word bounds;
-* sentence: `.`/`!`/`?` + whitespace (locale-aware dictionary TBD);
-* paragraph: paragraph bounds;
-* section: section bounds;
-* document: entire doc.
+- word: UAX #29 word bounds;
+- sentence: `.`/`!`/`?` + whitespace (locale-aware dictionary TBD);
+- paragraph: paragraph bounds;
+- section: section bounds;
+- document: entire doc.
 
 We maintain `selection.anchor` fixed; `selection.focus` jumps to the
 next/previous unit boundary from its current position on each press.
@@ -2779,18 +2823,18 @@ Engine                 Paginator              FootnoteArea
 
 ### 27.1 Stage-isolated tests
 
-* **Measure**: given `runs[]` and font metrics, assert `ShapedRun[]`
+- **Measure**: given `runs[]` and font metrics, assert `ShapedRun[]`
   widths match a golden table. Separate tests for Canvas fast path and
   HarfBuzz path.
-* **Line break**: given `ShapedRun[]` and widths, assert the break
+- **Line break**: given `ShapedRun[]` and widths, assert the break
   points on a corpus of paragraphs.
-* **Justification**: given a target width, assert `justifyExtraPerGap`
+- **Justification**: given a target width, assert `justifyExtraPerGap`
   and post-justification widths.
-* **Bidi**: exhaustive per UAX #9 test file (bidi-test.txt) against our
+- **Bidi**: exhaustive per UAX #9 test file (bidi-test.txt) against our
   L1/L2 reorder.
-* **Table layout**: auto-fit on synthetic tables with known min/max
+- **Table layout**: auto-fit on synthetic tables with known min/max
   widths.
-* **Pagination**: keep-with-next chains, widow/orphan on synthetic
+- **Pagination**: keep-with-next chains, widow/orphan on synthetic
   paragraphs of known heights.
 
 ### 27.2 Golden documents
@@ -2840,13 +2884,13 @@ Risk: we underestimate the effort to reach Word parity.
 
 Mitigation:
 
-* **Incremental rollout**: Latin-only in sprint 1; CJK in 2; Arabic and
+- **Incremental rollout**: Latin-only in sprint 1; CJK in 2; Arabic and
   Hebrew in 3; Indic in 4; remaining in 5. Each sprint ships a
   feature-gated milestone.
-* **Reference implementation study**: LibreOffice's `sw/source/core/layout`
+- **Reference implementation study**: LibreOffice's `sw/source/core/layout`
   is open source and is our reference for Word-like pagination corners.
   We document our divergences.
-* **Test-driven**: golden docs from day 1; no feature merges without
+- **Test-driven**: golden docs from day 1; no feature merges without
   tests.
 
 ### 28.2 Font availability
@@ -2856,11 +2900,11 @@ materially different.
 
 Mitigation:
 
-* **Core set**: ship a curated set of open-licensed fonts (Liberation
+- **Core set**: ship a curated set of open-licensed fonts (Liberation
   Sans/Serif/Mono, Noto Sans CJK, Noto Naskh Arabic, Noto Sans
   Devanagari, etc.) installed by default with the app.
-* **Per-document metric warning**: see §14.5.
-* **Font substitution table**: per spec recommendations, substitute
+- **Per-document metric warning**: see §14.5.
+- **Font substitution table**: per spec recommendations, substitute
   Calibri → Carlito, Cambria → Caladea, Times New Roman → Liberation
   Serif, Arial → Liberation Sans. Metric-compatible replacements.
 
@@ -2870,10 +2914,10 @@ Risk: 10k-page docs overwhelm the DOM.
 
 Mitigation:
 
-* Virtualization (see §11).
-* **Huge-doc mode**: opt-in Canvas renderer; loses AT but preserves
+- Virtualization (see §11).
+- **Huge-doc mode**: opt-in Canvas renderer; loses AT but preserves
   interactivity for very large docs. Guide users with a prompt.
-* Memory pressure evictions of ParaLayout (re-computed on return to
+- Memory pressure evictions of ParaLayout (re-computed on return to
   viewport).
 
 ### 28.4 Shaping divergence
@@ -2910,14 +2954,14 @@ selection on demand.
 
 ## 29. Dependencies summary
 
-| Dep                      | Purpose                     | License   | Alternative                     |
-|--------------------------|-----------------------------|-----------|---------------------------------|
-| `icu4x` (WASM)           | Line break, script, normalize | Apache-2 | self-hosted tables              |
-| `harfbuzz-wasm`          | Text shaping                | MIT       | icu4x experimental shaper       |
-| `opentype.js`            | Font metrics parsing        | MIT       | fontkit-wasm                    |
-| `pdf-lib` (v2)           | Direct PDF generation       | MIT       | Chromium printToPDF             |
-| `pixelmatch`             | Screenshot diffs            | ISC       | jest-image-snapshot             |
-| Hyphenation patterns     | Auto-hyphenate              | LGPL/MIT  | none (disable auto-hyphen)      |
+| Dep                  | Purpose                       | License  | Alternative                |
+| -------------------- | ----------------------------- | -------- | -------------------------- |
+| `icu4x` (WASM)       | Line break, script, normalize | Apache-2 | self-hosted tables         |
+| `harfbuzz-wasm`      | Text shaping                  | MIT      | icu4x experimental shaper  |
+| `opentype.js`        | Font metrics parsing          | MIT      | fontkit-wasm               |
+| `pdf-lib` (v2)       | Direct PDF generation         | MIT      | Chromium printToPDF        |
+| `pixelmatch`         | Screenshot diffs              | ISC      | jest-image-snapshot        |
+| Hyphenation patterns | Auto-hyphenate                | LGPL/MIT | none (disable auto-hyphen) |
 
 We pin versions and mirror binaries into our build.
 
@@ -2945,27 +2989,27 @@ We pin versions and mirror binaries into our build.
 
 Rendering consumes from:
 
-* **Domain/Model**: `DomainSnapshot`, `Patch` stream, `ResolvedStyle`
+- **Domain/Model**: `DomainSnapshot`, `Patch` stream, `ResolvedStyle`
   API.
-* **DOCX Parser**: already-parsed `DomainSnapshot`; fonts registered;
+- **DOCX Parser**: already-parsed `DomainSnapshot`; fonts registered;
   images decoded.
-* **Platform (Electron)**: `dpr`, `printToPDF`, file access for embedded
+- **Platform (Electron)**: `dpr`, `printToPDF`, file access for embedded
   fonts.
-* **UI (React)**: `PageHost` component host; toolbar/ribbon inject zoom
+- **UI (React)**: `PageHost` component host; toolbar/ribbon inject zoom
   and view mode via commands.
 
 Rendering provides to:
 
-* **Editor core**: `hitTest`, `layoutFor`, `PageLayout` for selection
+- **Editor core**: `hitTest`, `layoutFor`, `PageLayout` for selection
   mechanics.
-* **Commands**: layout-dependent commands (e.g., "Next Page") call
+- **Commands**: layout-dependent commands (e.g., "Next Page") call
   `engine.getPage`.
-* **Accessibility exporter**: walks the layout for alt tree generation.
+- **Accessibility exporter**: walks the layout for alt tree generation.
 
 Cross-module invariants:
 
-* Domain `Patch` semantics do not depend on layout.
-* Layout is read-only: it does **not** mutate the domain. Field updates
+- Domain `Patch` semantics do not depend on layout.
+- Layout is read-only: it does **not** mutate the domain. Field updates
   that change text (e.g., NUMPAGES) are expressed as "resolved-field
   snapshots" applied only for display/print; the domain retains the
   field instruction.
@@ -2981,7 +3025,7 @@ function commitPage(page: PageLayout, container: HTMLElement, zoom: number, dpr:
   pageEl.setAttribute('role', 'document');
   pageEl.setAttribute('aria-label', `Page ${page.pageIndex + 1}`);
   pageEl.className = 'page';
-  pageEl.style.width  = cssPx(page.pageSize.w, zoom, dpr);
+  pageEl.style.width = cssPx(page.pageSize.w, zoom, dpr);
   pageEl.style.height = cssPx(page.pageSize.h, zoom, dpr);
 
   // decorations (SVG below)
@@ -2999,8 +3043,8 @@ function commitPage(page: PageLayout, container: HTMLElement, zoom: number, dpr:
     pageEl.appendChild(frameEl);
   }
 
-  if (page.header)    pageEl.appendChild(renderBlockStream(page.header, zoom, dpr, 'header'));
-  if (page.footer)    pageEl.appendChild(renderBlockStream(page.footer, zoom, dpr, 'footer'));
+  if (page.header) pageEl.appendChild(renderBlockStream(page.header, zoom, dpr, 'header'));
+  if (page.footer) pageEl.appendChild(renderBlockStream(page.footer, zoom, dpr, 'footer'));
   if (page.footnotes) pageEl.appendChild(renderBlockStream(page.footnotes, zoom, dpr, 'footnotes'));
 
   // decorations (SVG above)
@@ -3048,26 +3092,26 @@ possible break sequences.
 
 Parameters in our default configuration:
 
-* `l` (line penalty base) = 10
-* `π` (hyphen penalty) = 50
-* `α` (consecutive-hyphen) = 3000
-* `γ` (fitness mismatch) = 100
-* `widows/orphans` enforced at stage 5, not as K-P penalties
+- `l` (line penalty base) = 10
+- `π` (hyphen penalty) = 50
+- `α` (consecutive-hyphen) = 3000
+- `γ` (fitness mismatch) = 100
+- `widows/orphans` enforced at stage 5, not as K-P penalties
 
 Reference implementation skeleton:
 
 ```ts
-function kp(items: Item[], widths: (i: number)=>number): Break[] {
+function kp(items: Item[], widths: (i: number) => number): Break[] {
   const active: Node[] = [{ line: 0, index: 0, fitness: 1, total: 0 }];
   for (let i = 0; i < items.length; i++) {
     if (items[i].kind !== 'penalty' && !isBreakable(items[i])) continue;
     for (const a of active.slice()) {
-      const r = adjustmentRatio(a.index, i, items, widths(a.line+1));
+      const r = adjustmentRatio(a.index, i, items, widths(a.line + 1));
       if (r < -1 || isForbidden(items, a.index, i)) continue;
       const fit = fitnessOf(r);
       const d = demerits(r, items[i], a, fit);
       const total = a.total + d;
-      pushCandidate(active, { line: a.line+1, index: i, fitness: fit, total, prev: a });
+      pushCandidate(active, { line: a.line + 1, index: i, fitness: fit, total, prev: a });
     }
     if (items[i].kind === 'penalty' && items[i].penalty === -Infinity) {
       // forced break: keep only best active node at this point
@@ -3085,12 +3129,12 @@ We plan to open-source this module under the project's license.
 
 ## 34. Appendix C — UAX references used
 
-* UAX #9 — Unicode Bidirectional Algorithm
-* UAX #14 — Line Breaking Properties
-* UAX #24 — Unicode Script Property
-* UAX #29 — Text Segmentation (grapheme, word, sentence)
-* UAX #31 — Identifier Syntax (for word boundaries)
-* UTS #10 — Unicode Collation Algorithm (sort; indirectly)
+- UAX #9 — Unicode Bidirectional Algorithm
+- UAX #14 — Line Breaking Properties
+- UAX #24 — Unicode Script Property
+- UAX #29 — Text Segmentation (grapheme, word, sentence)
+- UAX #31 — Identifier Syntax (for word boundaries)
+- UTS #10 — Unicode Collation Algorithm (sort; indirectly)
 
 All implemented via ICU4X. We don't hand-roll.
 
@@ -3098,24 +3142,24 @@ All implemented via ICU4X. We don't hand-roll.
 
 ## 35. Appendix D — Glossary
 
-* **ParaLayout** — result of stages 1+2 for one paragraph.
-* **Line** — a visual line within a ParaLayout.
-* **LineSegment** — a visually contiguous run of glyph clusters sharing
+- **ParaLayout** — result of stages 1+2 for one paragraph.
+- **Line** — a visual line within a ParaLayout.
+- **LineSegment** — a visually contiguous run of glyph clusters sharing
   a ShapedRun within a line.
-* **ShapedRun** — stage-1 result for one shaping segment of a run.
-* **Cluster** — grapheme cluster with width and breakability.
-* **ContentFrame** — rectangular area on a page into which block content
+- **ShapedRun** — stage-1 result for one shaping segment of a run.
+- **Cluster** — grapheme cluster with width and breakability.
+- **ContentFrame** — rectangular area on a page into which block content
   flows (one per column).
-* **PageLayout** — result of stage 5 for one page.
-* **Section** — contiguous range of paragraphs sharing page geometry.
-* **Content frame** — drawable area inside margins on a page.
-* **Exclusion zone** — rectangle/polygon blocking text flow (a float's
+- **PageLayout** — result of stage 5 for one page.
+- **Section** — contiguous range of paragraphs sharing page geometry.
+- **Content frame** — drawable area inside margins on a page.
+- **Exclusion zone** — rectangle/polygon blocking text flow (a float's
   wrap zone).
-* **Dominant font** — the font used to determine line height (see §15.2).
-* **Measurement key** — hash key for cluster-width cache.
-* **Widow** — last line of a paragraph left alone at top of new page.
-* **Orphan** — first line of a paragraph left alone at bottom of page.
-* **Kinsoku shori** — Japanese line-breaking restrictions (certain
+- **Dominant font** — the font used to determine line height (see §15.2).
+- **Measurement key** — hash key for cluster-width cache.
+- **Widow** — last line of a paragraph left alone at top of new page.
+- **Orphan** — first line of a paragraph left alone at bottom of page.
+- **Kinsoku shori** — Japanese line-breaking restrictions (certain
   punctuation may not start/end a line).
 
 ---
@@ -3125,16 +3169,16 @@ All implemented via ICU4X. We don't hand-roll.
 The CSS `@page` and related rules (`break-before`, `break-after`,
 `break-inside`) look tempting. They fail us on:
 
-* Keep-with-next: Chromium supports `break-after: avoid`, but not
+- Keep-with-next: Chromium supports `break-after: avoid`, but not
   reliably across table rows or when images are involved.
-* Widow/orphan: supported for block text but ignored when text contains
+- Widow/orphan: supported for block text but ignored when text contains
   inline floats.
-* Footnote anchoring: not supported.
-* Repeat-header rows: implemented by Chromium but with glitches on row
+- Footnote anchoring: not supported.
+- Repeat-header rows: implemented by Chromium but with glitches on row
   heights that change across pages.
-* Cross-column flow: CSS columns don't split a single paragraph across
+- Cross-column flow: CSS columns don't split a single paragraph across
   columns in a predictable way when balanced columns are active.
-* Printer-specific pagination: Chromium sometimes reflows differently
+- Printer-specific pagination: Chromium sometimes reflows differently
   when it knows the print target's margins (shrink-to-fit).
 
 We'd end up patching around Chromium's behavior enough that we have
@@ -3176,16 +3220,16 @@ unpredictability. Full custom wins.
 
 ## 38. Appendix G — Opinionated defaults
 
-* Default justification: `first-fit` (Word 95 parity).
-* Default hyphenation: `off` at document level (matches Word); style can
+- Default justification: `first-fit` (Word 95 parity).
+- Default hyphenation: `off` at document level (matches Word); style can
   enable.
-* Default line rule: `auto` `240` (single).
-* Default tab stop: `720` twips (0.5 in).
-* Default zoom: `100%`.
-* Default view: `Page Layout`.
-* Default overscan pages: `2` each side of viewport.
-* Default worker count: `hardwareConcurrency - 1`, min `1`, max `8`.
-* Default cache sizes: see §22.6.
+- Default line rule: `auto` `240` (single).
+- Default tab stop: `720` twips (0.5 in).
+- Default zoom: `100%`.
+- Default view: `Page Layout`.
+- Default overscan pages: `2` each side of viewport.
+- Default worker count: `hardwareConcurrency - 1`, min `1`, max `8`.
+- Default cache sizes: see §22.6.
 
 ---
 

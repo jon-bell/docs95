@@ -14,15 +14,18 @@ Every AST subtree — known or opaque — receives a stable `NodeId` at parse ti
 ## Consequences
 
 ### Positive
+
 - Opaque content never silently relocates on edit.
 - Unknown-namespace content survives edits intact for round-trip.
 - `NodeId` scheme is already committed in `overview.md:157`; this ADR extends its scope to opaque subtrees.
 
 ### Negative
+
 - Each document carries a `NodeId` index in memory; bounded by document size.
 - Content-hash-derived IDs are stable only for unmodified imports; modification by another tool between reads produces different IDs. Documented as a known limitation; not a correctness hazard.
 
 ### Follow-up required
+
 - Persistence integration tests must include: "edit adjacent to opaque subtree; re-save; assert opaque subtree byte-identical and at the same document-order position."
 
 ## Alternatives considered

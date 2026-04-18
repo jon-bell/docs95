@@ -14,14 +14,17 @@ v1 ships Canvas `measureText` as a fast path for Latin and CJK. UAX #24 script s
 ## Consequences
 
 ### Positive
+
 - Cold-start budget met (`non-functional.md:175-189`) for the Latin-only scenario.
 - Correct shaping for RTL and Indic text from v1 (text-level; UI-mirroring remains v2 per `ux.md:2141-2142`).
 
 ### Negative
+
 - Two shaping paths = visual-regression surface; divergence must be gated in CI or bugs silently creep in.
 - First-use latency spike for RTL users (WASM download + warmup).
 
 ### Follow-up required
+
 - Define the divergence tolerance between Canvas and HarfBuzz widths (target: ≤ 0.5 px on a documented font corpus).
 
 ## Alternatives considered

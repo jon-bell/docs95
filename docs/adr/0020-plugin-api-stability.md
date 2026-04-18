@@ -5,7 +5,7 @@
 
 ## Context
 
-ADR-0006 makes the `Plugin` contract the central feature-extension mechanism: 17+ subsystems ship as plugins from day one. `NFR-16-80` (`docs/requirements/non-functional.md:1405-1407`) declares no public plugin API in v1, but commits to semver when one is introduced. Without a stability policy for the *internal* plugin contract, internal contributors silently break each other, refactors cascade, and moving to a public API in v2 becomes a "big bang" rewrite. Review Phase 3 P3-W3 flagged this.
+ADR-0006 makes the `Plugin` contract the central feature-extension mechanism: 17+ subsystems ship as plugins from day one. `NFR-16-80` (`docs/requirements/non-functional.md:1405-1407`) declares no public plugin API in v1, but commits to semver when one is introduced. Without a stability policy for the _internal_ plugin contract, internal contributors silently break each other, refactors cascade, and moving to a public API in v2 becomes a "big bang" rewrite. Review Phase 3 P3-W3 flagged this.
 
 ## Decision
 
@@ -22,7 +22,7 @@ ADR-0006 makes the `Plugin` contract the central feature-extension mechanism: 17
 **v2: public API introduction.**
 
 - Public plugin API opens after the internal contract has survived at least two engine majors with no forced breakage reverted.
-- Public contract is a *subset* of the internal contract, explicitly re-exported from `@word/plugin-api`. The engine is allowed to use internal-only hooks; plugins publishing against `@word/plugin-api` cannot.
+- Public contract is a _subset_ of the internal contract, explicitly re-exported from `@word/plugin-api`. The engine is allowed to use internal-only hooks; plugins publishing against `@word/plugin-api` cannot.
 - The public API carries its own independent semver track.
 
 **Contract tests.** Every internal plugin ships with a conformance test (`plugin.contract.test.ts`) that asserts: (a) it declares all hooks it implements; (b) input/output payloads match the declared types under fuzzing; (c) plugin init is all-or-nothing (review P2-W7). CI blocks merge if conformance fails.
@@ -30,16 +30,19 @@ ADR-0006 makes the `Plugin` contract the central feature-extension mechanism: 17
 ## Consequences
 
 ### Positive
+
 - Internal contributors get a predictable contract with known change cadence.
 - Refactors of the core are cheap: a single engine-major migration moves all plugins in lockstep.
 - The v2 public surface is pre-hardened by two internal majors of real use.
 - No premature lock-in to a public API we'd regret.
 
 ### Negative
+
 - Versioning discipline has a cost; every contract change requires review against the semver categorization.
 - Plugin authors must re-declare peer-dep ranges on each engine major; scripted via Renovate (`non-functional.md:548`).
 
 ### Follow-up required
+
 - Author the Plugin contract test harness.
 - Define the plugin manifest schema (fields: `id`, `engineMajor`, `capabilities`, `provides`, `requires`).
 - Stand up `docs/plugin-migrations/` and land an empty `1-to-2.md` template.

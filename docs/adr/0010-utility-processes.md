@@ -14,16 +14,19 @@ Each CPU-heavy or risky subsystem runs in a dedicated Electron `utilityProcess`:
 ## Consequences
 
 ### Positive
+
 - Renderer stays under typing-latency budget.
 - Parser / spell-check / indexer crashes do not kill the edit session.
 - Principle-of-least-privilege: macro-sanitizer has no filesystem access.
 
 ### Negative
+
 - Extra IPC cost and serialization overhead for every call.
 - `utilityProcess` is Electron-specific; the browser-target port (`non-functional.md:1418-1419`) needs a Web Worker fallback.
 - A single utility cannot share in-memory state with other utilities.
 
 ### Follow-up required
+
 - Specify per-utility concurrency caps and request-queue depth (currently unbounded — review Phase 3 P3-W4).
 
 ## Alternatives considered

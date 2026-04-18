@@ -1,0 +1,65 @@
+/* @word/render — base styles for the document canvas. */
+
+.page-host {
+  overflow: auto;
+  background: #808080;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  gap: 24px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.page {
+  position: relative;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+  /* Prevent the browser from reflowing our content. */
+  contain: strict;
+  overflow: hidden;
+}
+
+.line {
+  position: absolute;
+  white-space: pre;
+  overflow: visible;
+}
+
+.run {
+  position: absolute;
+  white-space: pre;
+  overflow: visible;
+  user-select: none;
+}
+
+.list-marker {
+  display: inline-block;
+  user-select: none;
+}
+
+.caret {
+  position: absolute;
+  width: 2px;
+  background: #000000;
+  pointer-events: none;
+  animation: word-caret-blink 1s step-end infinite;
+}
+
+@keyframes word-caret-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.sel-rect {
+  position: absolute;
+  background: rgba(0, 120, 215, 0.3);
+  pointer-events: none;
+}

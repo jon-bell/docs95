@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist"],
+  "references": [
+    { "path": "../domain" },
+    { "path": "../engine" },
+    { "path": "../layout" },
+    { "path": "../docx" }
+  ]
+}

@@ -5,7 +5,7 @@
 
 ## Context
 
-Word 95 wrote binary `.doc`. We target a 2026 ecosystem where DOCX (ECMA-376 Transitional) is the dominant office format, openly specified, and widely exchanged. Reverse-engineering `.doc` for *write* is legally and technically heavy without business upside. Users still receive and expect to read `.doc`, `.rtf`, `.odt`, `.html`, and `.txt`.
+Word 95 wrote binary `.doc`. We target a 2026 ecosystem where DOCX (ECMA-376 Transitional) is the dominant office format, openly specified, and widely exchanged. Reverse-engineering `.doc` for _write_ is legally and technically heavy without business upside. Users still receive and expect to read `.doc`, `.rtf`, `.odt`, `.html`, and `.txt`.
 
 The question: which format is canonical — the one we round-trip, byte-diff, and gate on CI? See `docs/architecture/overview.md:7`, `docs/requirements/docx-format.md`, `CLAUDE.md:7`.
 
@@ -16,16 +16,19 @@ DOCX Transitional is the only canonical format. `.doc` is **import-only** via an
 ## Consequences
 
 ### Positive
+
 - Single round-trip contract; one corpus, one fidelity ledger.
 - Security boundary: no in-process binary `.doc` parser.
 - Schema evolution bounded to ECMA-376.
 
 ### Negative
+
 - Permanent lossy mapping for Word-95 features with no DOCX equivalent — WordBasic (ADR-0007), Frames, OLE 1.x.
 - `.doc` import requires LibreOffice on the user's machine; we cannot open `.doc` without it.
 - No user-side "save back to Word 95" path.
 
 ### Follow-up required
+
 - Land a Fidelity Ledger document enumerating every lossy Word-95 → DOCX mapping.
 
 ## Alternatives considered
