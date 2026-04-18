@@ -18,12 +18,13 @@
     "dev:electron": "electron .",
     "e2e": "playwright test",
     "icon": "node build/make-icon.mjs",
-    "dist": "electron-builder --publish never",
-    "dist:mac": "electron-builder --mac --publish never",
-    "dist:win": "electron-builder --win --publish never",
-    "dist:linux": "electron-builder --linux --publish never",
-    "dist:all": "electron-builder --mac --win --linux --publish never",
-    "clean": "rm -rf dist out tsconfig.tsbuildinfo release"
+    "stage": "node scripts/stage-dist.mjs",
+    "dist": "pnpm stage && electron-builder --publish never",
+    "dist:mac": "pnpm stage && electron-builder --mac --publish never",
+    "dist:win": "pnpm stage && electron-builder --win --publish never",
+    "dist:linux": "pnpm stage && electron-builder --linux --publish never",
+    "dist:all": "pnpm stage && electron-builder --mac --win --linux --publish never",
+    "clean": "rm -rf dist out tsconfig.tsbuildinfo release release-staging"
   },
   "dependencies": {
     "@word/docx": "workspace:*",

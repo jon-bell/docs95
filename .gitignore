@@ -16,6 +16,9 @@ Thumbs.db
 pnpm-debug.log*
 # Electron packaging output
 packages/app/release/
+packages/app/release-staging/
+# Stray output if a previous run produced artifacts at the wrong path
+packages/release/
 # Playwright artifacts
 test-results/
 playwright-report/

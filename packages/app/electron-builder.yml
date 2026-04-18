@@ -2,27 +2,22 @@ appId: com.example.word
 productName: Word
 copyright: Copyright © 2026
 
+# We stage a minimal app tree at release-staging/ (see scripts/stage-dist.mjs)
+# containing only dist/, build/, and a sanitized package.json with zero deps.
+# electron-builder reads from there, so it never traverses pnpm's workspace-
+# linked node_modules — which either bloated the asar with source (Linux) or
+# failed outright on macOS and Windows.
 directories:
+  app: release-staging
   output: release
   buildResources: build
 
-# Explicitly opt out of auto-publish. Even with --publish never on the CLI,
-# electron-builder tries to compute update channels when GH_TOKEN is in the
-# env (as it is on every GitHub Actions runner) and errors on a missing
-# publish configuration. null disables the whole publisher subsystem.
 publish: null
 
-# We pack self-contained CJS bundles plus the Vite-built renderer. No native
-# deps, no node_modules traversal needed.
 files:
   - dist/**/*
   - package.json
   - '!**/*.map'
-
-# The @word/app scope is used in-workspace. Inside the installer we surface
-# the binary as `word` so scripts, .desktop entries, and dpkg are happy.
-extraMetadata:
-  name: word
 
 # Keep artifact filenames clean of the @word/app scope slug.
 artifactName: ${productName}-${version}-${os}-${arch}.${ext}
