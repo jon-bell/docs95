@@ -43,13 +43,18 @@ mac:
       arch:
         - x64
         - arm64
-  # Code signing + notarisation require Apple Developer credentials supplied via
-  # the CSC_LINK / CSC_KEY_PASSWORD / APPLE_ID / APPLE_APP_SPECIFIC_PASSWORD env
-  # vars in CI. Unsigned builds run locally with a Gatekeeper override warning.
-  hardenedRuntime: true
-  gatekeeperAssess: false
-  entitlements: build/entitlements.mac.plist
-  entitlementsInherit: build/entitlements.mac.plist
+  # identity: null disables code-signing entirely. Without credentials, signing
+  # attempts fail with a cryptic "packages/app not a file" error from the walk
+  # @electron/osx-sign does. Users with an Apple Developer cert should override
+  # via the CSC_LINK / CSC_KEY_PASSWORD env vars (see docs/packaging.md) — when
+  # those are set, electron-builder ignores identity: null.
+  identity: null
+  # hardenedRuntime, gatekeeperAssess, and entitlements only apply when signing.
+  # Left here (commented) as breadcrumbs for when signing gets wired.
+  # hardenedRuntime: true
+  # gatekeeperAssess: false
+  # entitlements: build/entitlements.mac.plist
+  # entitlementsInherit: build/entitlements.mac.plist
 
 dmg:
   writeUpdateInfo: false
