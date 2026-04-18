@@ -6,24 +6,34 @@ directories:
   output: release
   buildResources: build
 
-# Only ship what Electron needs at runtime. The main + preload are self-contained
-# CJS bundles (scripts/build-preload.mjs inlines all @word/* workspace deps), and
-# the renderer is a Vite build. No node_modules traversal required.
+# Explicitly opt out of auto-publish. Even with --publish never on the CLI,
+# electron-builder tries to compute update channels when GH_TOKEN is in the
+# env (as it is on every GitHub Actions runner) and errors on a missing
+# publish configuration. null disables the whole publisher subsystem.
+publish: null
+
+# We pack self-contained CJS bundles plus the Vite-built renderer. No native
+# deps, no node_modules traversal needed.
 files:
-  - dist/main/**
-  - dist/preload/**
-  - dist/renderer/**
+  - dist/**/*
   - package.json
   - '!**/*.map'
 
+# The @word/app scope is used in-workspace. Inside the installer we surface
+# the binary as `word` so scripts, .desktop entries, and dpkg are happy.
 extraMetadata:
-  main: dist/main/index.cjs
   name: word
 
-# Artifact naming — keep it clean of the @word/app scope slug.
+# Keep artifact filenames clean of the @word/app scope slug.
 artifactName: ${productName}-${version}-${os}-${arch}.${ext}
 
 asar: true
+
+# Skip @electron/rebuild — we have zero native dependencies and the rebuild
+# step otherwise trips on pnpm's symlinked node_modules on macOS / Windows.
+npmRebuild: false
+buildDependenciesFromSource: false
+nodeGypRebuild: false
 
 # ── macOS ─────────────────────────────────────────────────────────────────────
 mac:

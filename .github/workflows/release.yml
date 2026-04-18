@@ -72,8 +72,10 @@ jobs:
       # overrides but should not be distributed to end users.
       - name: Package
         run: pnpm --filter @word/app ${{ matrix.dist_script }}
+        # GH_TOKEN intentionally omitted: its presence makes electron-builder
+        # infer auto-publish and crash on the missing publish config. The
+        # draft-release job below re-adds it when attaching artifacts.
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
