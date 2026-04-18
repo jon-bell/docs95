@@ -46,35 +46,60 @@ function makePage(index: number): PageLayout {
   };
 }
 
-function makeContainerEl(
-  opts: {
-    left?: number;
-    top?: number;
-    width?: number;
-    height?: number;
-    scrollLeft?: number;
-    scrollTop?: number;
-  } = {},
-): HTMLElement {
-  const el = document.createElement('div');
-  const { left = 0, top = 0, width = 1200, height = 900, scrollLeft = 0, scrollTop = 0 } = opts;
+/**
+ * Builds a container element that owns child page elements at the positions
+ * the new DOM-rect hit-test logic will query.
+ *
+ * Layout: container fills (0,0,1000,2200).
+ *   page 0: (100, 24, 816, 1056)    — centred with 24 px top padding
+ *   page 1: (100, 1104, 816, 1056)  — 24 px gap below page 0
+ */
+function makeContainerWithPages(pages: readonly PageLayout[]): HTMLElement {
+  const container = document.createElement('div');
 
-  el.scrollLeft = scrollLeft;
-  el.scrollTop = scrollTop;
-
-  vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
-    left,
-    top,
-    right: left + width,
-    bottom: top + height,
-    width,
-    height,
-    x: left,
-    y: top,
+  vi.spyOn(container, 'getBoundingClientRect').mockReturnValue({
+    left: 0,
+    top: 0,
+    right: 1000,
+    bottom: 2200,
+    width: 1000,
+    height: 2200,
+    x: 0,
+    y: 0,
     toJSON: () => ({}),
   });
 
-  return el;
+  // Lay out pages: page N starts at top = 24 + N * (1056 + 24), left = 100.
+  const PAGE_TOP_PADDING = 24;
+  const PAGE_GAP = 24;
+  const PAGE_LEFT = 100;
+
+  pages.forEach((page, idx) => {
+    const pageEl = document.createElement('div');
+    pageEl.className = 'page';
+    pageEl.dataset['pageIndex'] = String(idx);
+
+    const top = PAGE_TOP_PADDING + idx * (page.sizePx.heightPx + PAGE_GAP);
+
+    vi.spyOn(pageEl, 'getBoundingClientRect').mockReturnValue({
+      left: PAGE_LEFT,
+      top,
+      right: PAGE_LEFT + page.sizePx.widthPx,
+      bottom: top + page.sizePx.heightPx,
+      width: page.sizePx.widthPx,
+      height: page.sizePx.heightPx,
+      x: PAGE_LEFT,
+      y: top,
+      toJSON: () => ({}),
+    });
+
+    container.appendChild(pageEl);
+  });
+
+  // querySelectorAll must return the child elements — jsdom supports this
+  // natively so we don't need to stub it.
+
+  return container;
 }
 
 // ---------------------------------------------------------------------------
@@ -96,80 +121,98 @@ describe('useHitTest', () => {
 
   it('returns undefined when click is outside all pages', () => {
     const pages = [makePage(0)];
-    const el = makeContainerEl();
-    // Use a mutable ref
-    const ref = { current: el };
+    const container = makeContainerWithPages(pages);
+    const ref = { current: container };
 
     const { result } = renderHook(() => useHitTest(pages, ref));
-    // Click far below all pages (past 1056 + 24 + 24)
-    const hit = result.current(0, 2000);
+
+    // Far below page 0 (bottom = 24 + 1056 = 1080), so y=2000 misses.
+    const hit = result.current(500, 2000);
     expect(hit).toBeUndefined();
   });
 
-  it('resolves a position inside the first run', () => {
+  it('returns undefined when click is to the left of page 0', () => {
     const pages = [makePage(0)];
-    const el = makeContainerEl({ left: 0, top: 0, width: 1200, height: 900 });
-    const ref = { current: el };
+    const container = makeContainerWithPages(pages);
+    const ref = { current: container };
 
     const { result } = renderHook(() => useHitTest(pages, ref));
 
-    // The page is centered: pageLeft = (1200 - 816) / 2 = 192
-    // Click at x=192+10=202, which maps to localX=10 (inside run-0 which spans [0,50])
-    // Line topPx=100, so y inside page = 110 (lineTop=100, click y = 24+110=134)
-    const pageLeft = (1200 - 816) / 2;
-    const hit = result.current(pageLeft + 10, 24 + 110);
+    // page 0 left = 100; click at x=50 misses.
+    const hit = result.current(50, 100);
+    expect(hit).toBeUndefined();
+  });
+
+  it('resolves a position inside the first run of page 0', () => {
+    const pages = [makePage(0)];
+    const container = makeContainerWithPages(pages);
+    const ref = { current: container };
+
+    const { result } = renderHook(() => useHitTest(pages, ref));
+
+    // page 0: left=100, top=24.
+    // Line topPx=100, so client y = 24 + 110 = 134 (inside the line).
+    // run-0 spans localX [0, 50); click at localX=10 → inside run-0.
+    // client x = 100 + 10 = 110.
+    const hit = result.current(110, 134);
 
     expect(hit).toBeDefined();
     expect(hit!.leafId).toBe('para-0');
     expect(typeof hit!.offset).toBe('number');
+    expect(hit!.offset).toBeGreaterThanOrEqual(0);
+    expect(hit!.offset).toBeLessThanOrEqual(5);
   });
 
-  it('resolves a position inside the second run', () => {
+  it('resolves a position inside the second run of page 0', () => {
     const pages = [makePage(0)];
-    const el = makeContainerEl({ left: 0, top: 0, width: 1200, height: 900 });
-    const ref = { current: el };
+    const container = makeContainerWithPages(pages);
+    const ref = { current: container };
 
     const { result } = renderHook(() => useHitTest(pages, ref));
 
-    const pageLeft = (1200 - 816) / 2;
-    // run-1 spans [50, 110], click at localX=75 → inside run-1
-    const hit = result.current(pageLeft + 75, 24 + 110);
+    // run-1 spans localX [50, 110); click at localX=75 → inside run-1.
+    // client x = 100 + 75 = 175; client y = 24 + 110 = 134.
+    const hit = result.current(175, 134);
 
     expect(hit).toBeDefined();
     expect(hit!.leafId).toBe('para-0');
-    // offsetInRun=5, text length 6, fraction ≈ (75-50)/60 ≈ 0.42 → char ≈ 2 → offset ≈ 7
+    // offsetInRun=5, text ' World' length=6; fraction=(75-50)/60≈0.42 → char≈2 → offset≈7
     expect(hit!.offset).toBeGreaterThanOrEqual(5);
     expect(hit!.offset).toBeLessThanOrEqual(11);
   });
 
-  it('accounts for container scroll offset', () => {
-    const pages = [makePage(0)];
-    const el = makeContainerEl({
-      left: 0,
-      top: 0,
-      width: 1200,
-      height: 900,
-      scrollLeft: 0,
-      scrollTop: 200,
-    });
-    const ref = { current: el };
+  it('resolves a position inside page 1 when two pages are present', () => {
+    const pages = [makePage(0), makePage(1)];
+    const container = makeContainerWithPages(pages);
+    const ref = { current: container };
 
     const { result } = renderHook(() => useHitTest(pages, ref));
 
-    // With scrollTop=200, clicking at client y=0 means content y = 0-0+200 = 200
-    // The page starts at y=24 within scroll content, so localY = 200-24 = 176
-    // Line is at topPx=100, which is within the page (heightPx=1056)
-    const pageLeft = (1200 - 816) / 2;
-    const hit = result.current(pageLeft + 10, 0);
+    // page 1: top = 24 + 1*(1056+24) = 1104. Line topPx=100 → client y = 1104+110 = 1214.
+    // client x = 100 + 10 = 110 (inside run-0).
+    const hit = result.current(110, 1214);
 
-    // localY = 200 − inside page body, so should find the line
     expect(hit).toBeDefined();
+    expect(hit!.leafId).toBe('para-0');
+  });
+
+  it('returns undefined for a point between pages (in the gap)', () => {
+    const pages = [makePage(0), makePage(1)];
+    const container = makeContainerWithPages(pages);
+    const ref = { current: container };
+
+    const { result } = renderHook(() => useHitTest(pages, ref));
+
+    // page 0 bottom = 24 + 1056 = 1080; page 1 top = 1104. Gap is [1080, 1104).
+    // y=1090 is in the gap; x=110 would be within a page horizontally.
+    const hit = result.current(110, 1090);
+    expect(hit).toBeUndefined();
   });
 
   it('returns a stable function reference when pages reference does not change', () => {
     const pages = [makePage(0)];
-    const el = makeContainerEl();
-    const ref = { current: el };
+    const container = makeContainerWithPages(pages);
+    const ref = { current: container };
 
     const { result, rerender } = renderHook(
       ({ p }: { p: readonly PageLayout[] }) => useHitTest(p, ref),

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  AboutDialog,
   AppShell,
   FindReplaceDialog,
   FormattingToolbar,
@@ -130,6 +131,7 @@ export const App: React.FC = () => {
   const imeSurfaceRef = useRef<HTMLSpanElement | null>(null);
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
   const [findReplaceTab, setFindReplaceTab] = useState<'find' | 'replace'>('find');
+  const [aboutOpen, setAboutOpen] = useState(false);
 
   useEffect(() => {
     store.replaceDocument(editor.doc);
@@ -339,6 +341,12 @@ export const App: React.FC = () => {
         return;
       }
 
+      // Help
+      if (commandId === 'app.help.about') {
+        setAboutOpen(true);
+        return;
+      }
+
       // Everything else — forward to the engine bus as-is
       const result = editor.bus.dispatch(asCommandId(commandId), params);
       if (!result.ok) {
@@ -382,6 +390,10 @@ export const App: React.FC = () => {
           onCommand={handleCommand}
           onClose={() => setFindReplaceOpen(false)}
         />
+      )}
+      {aboutOpen && (
+        // TODO: wire to package.json version at build time
+        <AboutDialog version="0.1.1" onClose={() => setAboutOpen(false)} />
       )}
     </AppShell>
   );

@@ -38,6 +38,9 @@ export type {
   NumberingFormat,
 } from './components/BulletsAndNumberingDialog.js';
 
+export { AboutDialog } from './components/AboutDialog.js';
+export type { AboutDialogProps } from './components/AboutDialog.js';
+
 export { FindReplaceDialog } from './components/FindReplaceDialog.js';
 export type { FindReplaceDialogProps, FindOptions } from './components/FindReplaceDialog.js';
 

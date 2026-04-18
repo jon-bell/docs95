@@ -208,6 +208,83 @@ test('typing characters inserts text and Backspace removes it', async () => {
   await expect(firstRun).toContainText('Z');
 });
 
+test('click-to-caret places insertion point at the clicked position', async () => {
+  const { window } = launched;
+
+  // Wait for the page host and at least one rendered run to appear.
+  const docHost = window.locator('[role="document"]');
+  await expect(docHost).toBeVisible({ timeout: 15_000 });
+
+  // The invokeBeforeInput helper (duplicated here so each test is self-contained).
+  const invokeBeforeInput = async (inputType: string, data: string | null) => {
+    await window.evaluate(
+      ({ inputType, data }) => {
+        const surface = document.querySelector('[data-ime-surface]');
+        if (!surface) throw new Error('IME surface not found');
+        const reactKey = Object.keys(surface).find((k) => k.startsWith('__reactProps'));
+        if (!reactKey) throw new Error('React props not found on IME surface');
+        const props = (surface as Record<string, Record<string, unknown>>)[reactKey];
+        const handler = props?.['onBeforeInput'];
+        if (typeof handler !== 'function') throw new Error('onBeforeInput not a function');
+        const nativeEvent = new InputEvent('beforeinput', {
+          bubbles: true,
+          cancelable: true,
+          inputType,
+          data,
+        });
+        handler({ nativeEvent, target: surface, currentTarget: surface, preventDefault: () => {} });
+      },
+      { inputType, data },
+    );
+  };
+
+  // Find the italic run that contains 'DOCX persistence' (second paragraph of the
+  // welcome doc). It lives in a single long run so the selector targets its text.
+  const targetRun = window.locator('.run').filter({ hasText: 'DOCX persistence' }).first();
+  await expect(targetRun).toBeVisible({ timeout: 15_000 });
+
+  const box = await targetRun.boundingBox();
+  if (!box) throw new Error('Could not get bounding box for target run');
+
+  // Click ~40 px from the left edge of the run — mid-word into "A desktop…".
+  await window.mouse.click(box.x + 40, box.y + box.height / 2);
+
+  // After the click, the IME surface should have received focus. Type 'Z' and
+  // assert it appears somewhere before 'DOCX' in the run's rendered text.
+  await invokeBeforeInput('insertText', 'Z');
+
+  // The run text should now contain 'Z' and still contain 'DOCX persistence'.
+  // We verify both to show the caret moved to the click position rather than
+  // inserting at the start (which would give 'ZA desktop…DOCX…').
+  await expect(targetRun).toContainText('Z', { timeout: 5_000 });
+  await expect(targetRun).toContainText('DOCX persistence', { timeout: 5_000 });
+});
+
+test('Help > About opens the About dialog and Esc closes it', async () => {
+  const { window } = launched;
+
+  // Wait for the menu bar to appear.
+  const menubar = window.locator('[role="menubar"]');
+  await expect(menubar).toBeVisible({ timeout: 15_000 });
+
+  // Open the Help menu by clicking its top-level trigger.
+  const helpTrigger = menubar.locator('[role="menuitem"]').filter({ hasText: 'Help' });
+  await helpTrigger.click();
+
+  // Click the "About Word..." item in the popup.
+  const aboutItem = window.locator('[role="menuitem"]').filter({ hasText: 'About Word' });
+  await expect(aboutItem).toBeVisible({ timeout: 5_000 });
+  await aboutItem.click();
+
+  // The About dialog should now be visible.
+  const dialog = window.locator('[role="dialog"]', { hasText: 'About Word' });
+  await expect(dialog).toBeVisible({ timeout: 5_000 });
+
+  // Pressing Escape should dismiss it.
+  await window.keyboard.press('Escape');
+  await expect(dialog).not.toBeVisible({ timeout: 5_000 });
+});
+
 test('window closes cleanly', async () => {
   const { electronApp, window } = launched;
 

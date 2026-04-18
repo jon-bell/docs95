@@ -8,8 +8,11 @@ export type HitTestFn = (clientX: number, clientY: number) => IdPosition | undef
  * Returns a stable hit-test function that maps viewport coordinates to a
  * logical document position.
  *
- * The function accounts for container scroll and bounding rect so the caller
- * passes raw pointer clientX/clientY values.
+ * The function reads each page's rendered position from the DOM via
+ * getBoundingClientRect() on the [data-page-index] elements inside the
+ * container. This is robust to any CSS layout — flex, grid, zoom, retina
+ * DPR, OS scrollbar behaviour — because clientX/clientY and
+ * getBoundingClientRect() live in the same CSS-pixel coordinate space.
  */
 export function useHitTest(
   pages: readonly PageLayout[],
@@ -25,50 +28,32 @@ export function useHitTest(
       const container = containerRef.current;
       if (container === null || container === undefined) return undefined;
 
-      const rect = container.getBoundingClientRect();
-      const scrollLeft = container.scrollLeft;
-      const scrollTop = container.scrollTop;
-
-      // Convert from viewport coords to container-content coords.
-      const contentX = clientX - rect.left + scrollLeft;
-      const contentY = clientY - rect.top + scrollTop;
-
       const currentPages = pagesRef.current;
 
-      // Find the page containing the point. Pages are laid out vertically with
-      // a fixed gap; we walk them to find the one whose bounding box contains y.
-      // PageHost renders pages at natural vertical flow — we accumulate their
-      // heights to find each page's top offset within the scroll container.
-      // For the MVP, we assume a 24px top padding and 24px inter-page gap
-      // matching styles.css — the layout engine owns actual pixel offsets.
-      const PAGE_PADDING = 24;
-      const PAGE_GAP = 24;
-      let accumulatedY = PAGE_PADDING;
+      // Query rendered page elements by their data attribute. PageHost sets
+      // data-page-index on each <div class="page"> so we can look them up here
+      // without coupling hit-test logic to any CSS layout assumptions.
+      const pageElements = container.querySelectorAll<HTMLElement>('.page[data-page-index]');
 
-      for (let pi = 0; pi < currentPages.length; pi++) {
-        const page = currentPages[pi];
-        if (page === undefined) continue;
+      for (let i = 0; i < pageElements.length; i++) {
+        const el = pageElements[i];
+        if (el === undefined || el === null) continue;
 
-        const pageTop = accumulatedY;
-        const pageBottom = pageTop + page.sizePx.heightPx;
-
-        // Center pages horizontally within the container.
-        const containerWidth = rect.width + scrollLeft;
-        const pageLeft = Math.max(0, (containerWidth - page.sizePx.widthPx) / 2);
-        const pageRight = pageLeft + page.sizePx.widthPx;
+        const rect = el.getBoundingClientRect();
 
         if (
-          contentY >= pageTop &&
-          contentY < pageBottom &&
-          contentX >= pageLeft &&
-          contentX < pageRight
+          clientX >= rect.left &&
+          clientX < rect.right &&
+          clientY >= rect.top &&
+          clientY < rect.bottom
         ) {
-          const localX = contentX - pageLeft;
-          const localY = contentY - pageTop;
-          return hitTestPage(page, localX, localY);
-        }
+          const idx = Number(el.dataset['pageIndex']);
+          const page = currentPages[idx];
+          if (page === undefined) return undefined;
 
-        accumulatedY = pageBottom + PAGE_GAP;
+          // Convert from viewport coords to page-local coords.
+          return hitTestPage(page, clientX - rect.left, clientY - rect.top);
+        }
       }
 
       return undefined;
