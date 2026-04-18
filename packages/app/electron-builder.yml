@@ -1,0 +1,91 @@
+appId: com.example.word
+productName: Word
+copyright: Copyright © 2026
+
+directories:
+  output: release
+  buildResources: build
+
+# Only ship what Electron needs at runtime. The main + preload are self-contained
+# CJS bundles (scripts/build-preload.mjs inlines all @word/* workspace deps), and
+# the renderer is a Vite build. No node_modules traversal required.
+files:
+  - dist/main/**
+  - dist/preload/**
+  - dist/renderer/**
+  - package.json
+  - '!**/*.map'
+
+extraMetadata:
+  main: dist/main/index.cjs
+  name: word
+
+# Artifact naming — keep it clean of the @word/app scope slug.
+artifactName: ${productName}-${version}-${os}-${arch}.${ext}
+
+asar: true
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+mac:
+  category: public.app-category.productivity
+  icon: build/icon.png
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+    - target: zip
+      arch:
+        - x64
+        - arm64
+  # Code signing + notarisation require Apple Developer credentials supplied via
+  # the CSC_LINK / CSC_KEY_PASSWORD / APPLE_ID / APPLE_APP_SPECIFIC_PASSWORD env
+  # vars in CI. Unsigned builds run locally with a Gatekeeper override warning.
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+
+dmg:
+  writeUpdateInfo: false
+
+# ── Windows ───────────────────────────────────────────────────────────────────
+win:
+  icon: build/icon.png
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+  # Code signing requires a cert supplied via CSC_LINK / CSC_KEY_PASSWORD.
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: false
+  shortcutName: Word
+
+# ── Linux ─────────────────────────────────────────────────────────────────────
+linux:
+  icon: build/icon.png
+  category: Office
+  maintainer: word@example.com
+  vendor: Word Contributors
+  synopsis: Word 95 reference implementation
+  description: |
+    A desktop word processor with feature parity to Microsoft Word 95.
+    DOCX in, DOCX out. A reference implementation of clean software
+    architecture assembled by a fleet of LLM agents.
+  target:
+    - target: AppImage
+      arch:
+        - x64
+    - target: deb
+      arch:
+        - x64
+
+# appImage:
+#   license: LICENSE   # enable once the repo has a LICENSE file

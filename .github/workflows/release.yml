@@ -1,0 +1,110 @@
+name: Release
+
+# Builds platform-native installers on matching runners. Fires on version tags
+# (v*) and can be dispatched manually from the Actions tab. Each runner
+# produces the artifacts it is native to — cross-building unsigned Windows or
+# macOS binaries from Linux is possible but gives up signing/notarisation, so
+# we don't.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create a draft GitHub Release with the artifacts'
+        type: boolean
+        default: false
+
+jobs:
+  package:
+    name: Package ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            target: linux
+            dist_script: dist:linux
+            artifact_pattern: |
+              packages/app/release/*.AppImage
+              packages/app/release/*.deb
+          - os: macos-14
+            target: macos
+            dist_script: dist:mac
+            artifact_pattern: |
+              packages/app/release/*.dmg
+              packages/app/release/*.zip
+          - os: windows-2022
+            target: windows
+            dist_script: dist:win
+            artifact_pattern: |
+              packages/app/release/*.exe
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build workspace
+        run: pnpm build
+
+      # Code-signing is opt-in. Supply the following secrets to sign + notarise:
+      # macOS: CSC_LINK (base64-encoded .p12), CSC_KEY_PASSWORD,
+      #        APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID
+      # Windows: CSC_LINK, CSC_KEY_PASSWORD
+      # Unset → unsigned binaries, which still run with Gatekeeper/SmartScreen
+      # overrides but should not be distributed to end users.
+      - name: Package
+        run: pnpm --filter @word/app ${{ matrix.dist_script }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: word-${{ matrix.target }}
+          path: ${{ matrix.artifact_pattern }}
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Draft GitHub Release
+    needs: package
+    runs-on: ubuntu-22.04
+    if: startsWith(github.ref, 'refs/tags/v') || inputs.create_release
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist-artifacts
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          generate_release_notes: true
+          files: dist-artifacts/**/*

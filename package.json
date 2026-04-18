@@ -21,6 +21,10 @@
     "e2e": "pnpm --filter @word/app e2e",
     "perf": "pnpm --filter @word/dev-harness perf",
     "storybook": "pnpm --filter @word/ui storybook",
+    "dist": "pnpm --filter @word/app dist",
+    "dist:mac": "pnpm --filter @word/app dist:mac",
+    "dist:win": "pnpm --filter @word/app dist:win",
+    "dist:linux": "pnpm --filter @word/app dist:linux",
     "clean": "pnpm -r exec rm -rf dist tsconfig.tsbuildinfo"
   },
   "devDependencies": {
